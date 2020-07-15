@@ -9,12 +9,12 @@
 #SBATCH --mail-user=ehoseini@mit.edu
 
 
-SUBJ=sub124
+SUBJ=sub127
 HOMEDIR=/mindhive/evlab/Shared/diffusionzeynep/
-DIR=/mindhive/evlab/Shared/diffusionzeynep/DICOMS/sub124/dti/006/
+DIR=/mindhive/evlab/Shared/diffusionzeynep/DICOMS/sub127/dti/006/
 #this should have been run:unpacksdcmdir -src $PROJECT_DIR/DICOMS/$SUB/dicoms/ -targ $PROJECT_DIR/DICOMS/$SUB/ -run $dtirun dti nii dti.nii
 module add openmind/freesurfer/6.0.0
-module add openmind/fsl/5.0.9
+module add openmind/fsl/5.0.6
 source /etc/profile.d/modules.sh
 mkdir -p $HOMEDIR/$SUBJ/dti/
 
