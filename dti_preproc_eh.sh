@@ -9,6 +9,10 @@ HOMEDIR=/mindhive/evlab/Shared/diffusionzeynep/
 DIR=/mindhive/evlab/Shared/diffusionzeynep/DICOMS/sub124/dti/006/
 #this should have been run:unpacksdcmdir -src $PROJECT_DIR/DICOMS/$SUB/dicoms/ -targ $PROJECT_DIR/DICOMS/$SUB/ -run $dtirun dti nii dti.nii
 
+module add openmind/freesurfer
+module add openmind/fsl/5.0.6
+module add openmind/miniconda/3.18.3-python2
+
 mkdir -p $HOMEDIR/$SUBJ/dti/
 
 mv $DIR/dti.nii $HOMEDIR/$SUBJ/dti/diffusionseries.nii.gz
