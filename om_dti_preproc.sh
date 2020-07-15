@@ -9,18 +9,18 @@
 #SBATCH --mail-user=ehoseini@mit.edu
 
 
-SUBJ=sub124
+SUBJ=sub127
 HOMEDIR=/mindhive/evlab/Shared/diffusionzeynep/
-DIR=/mindhive/evlab/Shared/diffusionzeynep/DICOMS/sub124/dti/006/
+DIR=/mindhive/evlab/Shared/diffusionzeynep/DICOMS/sub127/dti/006/
 #this should have been run:unpacksdcmdir -src $PROJECT_DIR/DICOMS/$SUB/dicoms/ -targ $PROJECT_DIR/DICOMS/$SUB/ -run $dtirun dti nii dti.nii
 module add openmind/freesurfer
 module add openmind/fsl
-source /etc/profile.d/modules.sh
-mkdir -p $HOMEDIR/$SUBJ/dti/
 
-mv $DIR/dti.nii $HOMEDIR/$SUBJ/dti/diffusionseries.nii.gz
-mv $DIR/dti.bvals $HOMEDIR/$SUBJ/dti/bvals
-mv $DIR/dti.voxel_space.bvecs $HOMEDIR/$SUBJ/dti/bvecs
+
+mkdir -p $HOMEDIR/$SUBJ/dti/
+cp $DIR/dti.nii $HOMEDIR/$SUBJ/dti/diffusionseries.nii.gz
+cp $DIR/dti.bvals $HOMEDIR/$SUBJ/dti/bvals
+cp $DIR/dti.voxel_space.bvecs $HOMEDIR/$SUBJ/dti/bvecs
 
 
 eddy_correct $HOMEDIR/$SUBJ/dti/diffusionseries.nii.gz $HOMEDIR/$SUBJ/dti/data.nii.gz 0
