@@ -10,8 +10,8 @@
 
 
 SUBJ=sub127
-HOMEDIR=/mindhive/evlab/Shared/diffusionzeynep/
-DIR=/mindhive/evlab/Shared/diffusionzeynep/DICOMS/sub127/dti/006/
+HOMEDIR=/mindhive/evlab/Shared/diffusionzeynep
+DIR=/mindhive/evlab/Shared/diffusionzeynep/DICOMS/sub127/dti/006
 #this should have been run:unpacksdcmdir -src $PROJECT_DIR/DICOMS/$SUB/dicoms/ -targ $PROJECT_DIR/DICOMS/$SUB/ -run $dtirun dti nii dti.nii
 module add openmind/freesurfer
 module add openmind/fsl
