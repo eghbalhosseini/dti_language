@@ -8,22 +8,13 @@ module load openmind/anaconda/1.9.2
 
 HOMEDIR=/mindhive/evlab/Shared/diffusionzeynep
 
-sb=0
-se=20
-
-for i in {1..11}; do
-
-	n=0
-	for SUBJ in $HOMEDIR/sub?*; do
-		if [ "$n" -ge "$sb" ] && [ "$n" -lt "$se" ]; then
-			sbatch --array=0-100 -p normal --time=12:00:00 $ARCHITRACTDIR/z_run_bedpostX -h $HOMEDIR -s ${SUBJ##*/}
+for SUBJ in $HOMEDIR/sub?*; do
+	FILE=$SUBJ/dti.bedpostX/dyads1.nii.gz
+	if ! test -f $FILE; then
+		PREREQ=$SUBJ/dti/dti_V1.nii.gz
+		if test -f $PREREQ; then
+			sbatch --array=0-100 -p normal --time=3:00:00 $ARCHITRACTDIR/z_run_bedpostX -h $HOMEDIR -s ${SUBJ##*/}
+			sleep 3h
 		fi
-	n=$((n+1))
-	done
-
-	sb=$((sb+20))
-	se=$((se+20))
-
-	sleep 12.1h
-
+	fi
 done

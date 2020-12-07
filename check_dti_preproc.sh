@@ -4,6 +4,6 @@ do
 	if test -f $fname; then
 		freeview $fname:vector=true
 	else
-		: #echo $d | tee -a missing.txt
+		: #echo $d | tee -a missing_dti_preproc.txt
 	fi
 done
