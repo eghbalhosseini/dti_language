@@ -2,11 +2,29 @@ import numpy as np
 from regfusion import vol_to_fsaverage
 import glob
 import os
-path_to_masks='/Users/eghbalhosseini/Desktop/ROIS_NOV2020/Func_Lang_LHRH_SN220/'
 import nibabel as nib
 import nilearn.plotting as plotting
 from nilearn import datasets
+import pickle
 import fnmatch
+import getpass
+
+def save_obj(di_, filename_):
+    with open(filename_, 'wb') as f:
+        pickle.dump(di_, f, protocol=4)
+
+def load_obj(filename_, silent=False):
+    if not silent:
+        print('loading ' + filename_)
+    with open(filename_, 'rb') as f:
+        return pickle.load(f)
+
+if getpass.getuser()=='eghbalhosseini':
+    path_to_masks='/Users/eghbalhosseini/Desktop/ROIS_NOV2020/Func_Lang_LHRH_SN220/'
+elif getpass.getuser()=='ehoseini':
+    path_to_masks = '/om/user/ehoseini/MyData/dti_language/ROIS_NOV2020//Func_Lang_LHRH_SN220'
+
+
 
 d_parcel_name_map = {
     'lang':
@@ -33,70 +51,69 @@ d_parcel_name_map = {
 }
 
 
-# either construct or load parcels in
 
-for ROI_file in os.listdir(os.path.join(path_to_masks,'language_separFiles')):
-    if fnmatch.fnmatch(ROI_file,r'(\d)*.nii'):
-        print(ROI_file)
-def load_parcels_in_fsaverage():
+if os.path.isdir(os.path.join(path_to_masks,'language_separFiles_in_fsaverage')):
+    d_parcel_fsaverage=load_obj(os.path.join(path_to_masks,'ROIS_in_fsaverge.pkl'))
+else:
+    # either construct or load parcels in
+    ROI_files = glob.glob(os.path.join(path_to_masks, 'language_separFiles', '*.nii'))
+    lh_list = []
+    rh_list = []
+    for ROI_file in ROI_files:
+        if ROI_file.__contains__('_RH_'):
+            # find which network it is
+            lh_del, rh = vol_to_fsaverage(ROI_file, os.path.join(path_to_masks, 'language_separFiles_in_fsaverage'),
+                                          interp='nearest', out_type='label.gii')
+            rh_list.append(rh)
+            os.remove(lh_del)
+        elif ROI_file.__contains__('_LH_'):
+            lh, rh_del = vol_to_fsaverage(ROI_file, os.path.join(path_to_masks, 'language_separFiles_in_fsaverage'),
+                                          interp='nearest', out_type='label.gii')
+            lh_list.append(lh)
+            os.remove(rh_del)
+    # creat d_parcel_fsaverage
+    d_parcel_fsaverage = dict.fromkeys(list(d_parcel_name_map.keys()))
+    network_name = 'lang'
+    parc_to_srch = list(d_parcel_name_map[network_name].values())
+    lang_parc_dict = dict()
+    for ROI_file in os.listdir(os.path.join(path_to_masks,'language_separFiles_in_fsaverage')):
+        if fnmatch.fnmatch(ROI_file,'*.gii'):
+            # find which network it is
+            print(ROI_file)
+            parc_id=int(np.where(np.asarray([ROI_file.__contains__('_'+x+'.') for x in parc_to_srch]))[0])
+            print(parc_to_srch[parc_id])
+            parc_surf = nib.load(os.path.join(path_to_masks,'language_separFiles_in_fsaverage',ROI_file))
+            lang_parc_dict[parc_to_srch[parc_id]]=np.asarray(parc_surf.agg_data())
+    lang_parc_dict['LH_ROIs']=np.sum(np.stack(list(lang_parc_dict.values()))[np.where([x.__contains__('LH') for x in lang_parc_dict.keys()])[0],:],axis=0)
+    lang_parc_dict['RH_ROIs']=np.sum(np.stack(list(lang_parc_dict.values()))[np.where([x.__contains__('RH') for x in lang_parc_dict.keys()])[0],:],axis=0)
+    lang_parc_dict['all_ROIs']=np.sum(np.stack(list(lang_parc_dict.values())),axis=0)
 
-    return 1
-ROI_files=glob.glob(os.path.join(path_to_masks,'language_separFiles','*.nii'))
-lh_list=[]
-rh_list=[]
-for ROI_file in  ROI_files:
-    if ROI_file.__contains__('_RH_'):
-        # find which network it is
-        lh_del, rh = vol_to_fsaverage(ROI_file, os.path.join(path_to_masks,'language_separFiles_in_fsaverage'), interp='nearest', out_type='label.gii')
-        rh_list.append(rh)
-        os.remove(lh_del)
-    elif ROI_file.__contains__('_LH_'):
-        lh, rh_del = vol_to_fsaverage(ROI_file, os.path.join(path_to_masks,'language_separFiles_in_fsaverage'), interp='nearest', out_type='label.gii')
-        lh_list.append(lh)
-        os.remove(rh_del)
+    d_parcel_fsaverage[network_name]=lang_parc_dict
+    save_obj(d_parcel_fsaverage,os.path.join(path_to_masks,'ROIS_in_fsaverge.pkl'))
+    do_plotting = False
+    if do_plotting:
+        fsaverage = datasets.fetch_surf_fsaverage(mesh='fsaverage')
+        for ROI_file in os.listdir(os.path.join(path_to_masks, 'language_separFiles_in_fsaverage')):
+            if ROI_file.__contains__('_LH_'):
+                lh_surf = nib.load(os.path.join(path_to_masks, 'language_separFiles_in_fsaverage', ROI_file))
+                figure = plotting.plot_surf_stat_map(fsaverage.infl_left, lh_surf.agg_data(), hemi='left',
+                                                     title='Surface left hemisphere', colorbar=True,
+                                                     threshold=1., bg_map=fsaverage.sulc_left)
+                plotting.plot_surf_contours(fsaverage.infl_left, lh_surf.agg_data(),
+                                            levels=[1, ], figure=figure, legend=False,
+                                            colors=['g', ],
+                                            output_file=os.path.join(path_to_masks, 'language_separFiles_in_fsaverage',
+                                                                     ROI_file.replace('.gii', '.png')))
+            elif ROI_file.__contains__('_RH_'):
+                rh_surf = nib.load(os.path.join(path_to_masks, 'language_separFiles_in_fsaverage', ROI_file))
+                figure = plotting.plot_surf_stat_map(fsaverage.infl_right, rh_surf.agg_data(), hemi='right',
+                                                     title='Surface right hemisphere', colorbar=True,
+                                                     threshold=1., bg_map=fsaverage.sulc_right)
+                plotting.plot_surf_contours(fsaverage.infl_right, rh_surf.agg_data(),
+                                            levels=[1, ], figure=figure, legend=False,
+                                            colors=['g', ],
+                                            output_file=os.path.join(path_to_masks, 'language_separFiles_in_fsaverage',
+                                                                     ROI_file.replace('.gii', '.png')))
 
-#
-d_parcel_fsaverage=dict.fromkeys(list(d_parcel_name_map.keys()))
-network_name='lang'
-fsaverage = datasets.fetch_surf_fsaverage(mesh='fsaverage')
-parc_to_srch=list(d_parcel_name_map[network_name].values())
-lang_parc_dict=dict()
-for ROI_file in os.listdir(os.path.join(path_to_masks,'language_separFiles_in_fsaverage')):
-    if fnmatch.fnmatch(ROI_file,'*.gii'):
-        # find which network it is
-        print(ROI_file)
-        parc_id=int(np.where(np.asarray([ROI_file.__contains__('_'+x+'.') for x in parc_to_srch]))[0])
-        print(parc_to_srch[parc_id])
-        parc_surf = nib.load(os.path.join(path_to_masks,'language_separFiles_in_fsaverage',ROI_file))
-        lang_parc_dict[parc_to_srch[parc_id]]=np.asarray(parc_surf.agg_data())
-
-lang_parc_dict['LH_ROIs']=np.sum(np.stack(list(lang_parc_dict.values()))[np.where([x.__contains__('LH') for x in lang_parc_dict.keys()])[0],:],axis=0)
-lang_parc_dict['RH_ROIs']=np.sum(np.stack(list(lang_parc_dict.values()))[np.where([x.__contains__('RH') for x in lang_parc_dict.keys()])[0],:],axis=0)
-lang_parc_dict['all_ROIs']=np.sum(np.stack(list(lang_parc_dict.values())),axis=0)
-
-d_parcel_fsaverage[network_name]=lang_parc_dict
-
-
-# plot them to make sure
-
-for ROI_file in os.listdir(os.path.join(path_to_masks,'language_separFiles_in_fsaverage')):
-    if ROI_file.__contains__('_LH_'):
-        lh_surf= nib.load(os.path.join(path_to_masks,'language_separFiles_in_fsaverage',ROI_file))
-        figure=plotting.plot_surf_stat_map(fsaverage.infl_left, lh_surf.agg_data(), hemi='left',
-                                title='Surface left hemisphere', colorbar=True,
-                                threshold=1., bg_map=fsaverage.sulc_left)
-        plotting.plot_surf_contours(fsaverage.infl_left, lh_surf.agg_data(),
-                                levels=[1, ], figure=figure, legend=False,
-                                colors=['g', ],
-                                output_file=os.path.join(path_to_masks,'language_separFiles_in_fsaverage',ROI_file.replace('.gii','.png')))
-    elif ROI_file.__contains__('_RH_'):
-        rh_surf= nib.load(os.path.join(path_to_masks,'language_separFiles_in_fsaverage',ROI_file))
-        figure=plotting.plot_surf_stat_map(fsaverage.infl_right, rh_surf.agg_data(), hemi='right',
-                                title='Surface right hemisphere', colorbar=True,
-                                threshold=1., bg_map=fsaverage.sulc_right)
-        plotting.plot_surf_contours(fsaverage.infl_right, rh_surf.agg_data(),
-                                levels=[1,], figure=figure, legend=False,
-                                colors=['g',],
-                                output_file=os.path.join(path_to_masks,'language_separFiles_in_fsaverage',ROI_file.replace('.gii','.png')))
 
 

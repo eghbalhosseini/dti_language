@@ -3,6 +3,15 @@ import numpy as np
 from os.path import join
 from nilearn import plotting
 from pathlib import Path
+import getpass
+
+if getpass.getuser()=='eghbalhosseini':
+    subj_path='/Applications/freesurfer/subjects/'
+    subj_FS_path = '/Applications/freesurfer/subjects/'
+elif getpass.getuser()=='ehoseini':
+    subj_path = '/mindhive/evlab/u/Shared/SUBJECTS_FS/'
+    subj_FS_path='/mindhive/evlab/u/Shared/SUBJECTS_FS/FS/'
+
 
 
 SUBJECTDIR = '/mindhive/evlab/u/Shared/SUBJECTS'
