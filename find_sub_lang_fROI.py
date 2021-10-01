@@ -54,6 +54,7 @@ if __name__ == '__main__':
     network_img=nib.load(sub_func_dir)
     network = np.asarray(network_img.dataobj).flatten()
     sub_parcel_roi_vxl = np.zeros(network.shape).astype(int)
+    # create an annotation file from the activation masks
     for ROI_name in d_parcel_name_map[network_id].values():
         if ROI_name.__contains__(hemi_):
             roi_surf = d_parcel_fsaverage[network_id][ROI_name]
@@ -72,7 +73,7 @@ if __name__ == '__main__':
                                        roi_voxels.astype(int), np.asarray([[0, 0, 0, 0, 0], [255, 0, 0, 255, 1]]),
                                        [b'???', f'{ROI_name}_roi'], fill_ctab=True)
             sub_parcel_roi_vxl += roi_voxels.astype(int)
-    #
+    # make annotation to labels for easier transformation from average to native
     for ROI_name in d_parcel_name_map[network_id].values():
         if ROI_name.__contains__(hemi_):
             # move from annot to label
@@ -85,7 +86,8 @@ if __name__ == '__main__':
                              '--surface', 'inflated']
             output = subprocess.Popen(unix_pattern, env=my_env)
             output.communicate()
-    # move from fsaverage to fsnative
+
+    # move labels from fsaverage to fsnative
     functional_native_path = functional_path.replace('fsavg', 'self')
     sub_func_native_dir = os.path.join(subj_path, subj_id, 'bold', functional_native_path, file_name + '.nii.gz')
     network_native_img = nib.load(sub_func_native_dir)
@@ -97,7 +99,7 @@ if __name__ == '__main__':
         if ROI_name.__contains__(hemi_):
             unix_pattern = ['mri_label2label',
                             '--srcsubject', 'fsaverage',
-                             '--hemi', 'lh',
+                             '--hemi', hemi_.lower(),
                              '--srclabel', f'{sub_dti_dir}/{hemi_.lower()}.{ROI_name}_roi.label',
                              '--trgsubject', subj_id,
                              '--trgsurf', 'inflated',
@@ -117,7 +119,6 @@ if __name__ == '__main__':
                            darkness=1, output_file=f'{p_target_dir}/{hemi_.lower()}.{ROI_name}_roi.png')
 
     # plot labels and actvations to verify the tranformationed worked
-
     functional_native_path = functional_path.replace('fsavg', 'self')
     sub_func_native_dir = os.path.join(subj_path, subj_id, 'bold', functional_native_path, file_name + '.nii.gz')
     network_native_img = nib.load(sub_func_native_dir)
@@ -162,125 +163,41 @@ if __name__ == '__main__':
 
     print('done making fROIs\n')
 
+
     #####################################################################
-    ## Part 2 : tranfroming surface between fsaverage and subject space :
-    print('doing surf to volume transformation for subject in fsaverage space\n')
-    map_method = 'nnfr'
-    p_source=Path(f'{sub_dti_dir}/{hemi_}_ROIs_{file_name}_{threshold}_fsavg.nii')
-    p_target_dir=str(p_source.parent).replace('fsavg', 'fsnative')
-    p_target = str(p_source).replace('fsavg', 'fsnative')
-    p_target = p_target.replace('.nii', f'_nrep_{n_smooth}_map_{map_method}.nii')
+    ## Part 3 : transforming native label to volume for subject
+    # 3.A tranform labels to annoation first
+    for ROI_name in d_parcel_name_map[network_id].values():
+        if ROI_name.__contains__(hemi_):
+            # first create a ctab file
+            txt_lines=['#$Id: FreeSurferColorLUT.txt,v 1.38.2.1 2007/08/20 01:52:07 nicks Exp $',
+                        '#No. Label Name:                            R   G   B   A',
+                       '0   Unknown                                 0   0   0   0',
+                       f'1   {ROI_name}                                 255   0   0   1']
+            textfile = open(f'{p_target_dir}/{hemi_.lower()}.{ROI_name}_roi.txt', "w")
+            for element in txt_lines:
+                textfile.write(element + "\n")
+            textfile.close()
+            # transform label to annot
+            unix_pattern = ['mris_label2annot',
+                             '--l', f'{p_target_dir}/{hemi_.lower()}.{ROI_name}_roi.label',
+                            '--s', subj_id,
+                            '--h', hemi_.lower(),
+                            '--ctab',f'{p_target_dir}/{hemi_.lower()}.{ROI_name}_roi.txt',
+                            '--annot-path', f'{p_target_dir}/{hemi_.lower()}.{ROI_name}_roi',
+                            '--surf', 'inflated']
+            output = subprocess.Popen(unix_pattern, env=my_env)
+            output.communicate()
 
-    Path(p_target_dir).mkdir(parents=True, exist_ok=True)
-    # change where subject dir is
-    my_env = os.environ.copy()
-    my_env['SUBJECTS_DIR']=subj_FS_path
-    unix_pattern=['mri_surf2surf',
-                  '--hemi',hemi_.lower(),
-                  '--srcsubject','fsaverage',
-                  '--srcsurfval',str(p_source),
-                  '--surfreg','inflated',
-                  '--mapmethod', map_method,
-                  '--trgsubject',subj_id,
-                  '--nsmooth-out',str(n_smooth),
-                  '--trgsurfval',p_target
-                  ]
-    output=subprocess.Popen(unix_pattern,env=my_env)
-    output.communicate()
+    # 3.B move from annotation in surface to volume
+    for ROI_name in d_parcel_name_map[network_id].values():
+        if ROI_name.__contains__(hemi_):
+            # move the annot file to a location freesurfer can find:
+            os.rename(f'{p_target_dir}/{hemi_.lower()}.{ROI_name}_roi.annot',f'{subj_FS_path}/{subj_id}/label/{hemi_.lower()}.{ROI_name}_roi.annot')
 
-    # method 2: try label instead
-    unix_pattern = ['mri_annotation2label',
-                    '--hemi', hemi_.lower(),
-                    '--subject', 'fsaverage',
-                    '--label', str(1),
-                    '--outdir',f'{sub_dti_dir}',
-                    '--annotation', f'{sub_dti_dir}/{hemi_}_ROIs_{file_name}_{threshold}_fsavg.annot',
-                    '--surface','inflated']
-
-    output = subprocess.Popen(unix_pattern, env=my_env)
-    output.communicate()
-
-
-    unix_pattern = ['mri_label2label',
-                    '--srcsubject', 'fsaverage',
-                    '--hemi','lh',
-                    '--srclabel', f'{sub_dti_dir}/{hemi_.lower()}.{hemi_}_ROIs.label',
-                    '--trgsubject',subj_id,
-                    '--trgsurf','inflated',
-                    '--trglabel', f'{p_target_dir}/{hemi_.lower()}.{hemi_}_ROIs.label',
-                    '--regmethod','surface']
-
-    output = subprocess.Popen(unix_pattern, env=my_env)
-    output.communicate()
-    #
-    functional_native_path=functional_path.replace('fsavg','self')
-    sub_func_native_dir = os.path.join(subj_path, subj_id, 'bold', functional_native_path, file_name + '.nii.gz')
-    network_native_img = nib.load(sub_func_native_dir)
-    network_native = np.asarray(network_native_img.dataobj).flatten()
-    subj_surf_file = Path(subj_FS_path, subj_id, 'surf', hemi_.lower() + '.inflated')
-    subj_sulc_file = Path(subj_FS_path, subj_id, 'surf', hemi_.lower() + '.sulc')
-    figure, axes = plt.subplots(subplot_kw={'projection': '3d'})
-    plotting.plot_surf_stat_map(str(subj_surf_file), network_native, hemi=hemi,
-                                title=f'Surface {hemi} hemisphere', bg_map=str(subj_sulc_file),
-                                threshold=np.percentile(network_native, 75),axes=axes)
-
-    plotting.plot_surf_stat_map(str(subj_surf_file), p_target, hemi=hemi,
-                                             title=f'Surface {hemi} hemisphere',
-                                            cmap='viridis',
-                                             colorbar=True, bg_map=network_native,threshold=.1,axes=axes
-                                ,output_file=p_target.replace('.nii', '.png'))
-
-    plotting.plot_surf_contours(fsaverage['infl_' + hemi], all_ROIS, levels=[1, ], figure=figure, legend=True,
-                                colors=['g', ],
-                                labels=[hemi_ + '_ROIs'],
-                                output_file=f'{sub_dti_dir}/{hemi_}_ROIs_{file_name}_{threshold}_fsavg.png')
-
-    print(f'done plotting ROIs fsnative for {subj_id} and smoothing {n_smooth} \n')
-    #
-    print (f'done changing fsaverage surface to fsnative for {subj_id} \n')
-    # binarize the image
-    network_fsnative_img=nib.load(p_target)
-    network_fsnative=np.asarray(network_fsnative_img.dataobj).flatten()
-    network_fsnative_binary=np.ceil(network_fsnative)
-
-    #
-    ni_fsnative_bin_img = nib.Nifti1Image(np.reshape(network_fsnative_binary.astype(float), network_fsnative_img.shape),
-                             header=network_fsnative_img._header, affine=network_fsnative_img.affine)
-    p_target_binary=p_target.replace('fsnative_','fsnative_binary_')
-    nib.nifti1.save(ni_fsnative_bin_img, p_target_binary)
-    print('done binarizing fsnative\n')
-
-    figure = plotting.plot_surf_stat_map(str(subj_surf_file), p_target_binary,
-                                         hemi=hemi,title=f'Surface {hemi} hemisphere',
-                                         colorbar=True, bg_map=str(subj_sulc_file), threshold=.1,
-                                         output_file=p_target_binary.replace('.nii', '.png'))
-
-
-    plotting.plot_surf_roi(fsaverage['infl_left'], roi_map=sub_parcel_roi_vxl,
-                           hemi='left', view='lateral',
-                           bg_map=fsaverage['sulc_left'], bg_on_data=True,
-                           darkness=.5,output_file=f'{sub_dti_dir}/{hemi_}_ROIs_{file_name}_{threshold}_fsavg_.png')
-
-    # finally plot based on roi
-    p_target_ROI=f'{p_target_dir}/{hemi_.lower()}.{hemi_}_ROIs.label'
-    test=nib.freesurfer.read_label(p_target_ROI)
-    network_fsnative_ROI=np.zeros(network_fsnative_binary.shape)
-    network_fsnative_ROI[test]=1
-
-    figure=plotting.plot_surf_roi(str(subj_surf_file),network_fsnative_ROI,hemi=hemi,bg_map=str(subj_sulc_file),output_file=p_target_ROI.replace('.label','.png'))
-    #####################################################################
-    ## Part 3 : transforming native surface to volume for subject
-    p_target_volume = str(p_target).replace('fsnative.nii', 'fsnative_volume.nii')
-    #
-    unix_pattern = ['mri_surf2vol',
-                    '--o', p_target_volume,
-                    '--subject', subj_id,
-                    '--so', str(subj_surf_file).replace('.inflated','.pial'), p_target
-                    ]
-    output = subprocess.Popen(unix_pattern, env=my_env)
-    # plot volume data
-    subj_mgz_file=Path(subj_FS_path,subj_id,'mri','brain.mgz')
-    figure = plotting.plot_stat_map(p_target_volume, str(subj_mgz_file),
-                                         colorbar=True,
-                                         output_file=p_target_volume.replace('.nii', '.png'))
-
+            unix_pattern = ['mri_aparc2aseg',
+                            '--s', subj_id,
+                            '--o', f'{p_target_dir}/{hemi_.lower()}.{ROI_name}_roi.nii.gz',
+                            '--annot',f'{ROI_name}_roi']
+            output = subprocess.Popen(unix_pattern, env=my_env)
+            output.communicate()
