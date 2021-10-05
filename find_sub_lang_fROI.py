@@ -32,6 +32,7 @@ if __name__ == '__main__':
     my_env['SUBJECTS_DIR'] = subj_FS_path
     hemis_=['LH','RH']
     hemis=['left','right']
+    # adding stuff for checking
     #####################################################################
     ## Part 1 : select voxels based on overlap with langauge parcels:
     # find language signinifant voxels in fsaverge space
@@ -176,60 +177,60 @@ if __name__ == '__main__':
 
     #####################################################################
     ## Part 3 : transforming native label to volume for subject using label2vol method
-    unix_pattern = ['tkregister2',
-                    '--mov',  f'{subj_FS_path}/{subj_id}/mri/rawavg.mgz',
-                    '--noedit',
-                    '--s', subj_id,
-                    '--regheader',
-                    '--reg',  f'{subj_FS_path}/{subj_id}/mri/label_register.dat'
-                    ]
-    output = subprocess.Popen(unix_pattern, env=my_env)
-    output.communicate()
-
-    # unix_pattern = ['mri_convert',
-    #                 f'{subj_FS_path}/{subj_id}/mri/rawavg.mgz',
-    #                 f'{subj_FS_path}/{subj_id}/mri/rawavg.nii.gz'
+    # unix_pattern = ['tkregister2',
+    #                 '--mov',  f'{subj_FS_path}/{subj_id}/mri/rawavg.mgz',
+    #                 '--noedit',
+    #                 '--s', subj_id,
+    #                 '--regheader',
+    #                 '--reg',  f'{subj_FS_path}/{subj_id}/mri/label_register.dat'
     #                 ]
     # output = subprocess.Popen(unix_pattern, env=my_env)
-    #  output.communicate()
-
-    fill_thr=.1
-
-    for idx, hemi in enumerate(hemis):
-        functional_path = f'bold.fsavg.sm4.{hemis_[idx].lower()}.lang/S-v-N'
-        sub_dti_dir = os.path.join(subj_path, 'DTI', subj_id, functional_path)
-        p_target_dir = sub_dti_dir.replace('fsavg', 'fsnative')
-        for ROI_name in d_parcel_name_map[network_id].values():
-            if ROI_name.__contains__(hemis_[idx]):
-                unix_pattern = ['mri_label2vol',
-                            '--label', f'{p_target_dir}/{hemis_[idx].lower()}.{ROI_name}_roi.label',
-                             '--subject', subj_id,
-                                '--hemi', hemis_[idx].lower(),
-                                #'--fillthresh',f'{fill_thr}',
-                                '--proj', 'frac', '0','1','.01',
-                            '--reg', f'{subj_FS_path}/{subj_id}/mri/label_register.dat',
-                            '--temp', f'{subj_FS_path}/{subj_id}/mri/rawavg.mgz',
-                            '--o', f'{p_target_dir}/{hemis_[idx].lower()}.{ROI_name}_roi.nii.gz'
-                             ]
-                output = subprocess.Popen(unix_pattern, env=my_env)
-                output.communicate()
-                plotting.plot_stat_map(f'{p_target_dir}/{hemis_[idx].lower()}.{ROI_name}_roi.nii.gz',
-                                       bg_img=f'{subj_FS_path}/{subj_id}/mri/rawavg.nii.gz',draw_cross=False,
-                                       output_file=f'{p_target_dir}/{hemis_[idx].lower()}.{ROI_name}_roi_in_vol.png')
-                # binarize
-                unix_pattern = ['mri_binarize',
-                                '--dilate', '1',
-                                '--erode', '1',
-                                '--i', f'{p_target_dir}/{hemis_[idx].lower()}.{ROI_name}_roi.nii.gz',
-                                '--o', f'{p_target_dir}/{hemis_[idx].lower()}.{ROI_name}_roi_bin.nii.gz',
-                                '--min','1']
-                output = subprocess.Popen(unix_pattern, env=my_env)
-                output.communicate()
-
-                plotting.plot_stat_map(f'{p_target_dir}/{hemis_[idx].lower()}.{ROI_name}_roi_bin.nii.gz',
-                                       bg_img=f'{subj_FS_path}/{subj_id}/mri/rawavg.nii.gz',draw_cross=False,
-                                       output_file=f'{p_target_dir}/{hemis_[idx].lower()}.{ROI_name}_roi_in_vol_bin.png')
-                # ribbonize!
+    # output.communicate()
+    #
+    # # unix_pattern = ['mri_convert',
+    # #                 f'{subj_FS_path}/{subj_id}/mri/rawavg.mgz',
+    # #                 f'{subj_FS_path}/{subj_id}/mri/rawavg.nii.gz'
+    # #                 ]
+    # # output = subprocess.Popen(unix_pattern, env=my_env)
+    # #  output.communicate()
+    #
+    # fill_thr=.1
+    #
+    # for idx, hemi in enumerate(hemis):
+    #     functional_path = f'bold.fsavg.sm4.{hemis_[idx].lower()}.lang/S-v-N'
+    #     sub_dti_dir = os.path.join(subj_path, 'DTI', subj_id, functional_path)
+    #     p_target_dir = sub_dti_dir.replace('fsavg', 'fsnative')
+    #     for ROI_name in d_parcel_name_map[network_id].values():
+    #         if ROI_name.__contains__(hemis_[idx]):
+    #             unix_pattern = ['mri_label2vol',
+    #                         '--label', f'{p_target_dir}/{hemis_[idx].lower()}.{ROI_name}_roi.label',
+    #                          '--subject', subj_id,
+    #                             '--hemi', hemis_[idx].lower(),
+    #                             #'--fillthresh',f'{fill_thr}',
+    #                             '--proj', 'frac', '0','1','.01',
+    #                         '--reg', f'{subj_FS_path}/{subj_id}/mri/label_register.dat',
+    #                         '--temp', f'{subj_FS_path}/{subj_id}/mri/rawavg.mgz',
+    #                         '--o', f'{p_target_dir}/{hemis_[idx].lower()}.{ROI_name}_roi.nii.gz'
+    #                          ]
+    #             output = subprocess.Popen(unix_pattern, env=my_env)
+    #             output.communicate()
+    #             plotting.plot_stat_map(f'{p_target_dir}/{hemis_[idx].lower()}.{ROI_name}_roi.nii.gz',
+    #                                    bg_img=f'{subj_FS_path}/{subj_id}/mri/rawavg.nii.gz',draw_cross=False,
+    #                                    output_file=f'{p_target_dir}/{hemis_[idx].lower()}.{ROI_name}_roi_in_vol.png')
+    #             # binarize
+    #             unix_pattern = ['mri_binarize',
+    #                             '--dilate', '1',
+    #                             '--erode', '1',
+    #                             '--i', f'{p_target_dir}/{hemis_[idx].lower()}.{ROI_name}_roi.nii.gz',
+    #                             '--o', f'{p_target_dir}/{hemis_[idx].lower()}.{ROI_name}_roi_bin.nii.gz',
+    #                             '--min','1']
+    #             output = subprocess.Popen(unix_pattern, env=my_env)
+    #             output.communicate()
+    #
+    #             plotting.plot_stat_map(f'{p_target_dir}/{hemis_[idx].lower()}.{ROI_name}_roi_bin.nii.gz',
+    #                                    bg_img=f'{subj_FS_path}/{subj_id}/mri/rawavg.nii.gz',draw_cross=False,
+    #                                    output_file=f'{p_target_dir}/{hemis_[idx].lower()}.{ROI_name}_roi_in_vol_bin.png')
+    #             # ribbonize!
 
                 # unix_pattern = ['mris_calc',
                 #                 '-o', f'{p_target_dir}/{hemis_[idx].lower()}.{ROI_name}_roi_bin_rib.nii.gz',
