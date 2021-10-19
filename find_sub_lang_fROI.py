@@ -20,10 +20,6 @@ parser.add_argument('threshold', type=int)#, default=90)
 args=parser.parse_args()
 
 
-def debuglog(message, type='INFO'):
-    text = f'=================== {msg}'
-
-
 if __name__ == '__main__':
     subj_id = args.subj_id
     # subj_id='sub190' # DEBUG
@@ -99,7 +95,7 @@ if __name__ == '__main__':
         ######!!! ^ didnt run for sub191, so tried making modificaiton below:
         # sub_func_native_dir = os.path.join(subj_path, 'archive', f'{subj_id}_arch', 'bold', functional_native_path, file_name + '.nii.gz')
         sub_func_native_dir = os.path.join(subj_path, 'archive', 'n810_archived_18Oct2021',
-                                           subj_id, 'bold', functional_path, file_name+'.nii.gz')
+                                           subj_id, 'bold', functional_native_path, file_name+'.nii.gz')
         
         network_native_img = nib.load(sub_func_native_dir)
         network_native = np.asarray(network_native_img.dataobj).flatten()
@@ -127,9 +123,9 @@ if __name__ == '__main__':
                 network_fsnative_ROI = np.zeros(network_native.shape)
                 network_fsnative_ROI[label_roi] = 1
                 plotting.plot_surf_roi(str(subj_surf_file), roi_map=network_fsnative_ROI,
-                                           hemi=hemi, view='lateral', cmap='hot',
-                                            bg_map=network_native, bg_on_data=True,
-                                            darkness=1, output_file=f'{p_target_dir}/{hemis_[idx].lower()}.{ROI_name}_roi.png')
+                                       hemi=hemi, view='lateral', cmap='hot',
+                                       bg_map=network_native, bg_on_data=True,
+                                       darkness=1, output_file=f'{p_target_dir}/{hemis_[idx].lower()}.{ROI_name}_roi.png')
 
     #####################################################################
     # Part 3 : transforming native label to volume for subject
@@ -194,6 +190,7 @@ if __name__ == '__main__':
                     '--s', subj_id,
                     '--o', f'{p_target_dir}/lh.rh.{network_id}_roi.nii.gz',
                     '--annot', f'{network_id}_roi']
+    
     output = subprocess.Popen(unix_pattern, env=my_env)
     output.communicate()
 
