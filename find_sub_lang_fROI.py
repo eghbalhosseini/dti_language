@@ -160,8 +160,8 @@ if __name__ == '__main__':
                         '--s', subj_id,
                         '--h', hemis_[idx].lower(),
                         '--ctab', f'{p_target_dir}/{hemis_[idx].lower()}_{network_id}_roi_ctab.txt',
-                        # '--annot-path', f'{p_target_dir}/{hemis_[idx].lower()}.{network_id}_roi',
-                        '--a', f'{p_target_dir}/{hemis_[idx].lower()}.{network_id}_roi',
+                        '--annot-path', f'{p_target_dir}/{hemis_[idx].lower()}.{network_id}_roi',
+                        # '--a', f'../{hemis_[idx].lower()}.{network_id}_roi',
                         '--surf', 'pial',
                         '--offset',f'{offset}']
         for idy, y in enumerate(hemi_rois_idx):
@@ -177,7 +177,8 @@ if __name__ == '__main__':
         sub_dti_dir = os.path.join(subj_path, 'DTI', subj_id, functional_path)
         p_target_dir = sub_dti_dir.replace('fsavg', 'fsnative')
 
-        Path(f'{subj_FS_path}/{subj_id}/label/{hemis_[idx].lower()}.{network_id}_roi.annot').mkdir(parents=True, exist_ok=True)
+        Path(f'{subj_FS_path}/{subj_id}/label').mkdir(parents=True, exist_ok=True)
+        # /{hemis_[idx].lower()}.{network_id}_roi.annot')
         copyfile(f'{p_target_dir}/{hemis_[idx].lower()}.{network_id}_roi.annot',
                  f'{subj_FS_path}/{subj_id}/label/{hemis_[idx].lower()}.{network_id}_roi.annot')
 
