@@ -8,7 +8,8 @@ import getpass
 if getpass.getuser()=='eghbalhosseini':
     subj_path='/Applications/freesurfer/subjects/'
     subj_FS_path = '/Applications/freesurfer/subjects/'
-elif getpass.getuser()=='ehoseini':
+else:
+    # if getpass.getuser()=='ehoseini':
     subj_path = '/mindhive/evlab/u/Shared/SUBJECTS_FS/'
     subj_FS_path='/mindhive/evlab/u/Shared/SUBJECTS_FS/FS/'
 

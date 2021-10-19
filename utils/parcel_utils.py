@@ -21,7 +21,8 @@ def load_obj(filename_, silent=False):
 
 if getpass.getuser()=='eghbalhosseini':
     path_to_masks='/Users/eghbalhosseini/Desktop/ROIS_NOV2020/Func_Lang_LHRH_SN220/'
-elif getpass.getuser()=='ehoseini':
+# elif getpass.getuser() == 'ehoseini':
+else:
     path_to_masks = '/om/user/ehoseini/MyData/dti_language/ROIS_NOV2020//Func_Lang_LHRH_SN220'
 
 
