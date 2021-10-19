@@ -14,24 +14,28 @@ from shutil import copyfile
 
 
 parser = argparse.ArgumentParser(description='find_subj_actvation_in_language_ROIs')
-parser.add_argument('subj_id', type=str,default='sub190')
-parser.add_argument('network_id',type=str,default='lang')
-parser.add_argument('threshold',type=int,default=90)
+parser.add_argument('subj_id', type=str) # DEBUG
+parser.add_argument('network_id', type=str)#, default='lang')
+parser.add_argument('threshold', type=int)#, default=90)
 args=parser.parse_args()
 
 
+def debuglog(message, type='INFO'):
+    text = f'=================== {msg}'
+
+
 if __name__ == '__main__':
-    #subj_id=args.subj_id
-    subj_id='sub190'
+    subj_id = args.subj_id
+    # subj_id='sub190' # DEBUG
     #network_id=args.network_id
-    network_id='lang'
+    network_id = 'lang'
     #threshold = args.threshold
     threshold = 90
-    file_name='fsig'
+    file_name = 'fsig'
     my_env = os.environ.copy()
     my_env['SUBJECTS_DIR'] = subj_FS_path
-    hemis_=['LH','RH']
-    hemis=['left','right']
+    hemis_ = ['LH', 'RH']
+    hemis = ['left', 'right']
     # adding stuff for checking
     #####################################################################
     ## Part 1 : select voxels based on overlap with langauge parcels:
@@ -39,7 +43,7 @@ if __name__ == '__main__':
 
     for idx, hemi in enumerate(hemis):
         functional_path=f'bold.fsavg.sm4.{hemis_[idx].lower()}.lang/S-v-N'
-        sub_func_dir=os.path.join(subj_path,subj_id,'bold',functional_path,file_name+'.nii.gz')
+        sub_func_dir = os.path.join(subj_path, 'archive', 'n810_archived_18Oct2021', subj_id, 'bold', functional_path, file_name+'.nii.gz')
         sub_dti_dir= os.path.join(subj_path,'DTI',subj_id,functional_path)
         Path(sub_dti_dir).mkdir(parents=True, exist_ok=True)
 
@@ -74,12 +78,12 @@ if __name__ == '__main__':
             if ROI_name.__contains__(hemis_[idx]):
             # move from annot to label
                 unix_pattern = ['mri_annotation2label',
-                             '--hemi', hemis_[idx].lower(),
-                             '--subject', 'fsaverage',
-                             '--label', str(1),
-                             '--outdir', f'{sub_dti_dir}',
-                             '--annotation', f'{sub_dti_dir}/{ROI_name}_roi_{file_name}_{threshold}_fsavg.annot',
-                             '--surface', 'inflated']
+                                '--hemi', hemis_[idx].lower(),
+                                '--subject', 'fsaverage',
+                                '--label', str(1),
+                                '--outdir', f'{sub_dti_dir}',
+                                '--annotation', f'{sub_dti_dir}/{ROI_name}_roi_{file_name}_{threshold}_fsavg.annot',
+                                '--surface', 'inflated']
                 output = subprocess.Popen(unix_pattern, env=my_env)
                 output.communicate()
     #####################################################################
@@ -90,7 +94,13 @@ if __name__ == '__main__':
         p_target_dir = sub_dti_dir.replace('fsavg', 'fsnative')
         Path(p_target_dir).mkdir(parents=True, exist_ok=True)
         functional_native_path = functional_path.replace('fsavg', 'self')
-        sub_func_native_dir = os.path.join(subj_path, subj_id, 'bold', functional_native_path, file_name + '.nii.gz')
+        
+        # sub_func_native_dir = os.path.join(subj_path, subj_id, 'bold', functional_native_path, file_name + '.nii.gz')
+        ######!!! ^ didnt run for sub191, so tried making modificaiton below:
+        # sub_func_native_dir = os.path.join(subj_path, 'archive', f'{subj_id}_arch', 'bold', functional_native_path, file_name + '.nii.gz')
+        sub_func_native_dir = os.path.join(subj_path, 'archive', 'n810_archived_18Oct2021',
+                                           subj_id, 'bold', functional_path, file_name+'.nii.gz')
+        
         network_native_img = nib.load(sub_func_native_dir)
         network_native = np.asarray(network_native_img.dataobj).flatten()
         subj_surf_file = Path(subj_FS_path, subj_id, 'surf', hemis_[idx].lower() + '.inflated')
@@ -128,7 +138,12 @@ if __name__ == '__main__':
     G_col=np.flip(R_col)
     # breakdown the areas based on hemisphere
     for idx, hemi in enumerate(hemis):
+
+        print(f'in step 3. processing hemisphere {hemi}.')
+
         functional_path = f'bold.fsavg.sm4.{hemis_[idx].lower()}.lang/S-v-N'
+        # TODO possibly problematic? currenly outputs 2000s for LH and 3000s for
+        # RH
         offset=2000+1000*idx
         sub_dti_dir = os.path.join(subj_path, 'DTI', subj_id, functional_path)
         p_target_dir = sub_dti_dir.replace('fsavg', 'fsnative')
@@ -149,7 +164,8 @@ if __name__ == '__main__':
                         '--s', subj_id,
                         '--h', hemis_[idx].lower(),
                         '--ctab', f'{p_target_dir}/{hemis_[idx].lower()}_{network_id}_roi_ctab.txt',
-                        '--annot-path', f'{p_target_dir}/{hemis_[idx].lower()}.{network_id}_roi',
+                        # '--annot-path', f'{p_target_dir}/{hemis_[idx].lower()}.{network_id}_roi',
+                        '--a', f'{p_target_dir}/{hemis_[idx].lower()}.{network_id}_roi',
                         '--surf', 'pial',
                         '--offset',f'{offset}']
         for idy, y in enumerate(hemi_rois_idx):
@@ -165,16 +181,27 @@ if __name__ == '__main__':
         sub_dti_dir = os.path.join(subj_path, 'DTI', subj_id, functional_path)
         p_target_dir = sub_dti_dir.replace('fsavg', 'fsnative')
 
+        Path(f'{subj_FS_path}/{subj_id}/label/{hemis_[idx].lower()}.{network_id}_roi.annot').mkdir(parents=True, exist_ok=True)
         copyfile(f'{p_target_dir}/{hemis_[idx].lower()}.{network_id}_roi.annot',
                  f'{subj_FS_path}/{subj_id}/label/{hemis_[idx].lower()}.{network_id}_roi.annot')
 
-        unix_pattern = ['mri_aparc2aseg',
+        # unix_pattern = ['mri_aparc2aseg',
+        #             '--s', subj_id,
+        #             '--o', f'{p_target_dir}/{hemis_[idx].lower()}.{network_id}_roi.nii.gz',
+        #             '--annot', f'{network_id}_roi']
+    
+    unix_pattern = ['mri_aparc2aseg',
                     '--s', subj_id,
-                    '--o', f'{p_target_dir}/{hemis_[idx].lower()}.{network_id}_roi.nii.gz',
+                    '--o', f'{p_target_dir}/lh.rh.{network_id}_roi.nii.gz',
                     '--annot', f'{network_id}_roi']
-        output = subprocess.Popen(unix_pattern, env=my_env)
-        output.communicate()
+    output = subprocess.Popen(unix_pattern, env=my_env)
+    output.communicate()
 
+
+
+
+
+    # ALT approach not to use
     #####################################################################
     ## Part 3 : transforming native label to volume for subject using label2vol method
     # unix_pattern = ['tkregister2',
