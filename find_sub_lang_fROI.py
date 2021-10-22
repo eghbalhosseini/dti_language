@@ -39,6 +39,7 @@ if __name__ == '__main__':
 
     for idx, hemi in enumerate(hemis):
         functional_path=f'bold.fsavg.sm4.{hemis_[idx].lower()}.lang/S-v-N'
+        # sub_func_dir = os.path.join(subj_path, subj_id, 'bold', functional_path, file_name+'.nii.gz')
         sub_func_dir = os.path.join(subj_path, 'archive', 'n810_archived_18Oct2021', subj_id, 'bold', functional_path, file_name+'.nii.gz')
         sub_dti_dir= os.path.join(subj_path,'DTI',subj_id,functional_path)
         Path(sub_dti_dir).mkdir(parents=True, exist_ok=True)
@@ -93,7 +94,6 @@ if __name__ == '__main__':
         
         # sub_func_native_dir = os.path.join(subj_path, subj_id, 'bold', functional_native_path, file_name + '.nii.gz')
         ######!!! ^ didnt run for sub191, so tried making modificaiton below:
-        # sub_func_native_dir = os.path.join(subj_path, 'archive', f'{subj_id}_arch', 'bold', functional_native_path, file_name + '.nii.gz')
         sub_func_native_dir = os.path.join(subj_path, 'archive', 'n810_archived_18Oct2021',
                                            subj_id, 'bold', functional_native_path, file_name+'.nii.gz')
         
@@ -140,7 +140,7 @@ if __name__ == '__main__':
         functional_path = f'bold.fsavg.sm4.{hemis_[idx].lower()}.lang/S-v-N'
         # TODO possibly problematic? currenly outputs 2000s for LH and 3000s for
         # RH
-        offset=2000+1000*idx
+        offset=4000+1000*idx # 4000 for lh; 5000 for rh
         sub_dti_dir = os.path.join(subj_path, 'DTI', subj_id, functional_path)
         p_target_dir = sub_dti_dir.replace('fsavg', 'fsnative')
         ROI_names=list(d_parcel_name_map[network_id].values())
@@ -177,7 +177,7 @@ if __name__ == '__main__':
         sub_dti_dir = os.path.join(subj_path, 'DTI', subj_id, functional_path)
         p_target_dir = sub_dti_dir.replace('fsavg', 'fsnative')
 
-        Path(f'{subj_FS_path}/{subj_id}/label').mkdir(parents=True, exist_ok=True)
+        Path(f'{subj_FS_path}/{subj_id}/label/').mkdir(parents=True, exist_ok=True)
         # /{hemis_[idx].lower()}.{network_id}_roi.annot')
         copyfile(f'{p_target_dir}/{hemis_[idx].lower()}.{network_id}_roi.annot',
                  f'{subj_FS_path}/{subj_id}/label/{hemis_[idx].lower()}.{network_id}_roi.annot')
@@ -189,8 +189,9 @@ if __name__ == '__main__':
     
     unix_pattern = ['mri_aparc2aseg',
                     '--s', subj_id,
-                    '--o', f'{p_target_dir}/lh.rh.{network_id}_roi.nii.gz',
-                    '--annot', f'{network_id}_roi']
+                    '--o', f'{str(Path(p_target_dir).parent.parent)}/x.fsnative.{network_id}_roi.nii.gz',
+                    '--annot', f'{network_id}_roi'
+                    ]
     
     output = subprocess.Popen(unix_pattern, env=my_env)
     output.communicate()
