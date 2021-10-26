@@ -140,7 +140,7 @@ if __name__ == '__main__':
         functional_path = f'bold.fsavg.sm4.{hemis_[idx].lower()}.lang/S-v-N'
         # TODO possibly problematic? currenly outputs 2000s for LH and 3000s for
         # RH
-        offset=4000+1000*idx # 4000 for lh; 5000 for rh
+        offset=1000+1000*idx # results in 2000 for lh; 4000 for rh
         sub_dti_dir = os.path.join(subj_path, 'DTI', subj_id, functional_path)
         p_target_dir = sub_dti_dir.replace('fsavg', 'fsnative')
         ROI_names=list(d_parcel_name_map[network_id].values())
