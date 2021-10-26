@@ -140,21 +140,23 @@ if __name__ == '__main__':
         functional_path = f'bold.fsavg.sm4.{hemis_[idx].lower()}.lang/S-v-N'
         # TODO possibly problematic? currenly outputs 2000s for LH and 3000s for
         # RH
-        offset=1000+1000*idx # results in 2000 for lh; 4000 for rh
+        offset=0 #*1000+1000*idx # results in 2000 for lh; 4000 for rh
         sub_dti_dir = os.path.join(subj_path, 'DTI', subj_id, functional_path)
         p_target_dir = sub_dti_dir.replace('fsavg', 'fsnative')
         ROI_names=list(d_parcel_name_map[network_id].values())
         hemi_rois_idx=np.where([x.__contains__(hemis_[idx]) for x in ROI_names])[0]
         # create the ctab file
+        fmt = '{:>19} ' * 2 + '{: >5} ' * 4
         txt_lines = ['#$Id: FreeSurferColorLUT.txt,v 1.38.2.1 2007/08/20 01:52:07 nicks Exp $',
-                     '#No. Label Name:                            R   G   B   A',
-                     f'{offset}   Unknown                                 0   0   0   0']
+                     fmt.format('#No.','Label Name:','R','G','B','A'),
+                     fmt.format(offset, 'Unknown', 0, 0, 0, 0) #f'{offset}   Unknown                                 0   0   0   0'
+                     ]
         for idy, y in enumerate(hemi_rois_idx):
-            txt_lines.append(f'{idy+offset+1}   {ROI_names[y]}                                 {R_col[y]}   {G_col[y]}   0   1')
-        textfile = open(f'{p_target_dir}/{hemis_[idx].lower()}_{network_id}_roi_ctab.txt', "w")
-        for element in txt_lines:
-            textfile.write(element + "\n")
-        textfile.close()
+            # txt_lines.append(f'{idy+offset+1}   {ROI_names[y]}                                 {R_col[y]}   {G_col[y]}   0   1')
+            txt_lines.append(fmt.format(idy+offset+1, ROI_names[y], R_col[y], G_col[y], 0, 1))
+        with open(f'{p_target_dir}/{hemis_[idx].lower()}_{network_id}_roi_ctab.txt', "w") as textfile:
+            for element in txt_lines:
+                textfile.write(element + "\n")
         # create the unix pattern:
         unix_pattern = ['mris_label2annot',
                         '--s', subj_id,
@@ -163,7 +165,9 @@ if __name__ == '__main__':
                         '--annot-path', f'{p_target_dir}/{hemis_[idx].lower()}.{network_id}_roi',
                         # '--a', f'../{hemis_[idx].lower()}.{network_id}_roi',
                         '--surf', 'pial',
-                        '--offset',f'{offset}']
+                        # '--surf', 'orig',
+                        '--offset',f'{offset}'
+                        ]
         for idy, y in enumerate(hemi_rois_idx):
             unix_pattern.append('--l'),
             unix_pattern.append(f'{p_target_dir}/{hemis_[idx].lower()}.{ROI_names[y]}_roi.label')
