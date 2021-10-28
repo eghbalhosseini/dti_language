@@ -22,17 +22,16 @@ args=parser.parse_args()
 
 if __name__ == '__main__':
     subj_id = args.subj_id
-    # subj_id='sub190' # DEBUG
-    #network_id=args.network_id
     network_id = 'lang'
-    #threshold = args.threshold
-    threshold = 90
+    threshold = args.threshold
     file_name = 'fsig'
+
     my_env = os.environ.copy()
     my_env['SUBJECTS_DIR'] = subj_FS_path
-    hemis_ = ['LH', 'RH']
-    hemis = ['left', 'right']
-    # adding stuff for checking
+
+    hemis_ = ['LH', 'RH'] # shorthand version
+    hemis = ['left', 'right'] # longform version
+
     #####################################################################
     ## Part 1 : select voxels based on overlap with langauge parcels:
     # find language signinifant voxels in fsaverge space
@@ -40,14 +39,19 @@ if __name__ == '__main__':
     for idx, hemi in enumerate(hemis):
         functional_path=f'bold.fsavg.sm4.{hemis_[idx].lower()}.lang/S-v-N'
         # sub_func_dir = os.path.join(subj_path, subj_id, 'bold', functional_path, file_name+'.nii.gz')
-        sub_func_dir = os.path.join(subj_path, 'archive', 'n810_archived_18Oct2021', subj_id, 'bold', functional_path, file_name+'.nii.gz')
+
+        # replacing the original FS directory stuff with the "archived" stuff, because the newly processed directories
+        # are still missing certain files necessary for processing here (TODO: which files are missing? I think the 
+        # bold/*.nii.gz onces)
+        sub_func_dir = os.path.join(subj_path, 'archive', 'n810_archived_18Oct2021',
+                                    subj_id, 'bold', functional_path, file_name+'.nii.gz')
         sub_dti_dir= os.path.join(subj_path,'DTI',subj_id,functional_path)
         Path(sub_dti_dir).mkdir(parents=True, exist_ok=True)
-
 
         network_img=nib.load(sub_func_dir)
         network = np.asarray(network_img.dataobj).flatten()
         sub_parcel_roi_vxl = np.zeros(network.shape).astype(int)
+
         # create an annotation file from the activation masks
         for ROI_name in d_parcel_name_map[network_id].values():
             if ROI_name.__contains__(hemis_[idx]):
@@ -67,6 +71,7 @@ if __name__ == '__main__':
                                        roi_voxels.astype(int), np.asarray([[0, 0, 0, 0, 0], [255, 0, 0, 255, 1]]),
                                        [b'???', f'{ROI_name}_roi'], fill_ctab=True)
                 sub_parcel_roi_vxl += roi_voxels.astype(int)
+
     # make annotation to labels for easier transformation from average to native
     for idx, hemi in enumerate(hemis):
         functional_path = f'bold.fsavg.sm4.{hemis_[idx].lower()}.lang/S-v-N'
@@ -83,6 +88,7 @@ if __name__ == '__main__':
                                 '--surface', 'inflated']
                 output = subprocess.Popen(unix_pattern, env=my_env)
                 output.communicate()
+    
     #####################################################################
     ## Part 2 : move labels from fsaverage to fsnative
     for idx, hemi in enumerate(hemis):
@@ -145,28 +151,29 @@ if __name__ == '__main__':
         p_target_dir = sub_dti_dir.replace('fsavg', 'fsnative')
         ROI_names=list(d_parcel_name_map[network_id].values())
         hemi_rois_idx=np.where([x.__contains__(hemis_[idx]) for x in ROI_names])[0]
-        # create the ctab file
+
+        # create a nicely formatted ctab file
         fmt = '{:>19} ' * 2 + '{: >5} ' * 4
         txt_lines = ['#$Id: FreeSurferColorLUT.txt,v 1.38.2.1 2007/08/20 01:52:07 nicks Exp $',
                      fmt.format('#No.','Label Name:','R','G','B','A'),
-                     fmt.format(offset, 'Unknown', 0, 0, 0, 0) #f'{offset}   Unknown                                 0   0   0   0'
+                     fmt.format(offset, 'Unknown', 0, 0, 0, 0)
                      ]
         for idy, y in enumerate(hemi_rois_idx):
-            # txt_lines.append(f'{idy+offset+1}   {ROI_names[y]}                                 {R_col[y]}   {G_col[y]}   0   1')
             txt_lines.append(fmt.format(idy+offset+1, ROI_names[y], R_col[y], G_col[y], 0, 1))
         with open(f'{p_target_dir}/{hemis_[idx].lower()}_{network_id}_roi_ctab.txt', "w") as textfile:
             for element in txt_lines:
                 textfile.write(element + "\n")
-        # create the unix pattern:
+
+        # create the unix pattern to run mri_label2annot command:
         unix_pattern = ['mris_label2annot',
                         '--s', subj_id,
                         '--h', hemis_[idx].lower(),
                         '--ctab', f'{p_target_dir}/{hemis_[idx].lower()}_{network_id}_roi_ctab.txt',
                         '--annot-path', f'{p_target_dir}/{hemis_[idx].lower()}.{network_id}_roi',
-                        # '--a', f'../{hemis_[idx].lower()}.{network_id}_roi',
-                        '--surf', 'pial',
-                        # '--surf', 'orig',
-                        '--offset',f'{offset}'
+                        # NOTE: we do not observe any difference in the output generated using the
+                        # --surf pial or --surf orig flags. we may use either one.
+                        '--surf', 'pial', # '--surf', 'orig',
+                        '--offset', f'{offset}' # NOTE: expects offset of 0 for lh and rh
                         ]
         for idy, y in enumerate(hemi_rois_idx):
             unix_pattern.append('--l'),
@@ -182,15 +189,11 @@ if __name__ == '__main__':
         p_target_dir = sub_dti_dir.replace('fsavg', 'fsnative')
 
         Path(f'{subj_FS_path}/{subj_id}/label/').mkdir(parents=True, exist_ok=True)
-        # /{hemis_[idx].lower()}.{network_id}_roi.annot')
         copyfile(f'{p_target_dir}/{hemis_[idx].lower()}.{network_id}_roi.annot',
                  f'{subj_FS_path}/{subj_id}/label/{hemis_[idx].lower()}.{network_id}_roi.annot')
-
-        # unix_pattern = ['mri_aparc2aseg',
-        #             '--s', subj_id,
-        #             '--o', f'{p_target_dir}/{hemis_[idx].lower()}.{network_id}_roi.nii.gz',
-        #             '--annot', f'{network_id}_roi']
     
+    # output a unified volume file (for both hemispheres) at the root of the fsnative folder 
+    # need to only do this once for the subject
     unix_pattern = ['mri_aparc2aseg',
                     '--s', subj_id,
                     '--o', f'{str(Path(p_target_dir).parent.parent)}/x.fsnative.{network_id}_roi.nii.gz',
