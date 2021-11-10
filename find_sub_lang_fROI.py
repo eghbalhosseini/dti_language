@@ -203,77 +203,28 @@ if __name__ == '__main__':
     output = subprocess.Popen(unix_pattern, env=my_env)
     output.communicate()
 
-
-
-
-
-    # ALT approach not to use
     #####################################################################
-    ## Part 3 : transforming native label to volume for subject using label2vol method
-    # unix_pattern = ['tkregister2',
-    #                 '--mov',  f'{subj_FS_path}/{subj_id}/mri/rawavg.mgz',
-    #                 '--noedit',
-    #                 '--s', subj_id,
-    #                 '--regheader',
-    #                 '--reg',  f'{subj_FS_path}/{subj_id}/mri/label_register.dat'
-    #                 ]
-    # output = subprocess.Popen(unix_pattern, env=my_env)
-    # output.communicate()
-    #
-    # # unix_pattern = ['mri_convert',
-    # #                 f'{subj_FS_path}/{subj_id}/mri/rawavg.mgz',
-    # #                 f'{subj_FS_path}/{subj_id}/mri/rawavg.nii.gz'
-    # #                 ]
-    # # output = subprocess.Popen(unix_pattern, env=my_env)
-    # #  output.communicate()
-    #
-    # fill_thr=.1
-    #
-    # for idx, hemi in enumerate(hemis):
-    #     functional_path = f'bold.fsavg.sm4.{hemis_[idx].lower()}.lang/S-v-N'
-    #     sub_dti_dir = os.path.join(subj_path, 'DTI', subj_id, functional_path)
-    #     p_target_dir = sub_dti_dir.replace('fsavg', 'fsnative')
-    #     for ROI_name in d_parcel_name_map[network_id].values():
-    #         if ROI_name.__contains__(hemis_[idx]):
-    #             unix_pattern = ['mri_label2vol',
-    #                         '--label', f'{p_target_dir}/{hemis_[idx].lower()}.{ROI_name}_roi.label',
-    #                          '--subject', subj_id,
-    #                             '--hemi', hemis_[idx].lower(),
-    #                             #'--fillthresh',f'{fill_thr}',
-    #                             '--proj', 'frac', '0','1','.01',
-    #                         '--reg', f'{subj_FS_path}/{subj_id}/mri/label_register.dat',
-    #                         '--temp', f'{subj_FS_path}/{subj_id}/mri/rawavg.mgz',
-    #                         '--o', f'{p_target_dir}/{hemis_[idx].lower()}.{ROI_name}_roi.nii.gz'
-    #                          ]
-    #             output = subprocess.Popen(unix_pattern, env=my_env)
-    #             output.communicate()
-    #             plotting.plot_stat_map(f'{p_target_dir}/{hemis_[idx].lower()}.{ROI_name}_roi.nii.gz',
-    #                                    bg_img=f'{subj_FS_path}/{subj_id}/mri/rawavg.nii.gz',draw_cross=False,
-    #                                    output_file=f'{p_target_dir}/{hemis_[idx].lower()}.{ROI_name}_roi_in_vol.png')
-    #             # binarize
-    #             unix_pattern = ['mri_binarize',
-    #                             '--dilate', '1',
-    #                             '--erode', '1',
-    #                             '--i', f'{p_target_dir}/{hemis_[idx].lower()}.{ROI_name}_roi.nii.gz',
-    #                             '--o', f'{p_target_dir}/{hemis_[idx].lower()}.{ROI_name}_roi_bin.nii.gz',
-    #                             '--min','1']
-    #             output = subprocess.Popen(unix_pattern, env=my_env)
-    #             output.communicate()
-    #
-    #             plotting.plot_stat_map(f'{p_target_dir}/{hemis_[idx].lower()}.{ROI_name}_roi_bin.nii.gz',
-    #                                    bg_img=f'{subj_FS_path}/{subj_id}/mri/rawavg.nii.gz',draw_cross=False,
-    #                                    output_file=f'{p_target_dir}/{hemis_[idx].lower()}.{ROI_name}_roi_in_vol_bin.png')
-    #             # ribbonize!
+    # part 4
 
-                # unix_pattern = ['mris_calc',
-                #                 '-o', f'{p_target_dir}/{hemis_[idx].lower()}.{ROI_name}_roi_bin_rib.nii.gz',
-                #                 f'{p_target_dir}/{hemis_[idx].lower()}.{ROI_name}_roi_bin.nii.gz',
-                #                 'mul',
-                #                 f'{subj_FS_path}/{subj_id}/mri/{hemis_[idx].lower()}.ribbon.mgz']
-                # output = subprocess.Popen(unix_pattern, env=my_env)
-                # output.communicate()
-                #
-                # plotting.plot_stat_map(f'{p_target_dir}/{hemis_[idx].lower()}.{ROI_name}_roi_bin_rib.nii.gz',
-                #                        bg_img=f'{subj_FS_path}/{subj_id}/mri/rawavg.nii.gz',
-                #                        output_file=f'{p_target_dir}/{hemis_[idx].lower()}.{ROI_name}_roi_in_vol_bin_rib.png')
-                #
+    dti_vol_file='/mindhive/evlab/Shared/diffusionzeynep/sub190/dti/nodif_brain.nii.gz'
+
+    # create a registeration file between functional and dti
+    unix_pattern = ['bbregister',
+                    '--s', subj_id,
+                    '--mov', dti_vol_file,
+                    #'--init-fsl',
+                    '--dti',
+                    '--reg', f'{str(Path(p_target_dir).parent.parent)}/reg_FS2nodif.dat']
+    output = subprocess.Popen(unix_pattern, env=my_env)
+    output.communicate()
+
+    # do mri_vol2vol
+    unix_pattern = ['mri_vol2vol',
+                    '--targ', f'{str(Path(p_target_dir).parent.parent)}.orig/x.fsnative.{network_id}_roi.nii.gz',
+                    '--mov', dti_vol_file,
+                    '--inv',
+                    '--interp', 'nearest',
+                    '--reg', f'{str(Path(p_target_dir).parent.parent)}/reg_FS2nodif.dat',
+                    '--o',f'{str(Path(p_target_dir).parent.parent)}/x.fsnative.{network_id}_roi_in_DTI.nii.gz']
+    output = subprocess.Popen(unix_pattern, env=my_env)
+    output.communicate()
