@@ -11,6 +11,8 @@ from utils.fmri_utils import subj_path, subj_FS_path
 fsaverage = datasets.fetch_surf_fsaverage(mesh='fsaverage')
 from pathlib import Path
 from shutil import copyfile
+import matplotlib.pyplot as plt
+from nilearn.image import load_img, math_img
 
 
 parser = argparse.ArgumentParser(description='find_subj_actvation_in_language_ROIs')
@@ -22,6 +24,8 @@ args=parser.parse_args()
 
 if __name__ == '__main__':
     subj_id = args.subj_id
+    subj_id='sub239'
+    threshold=90
     network_id = 'lang'
     threshold = args.threshold
     file_name = 'fsig'
@@ -51,7 +55,8 @@ if __name__ == '__main__':
         network_img=nib.load(sub_func_dir)
         network = np.asarray(network_img.dataobj).flatten()
         sub_parcel_roi_vxl = np.zeros(network.shape).astype(int)
-
+        sub_parcel_roi = np.zeros(network.shape).astype(int)
+        # plot surface data
         # create an annotation file from the activation masks
         for ROI_name in d_parcel_name_map[network_id].values():
             if ROI_name.__contains__(hemis_[idx]):
@@ -60,17 +65,34 @@ if __name__ == '__main__':
                 samples_90 = np.percentile(samples, int(threshold))
                 roi_voxels = ((roi_surf == 1)) & (network >= samples_90)
                 print(f'ROI name: {ROI_name}, number of voxels {np.sum(roi_voxels)}')
-                figure = plotting.plot_surf_stat_map(fsaverage['infl_' + hemi], roi_voxels.astype(int), hemi=hemi,
-                                                 title=f'Surface {hemi} hemisphere', colorbar=False,
-                                                 threshold=1., bg_map=fsaverage['sulc_' + hemi])
+
+                figure=plotting.plot_surf_roi(surf_mesh=fsaverage['infl_' + hemi], roi_map=roi_voxels,
+                                       hemi=hemi, view='lateral', cmap='hot',
+                                       bg_map=network, bg_on_data=True, alpha=.3,
+                                       darkness=1)
+
                 plotting.plot_surf_contours(fsaverage['infl_' + hemi], roi_surf, levels=[1, ], figure=figure,
-                                        legend=True, colors=['g', ], labels=[ROI_name],
-                                        output_file=f'{sub_dti_dir}/{ROI_name}_roi_{file_name}_{threshold}_fsavg.png')
+                                        legend=True, colors=['k', ], labels=[f'{ROI_name},  #vox: {np.sum(roi_voxels)}'])
+
+                figure.savefig(f'{sub_dti_dir}/{subj_id}_{ROI_name}_roi_{file_name}_{threshold}_fsavg.png',facecolor=(.7,.7,.7),edgecolor='none')
             # save individual annotation file and create label form them
                 nib.freesurfer.write_annot(f'{sub_dti_dir}/{ROI_name}_roi_{file_name}_{threshold}_fsavg.annot',
                                        roi_voxels.astype(int), np.asarray([[0, 0, 0, 0, 0], [255, 0, 0, 255, 1]]),
                                        [b'???', f'{ROI_name}_roi'], fill_ctab=True)
                 sub_parcel_roi_vxl += roi_voxels.astype(int)
+                sub_parcel_roi += roi_surf
+        # plot full ROI map
+        figure = plotting.plot_surf_roi(surf_mesh=fsaverage['infl_' + hemi], roi_map=sub_parcel_roi_vxl,
+                                        hemi=hemi, view='lateral', cmap='hot',
+                                        bg_map=network, bg_on_data=True, alpha=.3,
+                                        title=f'num of voxels{sub_parcel_roi_vxl.sum()}',
+                                        darkness=1)
+
+
+        plotting.plot_surf_contours(fsaverage['infl_' + hemi], sub_parcel_roi, levels=[1, ], figure=figure,
+                                    legend=True, colors=['k', ], labels=[f'{hemis_[idx]} ROIs,  #vox: {sub_parcel_roi_vxl.sum()}'])
+        figure.savefig(f'{sub_dti_dir}/{subj_id}_{hemis_[idx]}_all_ROIs_{file_name}_{threshold}_fsavg.png',
+                       facecolor=(.7, .7, .7), edgecolor='none')
 
     # make annotation to labels for easier transformation from average to native
     for idx, hemi in enumerate(hemis):
@@ -100,11 +122,18 @@ if __name__ == '__main__':
         
         # sub_func_native_dir = os.path.join(subj_path, subj_id, 'bold', functional_native_path, file_name + '.nii.gz')
         ######!!! ^ didnt run for sub191, so tried making modificaiton below:
+        # load subject fsaverage activation, this is for plotting only
+        sub_func_dir = os.path.join(subj_path, 'archive', 'n810_archived_18Oct2021',
+                                    subj_id, 'bold', functional_path, file_name + '.nii.gz')
+        network_img=nib.load(sub_func_dir)
+        network_fsavg = np.asarray(network_img.dataobj).flatten()
+
+        # load subject native activation, this is for plotting only
         sub_func_native_dir = os.path.join(subj_path, 'archive', 'n810_archived_18Oct2021',
                                            subj_id, 'bold', functional_native_path, file_name+'.nii.gz')
-        
         network_native_img = nib.load(sub_func_native_dir)
         network_native = np.asarray(network_native_img.dataobj).flatten()
+
         subj_surf_file = Path(subj_FS_path, subj_id, 'surf', hemis_[idx].lower() + '.inflated')
         subj_sulc_file = Path(subj_FS_path, subj_id, 'surf', hemis_[idx].lower() + '.sulc')
     #
@@ -115,23 +144,38 @@ if __name__ == '__main__':
                              '--hemi', hemis_[idx].lower(),
                              '--srclabel', f'{sub_dti_dir}/{hemis_[idx].lower()}.{ROI_name}_roi.label',
                              '--trgsubject', subj_id,
-                             '--trgsurf', 'pial',
+                             #'--trgsurf', 'pial', # TODO :do we need this here ? this is for when the label in volume and need to be tranformed to surface
                              '--trglabel', f'{p_target_dir}/{hemis_[idx].lower()}.{ROI_name}_roi.label',
                              '--regmethod', 'surface']
                 output = subprocess.Popen(unix_pattern, env=my_env)
                 output.communicate()
+                # plot the resulting surface
 
-        for ROI_name in d_parcel_name_map[network_id].values():
-            if ROI_name.__contains__(hemis_[idx]):
-            # plot labels and actvations to verify the tranformationed worked
-                print(ROI_name)
+                #
+                fig, ax = plt.subplots(nrows=2, ncols=1,subplot_kw={'projection': '3d'},figsize=[8,11])
+                # plot fsaverage:
+                label_roi = nib.freesurfer.read_label(f'{sub_dti_dir}/{hemis_[idx].lower()}.{ROI_name}_roi.label')
+                network_fsaverage_ROI = np.zeros(network_fsavg.shape)
+                network_fsaverage_ROI[label_roi] = 1
+                plotting.plot_surf_roi(surf_mesh=fsaverage['infl_' + hemi], roi_map=network_fsaverage_ROI,
+                                       hemi=hemi, view='lateral', cmap='hot',
+                                       bg_map=network_fsavg, bg_on_data=True,
+                                       darkness=1,axes=ax[0])
+                ax[0].set_title(f'fsaverage, {ROI_name}_roi, #vox: {np.sum(network_fsaverage_ROI)}')
+                # plot fs native
                 label_roi = nib.freesurfer.read_label(f'{p_target_dir}/{hemis_[idx].lower()}.{ROI_name}_roi.label')
                 network_fsnative_ROI = np.zeros(network_native.shape)
                 network_fsnative_ROI[label_roi] = 1
+
                 plotting.plot_surf_roi(str(subj_surf_file), roi_map=network_fsnative_ROI,
                                        hemi=hemi, view='lateral', cmap='hot',
                                        bg_map=network_native, bg_on_data=True,
-                                       darkness=1, output_file=f'{p_target_dir}/{hemis_[idx].lower()}.{ROI_name}_roi.png')
+                                       darkness=1,axes=ax[1]
+                                       )
+                ax[1].set_title(f'fsnative, {ROI_name}_roi, #vox: {np.sum(network_fsnative_ROI)}')
+
+                fig.savefig(f'{p_target_dir}/{subj_id}_{hemis_[idx].lower()}.{ROI_name}_roi.png',edgecolor='none')
+
 
     #####################################################################
     # Part 3 : transforming native label to volume for subject
@@ -172,7 +216,7 @@ if __name__ == '__main__':
                         '--annot-path', f'{p_target_dir}/{hemis_[idx].lower()}.{network_id}_roi',
                         # NOTE: we do not observe any difference in the output generated using the
                         # --surf pial or --surf orig flags. we may use either one.
-                        '--surf', 'pial', # '--surf', 'orig',
+                        '--surf', 'orig', # '--surf', 'orig',
                         '--offset', f'{offset}' # NOTE: expects offset of 0 for lh and rh
                         ]
         for idy, y in enumerate(hemi_rois_idx):
@@ -202,7 +246,15 @@ if __name__ == '__main__':
     
     output = subprocess.Popen(unix_pattern, env=my_env)
     output.communicate()
+    # do some plotting here
+    subj_vol_path=os.path.join(subj_FS_path,subj_id,'mri','brain.mgz')
 
+    fig, ax = plt.subplots(nrows=1, ncols=1, subplot_kw={'projection': '3d'}, figsize=[8, 11])
+    test_img=load_img(f'{str(Path(p_target_dir).parent.parent)}/x.fsnative.{network_id}_roi.nii.gz')
+    mask=math_img('np.logical_and(img>1000,img<=1001)',img=test_img)
+
+    plotting.plot_stat_map(mask,bg_img=subj_vol_path,axes=ax,display_mode='ortho',draw_cross=False)
+    fig.show()
     #####################################################################
     # part 4
 
