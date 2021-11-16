@@ -38,13 +38,14 @@ if __name__ == '__main__':
 
     for idx, hemi in enumerate(hemis):
         functional_path=f'bold.fsavg.sm4.{hemis_[idx].lower()}.lang/S-v-N'
-        # sub_func_dir = os.path.join(subj_path, subj_id, 'bold', functional_path, file_name+'.nii.gz')
 
         # replacing the original FS directory stuff with the "archived" stuff, because the newly processed directories
         # are still missing certain files necessary for processing here (TODO: which files are missing? I think the 
         # bold/*.nii.gz onces)
-        sub_func_dir = os.path.join(subj_path, 'archive', 'n810_archived_18Oct2021',
-                                    subj_id, 'bold', functional_path, file_name+'.nii.gz')
+        # sub_func_dir = os.path.join(subj_path, 'archive', 'n810_archived_18Oct2021',
+        #                             subj_id, 'bold', functional_path, file_name+'.nii.gz')
+        sub_func_dir = os.path.join(subj_path, subj_id, 'bold', functional_path, file_name+'.nii.gz')
+        
         sub_dti_dir= os.path.join(subj_path,'DTI',subj_id,functional_path)
         Path(sub_dti_dir).mkdir(parents=True, exist_ok=True)
 
@@ -146,6 +147,13 @@ if __name__ == '__main__':
         functional_path = f'bold.fsavg.sm4.{hemis_[idx].lower()}.lang/S-v-N'
         # TODO possibly problematic? currenly outputs 2000s for LH and 3000s for
         # RH
+
+        # https://github.com/freesurfer/freesurfer/blob/e34ae4559d26a971ad42f5739d28e84d38659759/mri_aparc2aseg/mri_aparc2aseg.cpp#L836
+        # ACTUAL_OFFSET = {
+        #       OFFSET + 1000,  if LH
+        #       OFFSET + 2000,  if RH
+        # }
+        # these values are HARD-CODED in the freesurfer
         offset=0 #*1000+1000*idx # results in 2000 for lh; 4000 for rh
         sub_dti_dir = os.path.join(subj_path, 'DTI', subj_id, functional_path)
         p_target_dir = sub_dti_dir.replace('fsavg', 'fsnative')
