@@ -14,6 +14,8 @@ from shutil import copyfile
 import matplotlib.pyplot as plt
 from nilearn.image import load_img, math_img
 
+import IPython 
+
 
 parser = argparse.ArgumentParser(description='find_subj_actvation_in_language_ROIs')
 parser.add_argument('subj_id', type=str) # DEBUG
@@ -24,9 +26,9 @@ args=parser.parse_args()
 
 if __name__ == '__main__':
     subj_id = args.subj_id
-    subj_id='sub239'
-    threshold=90
-    network_id = 'lang'
+    # subj_id='sub239'
+    # threshold = 90
+    network_id = args.network_id # 'lang'
     threshold = args.threshold
     file_name = 'fsig'
 
@@ -64,6 +66,16 @@ if __name__ == '__main__':
                 roi_surf = d_parcel_fsaverage[network_id][ROI_name]
                 samples = network[(roi_surf == 1) & ~(np.isnan(network))]
                 samples_90 = np.percentile(samples, int(threshold))
+                
+                fig, ax = plt.subplots(1, 1, figsize=(8, 6))
+                ax.hist(samples, bins=32, range=[0, 10.5], facecolor='gray', align='mid')
+                # fig.tight_layout()
+                plt.title(f'{ROI_name}')
+                plt.xlabel("voxel activation")
+                plt.ylabel("Frequency")
+                plt.axvline(x=samples_90)
+                fig.savefig(str(Path(f'{sub_dti_dir}/../../{subj_id}_{ROI_name}_roi_{file_name}_{threshold}_voxels_histogram.png').resolve()))
+
                 roi_voxels = ((roi_surf == 1)) & (network >= samples_90)
                 print(f'ROI name: {ROI_name}, number of voxels {np.sum(roi_voxels)}')
 
@@ -82,6 +94,9 @@ if __name__ == '__main__':
                                        [b'???', f'{ROI_name}_roi'], fill_ctab=True)
                 sub_parcel_roi_vxl += roi_voxels.astype(int)
                 sub_parcel_roi += roi_surf
+        
+        # IPython.embed()
+
         # plot full ROI map
         figure = plotting.plot_surf_roi(surf_mesh=fsaverage['infl_' + hemi], roi_map=sub_parcel_roi_vxl,
                                         hemi=hemi, view='lateral', cmap='hot',
@@ -181,16 +196,16 @@ if __name__ == '__main__':
     #####################################################################
     # Part 3 : transforming native label to volume for subject
     # 3.A tranform labels to annoation first
-    R_col=np.linspace(0,255,len(d_parcel_name_map[network_id].values()),dtype=int)
+    R_col=np.linspace(0, 255, len(d_parcel_name_map[network_id].values()), dtype=int)
     G_col=np.flip(R_col)
     # breakdown the areas based on hemisphere
+    from utils.lookuptable import FSLUT, _FSLUT_HEADER 
+    LUT_prime = _FSLUT_HEADER + '\n' + FSLUT
     for idx, hemi in enumerate(hemis):
 
         print(f'in step 3. processing hemisphere {hemi}.')
 
         functional_path = f'bold.fsavg.sm4.{hemis_[idx].lower()}.lang/S-v-N'
-        # TODO possibly problematic? currenly outputs 2000s for LH and 3000s for
-        # RH
 
         # https://github.com/freesurfer/freesurfer/blob/e34ae4559d26a971ad42f5739d28e84d38659759/mri_aparc2aseg/mri_aparc2aseg.cpp#L836
         # ACTUAL_OFFSET = {
@@ -198,20 +213,26 @@ if __name__ == '__main__':
         #       OFFSET + 2000,  if RH
         # }
         # these values are HARD-CODED in the freesurfer
-        offset=0 #*1000+1000*idx # results in 2000 for lh; 4000 for rh
+        offset = 400 #*1000+1000*idx # results in 2000 for lh; 4000 for rh
         sub_dti_dir = os.path.join(subj_path, 'DTI', subj_id, functional_path)
         p_target_dir = sub_dti_dir.replace('fsavg', 'fsnative')
-        ROI_names=list(d_parcel_name_map[network_id].values())
+        ROI_names = list(d_parcel_name_map[network_id].values())
         hemi_rois_idx=np.where([x.__contains__(hemis_[idx]) for x in ROI_names])[0]
 
         # create a nicely formatted ctab file
-        fmt = '{:>19} ' * 2 + '{: >5} ' * 4
-        txt_lines = ['#$Id: FreeSurferColorLUT.txt,v 1.38.2.1 2007/08/20 01:52:07 nicks Exp $',
+        fmt = '{:<19} ' * 2 + '{: >5} ' * 4
+        # txt_lines = ['#$Id: FreeSurferColorLUT.txt,v 1.38.2.1 2007/08/20 01:52:07 nicks Exp $',
+        txt_lines = ['#$ Id: FreeSurferColorLUT_dti_evlab.txt, Fall 2021 $',
                      fmt.format('#No.','Label Name:','R','G','B','A'),
                      fmt.format(offset, 'Unknown', 0, 0, 0, 0)
-                     ]
+                    ]
+
+        LUT_prime += '\n' + fmt.format(offset+1000+(1000*idx), 'Unknown', 0, 0, 0, 0)
         for idy, y in enumerate(hemi_rois_idx):
             txt_lines.append(fmt.format(idy+offset+1, ROI_names[y], R_col[y], G_col[y], 0, 1))
+            # does what freesurfer does internally to the indices it reads from the ctab files.
+            # for LH, we want to transform x -> x + 1000 + offset if LH, else x + 2000 + offset
+            LUT_prime += '\n' + fmt.format(idy+offset+1+1000+(1000*idx), ROI_names[y], R_col[y], G_col[y], 0, 1)
         with open(f'{p_target_dir}/{hemis_[idx].lower()}_{network_id}_roi_ctab.txt', "w") as textfile:
             for element in txt_lines:
                 textfile.write(element + "\n")
@@ -233,6 +254,11 @@ if __name__ == '__main__':
 
         output = subprocess.Popen(unix_pattern, env=my_env)
         output.communicate()
+
+    sub_dti_dir = os.path.join(subj_path, 'DTI', subj_id, functional_path)
+    p_target_dir = sub_dti_dir.replace('fsavg', 'fsnative')
+    with open(f'{os.path.join(subj_path, "DTI", subj_id)}/FSColorLUT_with_{network_id}_rois.txt', "w") as ctab:
+        ctab.write(LUT_prime)
 
     # 3.B move from annotation in surface to volume
     for idx, hemi in enumerate(hemis):
@@ -261,7 +287,7 @@ if __name__ == '__main__':
     test_img=load_img(f'{str(Path(p_target_dir).parent.parent)}/x.fsnative.{network_id}_roi.nii.gz')
     mask=math_img('np.logical_and(img>1000,img<=1001)',img=test_img)
 
-    plotting.plot_stat_map(mask,bg_img=subj_vol_path,axes=ax,display_mode='ortho',draw_cross=False)
+    plotting.plot_stat_map(mask, bg_img=subj_vol_path, axes=ax, display_mode='ortho',draw_cross=False)
     fig.show()
     #####################################################################
     # part 4
@@ -280,7 +306,7 @@ if __name__ == '__main__':
 
     # do mri_vol2vol
     unix_pattern = ['mri_vol2vol',
-                    '--targ', f'{str(Path(p_target_dir).parent.parent)}.orig/x.fsnative.{network_id}_roi.nii.gz',
+                    '--targ', f'{str(Path(p_target_dir).parent.parent)}/x.fsnative.{network_id}_roi.nii.gz',
                     '--mov', dti_vol_file,
                     '--inv',
                     '--interp', 'nearest',
