@@ -8,8 +8,14 @@ from pathlib import Path
 # import numpy as np
 import os
 import argparse
+import requests
+import bs4
+from utils.parcel_utils import d_parcel_fsaverage, d_parcel_name_map
+from utils.fmri_utils import HOME_DIR
+from utils.general_utils import download
+
 # from utils.parcel_utils import d_parcel_fsaverage, d_parcel_name_map
-# from utils.fmri_utils import subj_path, subj_FS_path
+from utils.fmri_utils import subj_path, subj_FS_path
 
 # fsaverage = datasets.fetch_surf_fsaverage(mesh='fsaverage')
 
@@ -22,8 +28,6 @@ parser.add_argument('--subjects_dir', type=str,
                     default='/om/user/ehoseini/dti_language/glasser_to_native/subjects_for_processing')
 parser.add_argument('--data_source_dir', type=str,
                     default='/mindhive/evlab/u/Shared/SUBJECTS_FS/FS/')
-parser.add_argument('--output_dir', type=str, 
-                    default='/mindhive/evlab/u/Shared/SUBJECTS_FS/DTI/')
 
 args = parser.parse_args()
 
@@ -33,13 +37,17 @@ if __name__ == '__main__':
     print(f'received arguments: {args}')
 
     subj_id = args.subj_id
+    subj_id='sub190'
     subjects_dir = Path(args.subjects_dir)
     data_src = Path(args.data_source_dir)
-    
-    output_dir = Path(args.output_dir)  / subj_id / 'glasser'
-    output_dir.mkdir(exist_ok=True, parents=True)
 
-    dummy_sub_list = Path('.') / f'temp_subject_list_{subj_id}.txt'
+    my_env = os.environ.copy()
+    my_env['SUBJECTS_DIR'] = subj_FS_path
+    # add HCP labels if they are not in the subjects folder
+
+    output_dir=Path(f'{HOME_DIR}/{subj_id}/glasser')
+    output_dir.mkdir(exist_ok=True, parents=True)
+    dummy_sub_list=Path(f'{HOME_DIR}/{subj_id}/glasser/temp_subject_list_{subj_id}.txt')
     with dummy_sub_list.open('w') as f:
         f.write(f'{subj_id}\n')
 
@@ -54,8 +62,7 @@ if __name__ == '__main__':
     cmd = ['./glasser_to_native/create_subj_volume_parcellation.sh',
            '-L', str(dummy_sub_list),
            '-a', 'HCP-MMP1',
-           '-d', './out',  # str(output_dir),
-          ]
+           '-d', str(output_dir)]
     subprocess.call(cmd)
 
     # move everything from /mindhive/evlab/u/Shared/SUBJECTS_FS/DTI/sub190/glasser/sub190 into a dir above

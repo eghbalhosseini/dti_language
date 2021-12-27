@@ -8,6 +8,7 @@ from nilearn import datasets
 import pickle
 import fnmatch
 import getpass
+import subprocess
 
 def save_obj(di_, filename_):
     with open(filename_, 'wb') as f:
@@ -50,6 +51,7 @@ d_parcel_name_map = {
         {'1':'Occipital_Sup_L','2':'Occipital_Sup_R','3':'Occipital_Mid_L',
          '4':'Occipital_Mid_R','5':'Occipital_Inf_L','6':'Occipital_Inf_R'}
 }
+
 
 
 
@@ -116,5 +118,17 @@ else:
                                             output_file=os.path.join(path_to_masks, 'language_separFiles_in_fsaverage',
                                                                      ROI_file.replace('.gii', '.png')))
 
+# register MNI parcels on MNI surface
+parcel_file=glob.glob(os.path.join(path_to_masks, 'allParcels_language_79x95x69.nii'))
+
+for hemi in ['lh','rh']:
+    unix_pattern = ['mri_vol2surf',
+                '--src',parcel_file[0],
+                '--out',parcel_file[0].replace('.nii',f'_on_mni_surface_{hemi}.img'),
+                '--hemi', hemi,
+                '--regheader', 'cvs_avg35_inMNI152',
+                '--surf', 'pial']
+    output = subprocess.Popen(unix_pattern)
+    output.communicate()
 
 

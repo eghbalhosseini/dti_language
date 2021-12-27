@@ -8,14 +8,15 @@ import getpass
 if getpass.getuser()=='eghbalhosseini':
     subj_path='/Applications/freesurfer/subjects/'
     subj_FS_path = '/Applications/freesurfer/subjects/'
-else:
-    # if getpass.getuser()=='ehoseini':
-    subj_path = '/mindhive/evlab/u/Shared/SUBJECTS_FS/'
+    HOME_DIR = '/mindhive/evlab/Shared/diffusionzeynep/'
+elif getpass.getuser()=='ehoseini':
+    subj_lang_path = '/mindhive/evlab/u/Shared/SUBJECTS_FS/'
     subj_FS_path='/mindhive/evlab/u/Shared/SUBJECTS_FS/FS/'
+    HOME_DIR='/mindhive/evlab/Shared/diffusionzeynep/'
 
 
 
-SUBJECTDIR = '/mindhive/evlab/u/Shared/SUBJECTS'
+SUBJECTDIR = '/mindhive/evlab/u/Shared/SUBJECTS_FS'
 ROIDIR = '/mindhive/evlab/u/Shared/ROIS_Nov2020'
 ROOTDIR = (Path('/om/user/ehoseini/MyData/fmri_DNN/') ).resolve()
 OUTDIR = (Path(ROOTDIR /  'outputs')).resolve()
