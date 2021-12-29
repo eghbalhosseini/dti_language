@@ -23,6 +23,6 @@ echo "looking at ${DTI_DIR} "
       else
         echo "$possible_file dosent exists adding it"
         LINE_COUNT=$(expr ${LINE_COUNT} + 1)
-        printf "%d, %s %s \n" "$LINE_COUNT" "$subject_name" "$x" >> $GRAND_MFTMA_FILE
+        printf "%d, %s %s \n" "$LINE_COUNT" "$subject_name" "$x" >> $SUBJECT_GLASSER_FILE
       fi
     done < <(find $DTI_DIR -type d -maxdepth 1 -name "sub*")
