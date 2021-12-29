@@ -42,6 +42,7 @@ echo "txt file ${run_subj_glasser_txt}"
 
 echo "glasser_relative ${run_glasser_rel_dir}"
 echo "glasser destination ${run_glasser_dest_dir}"
+echo "subject dir ${SUBJECTS_DIR}"
 
 
 

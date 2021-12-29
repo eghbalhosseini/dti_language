@@ -2,10 +2,12 @@
 DTI_DIR=/mindhive/evlab/Shared/diffusionzeynep/
 FS_DIR=/mindhive/evlab/u/Shared/SUBJECTS_FS/FS/
 
+# change relative FS folder
+SUBJECTS_DIR="${FS_DIR}"
+export SUBJECTS_DIR
+#
 GLASSER_LOC='GLASSER'
-
 analyze_glasser='subject_for_glasser'
-
 i=0
 LINE_COUNT=0
 SUBJECT_GLASSER_FILE="${DTI_DIR}/${analyze_glasser}.txt"
@@ -30,7 +32,7 @@ echo "looking at ${DTI_DIR} "
         rm -f $IND_GLASSER_FILE
         touch $IND_GLASSER_FILE
         printf "%s \n" "$subject_name" >> $IND_GLASSER_FILE
-        mkdir $possible_folder
+        mkdir -p $possible_folder
         printf "%d, %s, %s, %s, %s, %s, %s \n" "$LINE_COUNT" "$subject_name" "$x" "$FS_DIR" "$IND_GLASSER_FILE" "$GLASSER_LOC" "$possible_folder"  >> $SUBJECT_GLASSER_FILE
       fi
     done < <(find $DTI_DIR -type d -maxdepth 1 -name "sub*")
