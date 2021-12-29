@@ -47,8 +47,17 @@ echo "subject dir ${SUBJECTS_DIR}"
 
 
 
-## Get the relevant line from the parameters
-#singularity exec -B /om:/om,/mindhive:/mindhive /om/user/${USER}/simg_images/neural_manifolds_tiny.simg python /om/user/${USER}/neural_manifolds/mftma_capacity_analysis.py ${run_file} ${run_model} ${run_analyze} ${OVERWRITE}
+bash /om/user/ehoseini/dti_language/glasser_to_native/create_subj_volume_parcellation.sh -L $run_subj_glasser_txt -a HCPMMP1 -d $run_gsslasser_rel_dir
+# copy files from relative location to DTI folder:
 
- bash /om/user/ehoseini/dti_language/glasser_to_native/create_subj_volume_parcellation.sh -L $run_subj_glasser_txt -a HCPMMP1 -d $run_glasser_rel_dir
+SUB_HCPMM_FILE_IN_FS="${run_fs_dir}/${run_glasser_rel_dir}/${run_subj_name}/HCPMMP1.nii.gz"
+
+SUB_HCPMM_FILE_IN_DTI="${run_glasser_dest_dir}/HCPMMP1.nii.gz"
+
+echo "copying from  ${SUB_HCPMM_FILE_IN_FS} to ${SUB_HCPMM_FILE_IN_DTI}"
+cp $SUB_HCPMM_FILE_IN_FS $SUB_HCPMM_FILE_IN_DTI
+
+
+
+
 

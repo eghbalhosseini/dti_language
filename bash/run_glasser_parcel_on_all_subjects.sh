@@ -42,7 +42,7 @@ run_val=0
 if [ "$LINE_COUNT" -gt "$run_val" ]; then
   echo "running  ${LINE_COUNT} "
    #nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT 150 200 50 glasser_parcellation_on_subject.sh  $SUBJECT_GLASSER_FILE &
-   nohup /cm/shared/admin/bin/submit-many-jobs 3 1 3 2 glasser_parcellation_on_subject.sh  $SUBJECT_GLASSER_FILE &
+   nohup /cm/shared/admin/bin/submit-many-jobs 2 1 2 1 glasser_parcellation_on_subject.sh  $SUBJECT_GLASSER_FILE &
   else
     echo $LINE_COUNT
 fi
