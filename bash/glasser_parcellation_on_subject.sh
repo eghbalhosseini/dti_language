@@ -50,17 +50,23 @@ echo "source file:${SUB_HCPMM_FILE_IN_FS}"
 echo "target dir:${SUB_HCPMM_FILE_IN_DTI}"
 
 
+# method copy the files into diffusion folder and fix it there
+TEMP_FOLDER="${run_sub_dti_dir}/temporary/"
+mkdir -p $TEMP_FOLDER
+# copy folder to temp:
+cp -r "${run_fs_dir}/fsaverage" $TEMP_FOLDER
+cp -r "${run_fs_dir}/${run_subj_name}" $TEMP_FOLDER
 
 
-bash /om/user/ehoseini/dti_language/glasser_to_native/create_subj_volume_parcellation.sh -L $run_subj_glasser_txt -a HCPMMP1 -d $run_gsslasser_rel_dir
+#bash /om/user/ehoseini/dti_language/glasser_to_native/create_subj_volume_parcellation.sh -L $run_subj_glasser_txt -a HCPMMP1 -d $run_gsslasser_rel_dir
 # copy files from relative location to DTI folder:
 
-SUB_HCPMM_FILE_IN_FS="${run_fs_dir}/${run_glasser_rel_dir}/${run_subj_name}/HCPMMP1.nii.gz"
+#SUB_HCPMM_FILE_IN_FS="${run_fs_dir}/${run_glasser_rel_dir}/${run_subj_name}/HCPMMP1.nii.gz"
 
-SUB_HCPMM_FILE_IN_DTI="${run_glasser_dest_dir}/"
+#SUB_HCPMM_FILE_IN_DTI="${run_glasser_dest_dir}/"
 
-echo "copying from  ${SUB_HCPMM_FILE_IN_FS} to ${SUB_HCPMM_FILE_IN_DTI}"
-cp $SUB_HCPMM_FILE_IN_FS $SUB_HCPMM_FILE_IN_DTI
+#echo "copying from  ${SUB_HCPMM_FILE_IN_FS} to ${SUB_HCPMM_FILE_IN_DTI}"
+#cp $SUB_HCPMM_FILE_IN_FS $SUB_HCPMM_FILE_IN_DTI
 
 
 
