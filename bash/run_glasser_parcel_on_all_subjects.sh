@@ -27,7 +27,7 @@ echo "looking at ${DTI_DIR} "
         echo "$possible_file dosent exists adding it"
         LINE_COUNT=$(expr ${LINE_COUNT} + 1)
         IND_GLASSER_FILE="${DTI_DIR}/${subject_name}/sub_list_for_glasser.txt"
-        rm $IND_GLASSER_FILE
+        rm -f $IND_GLASSER_FILE
         touch $IND_GLASSER_FILE
         printf "%s \n" "$subject_name" >> $IND_GLASSER_FILE
         mkdir $possible_folder
