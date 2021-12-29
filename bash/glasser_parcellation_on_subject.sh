@@ -15,7 +15,7 @@ fi
 echo "${GRAND_FILE}"
 echo $JID
 
-while IFS=, read -r line_count subj_name sub_dti_dir fs_dir subj_glasser_txt glasser_rel_dir glasser_dest_dir ; do
+while IFS=, read -r line_count subj_name sub_dti_dir fs_dir subj_glasser_txt glasser_rel_dir glasser_dest_dir temp_dir ; do
   #echo "line_count ${model}"
   if [ $JID == $line_count ]
     then
@@ -26,6 +26,7 @@ while IFS=, read -r line_count subj_name sub_dti_dir fs_dir subj_glasser_txt gla
       run_subj_glasser_txt=$subj_glasser_txt
       run_glasser_rel_dir=$glasser_rel_dir
       run_glasser_dest_dir=$glasser_dest_dir
+      run_temp_dir=$temp_dir
       do_run=true
       break
     else
@@ -48,17 +49,13 @@ echo "glasser destination:${run_glasser_dest_dir}"
 echo "subject dir:${SUBJECTS_DIR}"
 echo "source file:${SUB_HCPMM_FILE_IN_FS}"
 echo "target dir:${SUB_HCPMM_FILE_IN_DTI}"
+echo "temp dir:${run_temp_dir}"
 
-
-# method copy the files into diffusion folder and fix it there
-TEMP_FOLDER="${run_sub_dti_dir}/temporary/"
-mkdir -p $TEMP_FOLDER
 # copy folder to temp:
-cp -r "${run_fs_dir}/fsaverage" $TEMP_FOLDER
-cp -r "${run_fs_dir}/${run_subj_name}" $TEMP_FOLDER
+cp -r "${run_fs_dir}/${run_subj_name}" $run_temp_dir
 
 
-#bash /om/user/ehoseini/dti_language/glasser_to_native/create_subj_volume_parcellation.sh -L $run_subj_glasser_txt -a HCPMMP1 -d $run_gsslasser_rel_dir
+bash /om/user/ehoseini/dti_language/glasser_to_native/create_subj_volume_parcellation.sh -L $run_subj_glasser_txt -a HCPMMP1 -d $run_gsslasser_rel_dir
 # copy files from relative location to DTI folder:
 
 #SUB_HCPMM_FILE_IN_FS="${run_fs_dir}/${run_glasser_rel_dir}/${run_subj_name}/HCPMMP1.nii.gz"

@@ -1,12 +1,13 @@
 #!/bin/bash
 DTI_DIR=/mindhive/evlab/Shared/diffusionzeynep/
 FS_DIR=/mindhive/evlab/u/Shared/SUBJECTS_FS/FS/
+TEMP_DIR="${DTI_DIR}/temporary"
 
 # change relative FS folder
-SUBJECTS_DIR="${FS_DIR}"
-export SUBJECTS_DIR
+SUBJECTS_DIR="${TEMP_DIR}"
+export TEMP_DIR
 #
-GLASSER_LOC='GLASSER'
+GLASSER_LOC='glasser_output'
 analyze_glasser='subject_for_glasser'
 i=0
 LINE_COUNT=0
@@ -33,7 +34,7 @@ echo "looking at ${DTI_DIR} "
         touch $IND_GLASSER_FILE
         printf "%s\n" "$subject_name" >> $IND_GLASSER_FILE
         mkdir -p $possible_folder
-        printf "%d,%s,%s,%s,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "$x" "$FS_DIR" "$IND_GLASSER_FILE" "$GLASSER_LOC" "$possible_folder"  >> $SUBJECT_GLASSER_FILE
+        printf "%d,%s,%s,%s,%s,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "$x" "$FS_DIR" "$IND_GLASSER_FILE" "$GLASSER_LOC" "$possible_folder" "$TEMP_DIR"  >> $SUBJECT_GLASSER_FILE
       fi
     done < <(find $DTI_DIR -type d -maxdepth 1 -name "sub*")
 
