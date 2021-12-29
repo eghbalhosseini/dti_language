@@ -35,14 +35,19 @@ while IFS=, read -r line_count subj_name sub_dti_dir fs_dir subj_glasser_txt gla
 
 done <"${GRAND_FILE}"
 
-echo "subj ${run_subj_name}"
-echo "dti_dir ${run_sub_dti_dir}"
-echo "fs_dir ${run_fs_dir}"
-echo "txt file ${run_subj_glasser_txt}"
+SUB_HCPMM_FILE_IN_FS="${run_fs_dir}/${run_glasser_rel_dir}/${run_subj_name}/HCPMMP1.nii.gz"
+SUB_HCPMM_FILE_IN_DTI="${run_glasser_dest_dir}/"
 
-echo "glasser_relative ${run_glasser_rel_dir}"
-echo "glasser destination ${run_glasser_dest_dir}"
-echo "subject dir ${SUBJECTS_DIR}"
+echo "subj:${run_subj_name}"
+echo "dti_dir:${run_sub_dti_dir}"
+echo "fs_dir:${run_fs_dir}"
+echo "txt file:${run_subj_glasser_txt}"
+
+echo "glasser_relative:${run_glasser_rel_dir}"
+echo "glasser destination:${run_glasser_dest_dir}"
+echo "subject dir:${SUBJECTS_DIR}"
+echo "source file:${SUB_HCPMM_FILE_IN_FS}"
+echo "target dir:${SUB_HCPMM_FILE_IN_DTI}"
 
 
 
@@ -52,7 +57,7 @@ bash /om/user/ehoseini/dti_language/glasser_to_native/create_subj_volume_parcell
 
 SUB_HCPMM_FILE_IN_FS="${run_fs_dir}/${run_glasser_rel_dir}/${run_subj_name}/HCPMMP1.nii.gz"
 
-SUB_HCPMM_FILE_IN_DTI="${run_glasser_dest_dir}/HCPMMP1.nii.gz"
+SUB_HCPMM_FILE_IN_DTI="${run_glasser_dest_dir}/"
 
 echo "copying from  ${SUB_HCPMM_FILE_IN_FS} to ${SUB_HCPMM_FILE_IN_DTI}"
 cp $SUB_HCPMM_FILE_IN_FS $SUB_HCPMM_FILE_IN_DTI
