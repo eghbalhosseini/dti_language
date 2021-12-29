@@ -2,6 +2,8 @@
 DTI_DIR=/mindhive/evlab/Shared/diffusionzeynep/
 FS_DIR=/mindhive/evlab/u/Shared/SUBJECTS_FS/FS/
 
+GLASSER_LOC='GLASSER'
+
 analyze_glasser='subject_for_glasser'
 
 i=0
@@ -23,6 +25,20 @@ echo "looking at ${DTI_DIR} "
       else
         echo "$possible_file dosent exists adding it"
         LINE_COUNT=$(expr ${LINE_COUNT} + 1)
-        printf "%d, %s %s \n" "$LINE_COUNT" "$subject_name" "$x" >> $SUBJECT_GLASSER_FILE
+        IND_GLASSER_FILE="${DTI_DIR}/${subject_name}/sub_list_for_glasser.txt"
+        rm $IND_GLASSER_FILE
+        touch $IND_GLASSER_FILE
+        printf "%s \n" >> $IND_GLASSER_FILE
+        printf "%d, %s %s %s %s %s \n" "$LINE_COUNT" "$subject_name" "$x" "$FS_DIR" "$IND_GLASSER_FILE" "$GLASSER_LOC"  >> $SUBJECT_GLASSER_FILE
       fi
     done < <(find $DTI_DIR -type d -maxdepth 1 -name "sub*")
+
+echo $LINE_COUNT
+run_val=0
+if [ "$LINE_COUNT" -gt "$run_val" ]; then
+  echo "running  ${LINE_COUNT} "
+   #nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT 150 200 50 manifold_capacity_script.sh $GRAND_MFTMA_FILE &
+   nohup /cm/shared/admin/bin/submit-many-jobs 20 15 20 5 manifold_capacity_script.sh $GRAND_MFTMA_FILE &
+  else
+    echo $LINE_COUNT
+fi
