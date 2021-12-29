@@ -12,13 +12,10 @@ import requests
 import bs4
 from utils.parcel_utils import d_parcel_fsaverage, d_parcel_name_map
 from utils.fmri_utils import HOME_DIR
-from utils.general_utils import download
+
 
 # from utils.parcel_utils import d_parcel_fsaverage, d_parcel_name_map
-from utils.fmri_utils import subj_path, subj_FS_path
-
-# fsaverage = datasets.fetch_surf_fsaverage(mesh='fsaverage')
-
+from utils.fmri_utils import subj_lang_path, subj_FS_path
 
 parser = argparse.ArgumentParser(description='create_subj_parcellation_from_glasser_to_native')
 
@@ -42,12 +39,13 @@ if __name__ == '__main__':
     data_src = Path(args.data_source_dir)
 
     my_env = os.environ.copy()
-    my_env['SUBJECTS_DIR'] = subj_FS_path
+    temp_dir='/mindhive/evlab/Shared/diffusionzeynep/temporary/'
+    my_env['SUBJECTS_DIR'] = temp_dir
     # add HCP labels if they are not in the subjects folder
-
-    output_dir=Path(f'{HOME_DIR}/{subj_id}/glasser')
+    output_dir=Path(f'{temp_dir}/glasser_annot')
     output_dir.mkdir(exist_ok=True, parents=True)
-    dummy_sub_list=Path(f'{HOME_DIR}/{subj_id}/glasser/temp_subject_list_{subj_id}.txt')
+    dummy_sub_list=Path(f'{output_dir}/temp_subject_list_{subj_id}.txt')
+
     with dummy_sub_list.open('w') as f:
         f.write(f'{subj_id}\n')
 
@@ -62,9 +60,15 @@ if __name__ == '__main__':
     cmd = ['./glasser_to_native/create_subj_volume_parcellation.sh',
            '-L', str(dummy_sub_list),
            '-a', 'HCP-MMP1',
-           '-d', str(output_dir)]
+           '-d', 'glasser_annot']
+    output = subprocess.call(' '.join(cmd), env=my_env,shell=True,executable='/bin/bash')
+    output.communicate()
     subprocess.call(cmd)
-
+    subprocess.Popen(['mri_annotation2label','--help'],env=my_env)
+    subprocess.Popen(cmd,env=my_env)
+    #subprocess.Popen('fslmaths',shell=True,executable='/bin/bash')
+    subprocess.Popen(['bash','~/.bash_profile'])
+    output = subprocess.Popen(['fslmaths,--help'])
     # move everything from /mindhive/evlab/u/Shared/SUBJECTS_FS/DTI/sub190/glasser/sub190 into a dir above
     actual_output_files = [*(output_dir / subj_id).glob('*')]
     print(f'renaming output files {[*actual_output_files]}, continue? [Nn]')

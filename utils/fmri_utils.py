@@ -6,7 +6,7 @@ from pathlib import Path
 import getpass
 
 if getpass.getuser()=='eghbalhosseini':
-    subj_path='/Applications/freesurfer/subjects/'
+    subj_lang_path='/Applications/freesurfer/subjects/'
     subj_FS_path = '/Applications/freesurfer/subjects/'
     HOME_DIR = '/mindhive/evlab/Shared/diffusionzeynep/'
 elif getpass.getuser()=='ehoseini':

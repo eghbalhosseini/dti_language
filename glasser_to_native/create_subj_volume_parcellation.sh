@@ -48,7 +48,7 @@
 # look-up table will also be created inside each subject’s folder, named
 # LUT_<name_of_annotation_file>.txt. In each subject’s folder, a directory
 # called label/ will also be created, where the transformed labels will be
-# stored If the -m option is set to YES, each subject’s directory will also
+# stored If the -m optdion is set to YES, each subject’s directory will also
 # contain a masks/ directory containing one volume .nii.gz file for each binary
 # mask If the -s option is set to YES, an aseg_masks/ directory will be created,
 # containing one .nii.gz file for each subcortical region Inside the original
