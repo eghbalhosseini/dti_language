@@ -46,11 +46,9 @@ echo "subject dir ${SUBJECTS_DIR}"
 
 
 
-#module add openmind/singularity
-#export SINGULARITY_CACHEDIR=/om/user/${USER}/st/
-#XDG_CACHE_HOME=/om/user/${USER}/st
-#export XDG_CACHE_HOME
-#
+
 ## Get the relevant line from the parameters
 #singularity exec -B /om:/om,/mindhive:/mindhive /om/user/${USER}/simg_images/neural_manifolds_tiny.simg python /om/user/${USER}/neural_manifolds/mftma_capacity_analysis.py ${run_file} ${run_model} ${run_analyze} ${OVERWRITE}
+
+ bash /om/user/ehoseini/dti_language/glasser_to_native/create_subj_volume_parcellation.sh -L $run_subj_glasser_txt -a HCPMMP1 -d $run_glasser_rel_dir
 
