@@ -18,7 +18,8 @@ echo "looking at ${DTI_DIR} "
       original=$DTI_DIR
       correction=''
       subject_name="${x/$original/$correction}"
-      possible_file="${DTI_DIR}/${subject_name}/glasser/HCPMMP1.nii.gz"
+      possible_folder="${DTI_DIR}/${subject_name}/glasser"
+      possible_file="${possible_folder}/HCPMMP1.nii.gz"
       if [ -f "$possible_file" ]
       then
         true
@@ -28,8 +29,9 @@ echo "looking at ${DTI_DIR} "
         IND_GLASSER_FILE="${DTI_DIR}/${subject_name}/sub_list_for_glasser.txt"
         rm $IND_GLASSER_FILE
         touch $IND_GLASSER_FILE
-        printf "%s \n" >> $IND_GLASSER_FILE
-        printf "%d, %s %s %s %s %s \n" "$LINE_COUNT" "$subject_name" "$x" "$FS_DIR" "$IND_GLASSER_FILE" "$GLASSER_LOC"  >> $SUBJECT_GLASSER_FILE
+        printf "%s \n" "$subject_name" >> $IND_GLASSER_FILE
+        mkdir $possible_folder
+        printf "%d, %s, %s, %s, %s, %s, %s \n" "$LINE_COUNT" "$subject_name" "$x" "$FS_DIR" "$IND_GLASSER_FILE" "$GLASSER_LOC" "$possible_folder"  >> $SUBJECT_GLASSER_FILE
       fi
     done < <(find $DTI_DIR -type d -maxdepth 1 -name "sub*")
 
