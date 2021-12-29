@@ -16,7 +16,7 @@ echo "looking at ${DTI_DIR} "
       original=$DTI_DIR
       correction=''
       subject_name="${x/$original/$correction}"
-      possible_file="${DTI_DIR/$subject_name/glasser/HCPMMP1.nii.gz}"
+      possible_file="${DTI_DIR}/${subject_name}/glasser/HCPMMP1.nii.gz"
       if [ -f "$possible_file" ]
       then
         true
