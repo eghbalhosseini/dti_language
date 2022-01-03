@@ -35,7 +35,7 @@ while read x; do
         printf "%s\n" "$subject_name" >> $IND_GLASSER_FILE
         mkdir -p $possible_folder
         # copy files from FS folder to GLASSER, this will be removed afterwards
-        cp -a "${DTI_DIR}/${subject_name}/fs/." "${TEMP_DIR}/${subject_name}/"
+        #cp -a "${DTI_DIR}/${subject_name}/fs/." "${TEMP_DIR}/${subject_name}/"
 
         printf "%d,%s,%s,%s,%s,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "$x" "$FS_DIR" "$IND_GLASSER_FILE" "$GLASSER_LOC" "$possible_folder" "$TEMP_DIR"  >> $SUBJECT_GLASSER_FILE
       fi
