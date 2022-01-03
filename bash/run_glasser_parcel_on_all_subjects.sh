@@ -1,5 +1,5 @@
 #!/bin/bash
-DTI_DIR=/mindhive/evlab/Shared/diffusionzeynep
+DTI_DIR=/mindhive/evlab/Shared/diffusionzeynep/
 FS_DIR=/mindhive/evlab/u/Shared/SUBJECTS_FS/FS/
 TEMP_DIR="${DTI_DIR}/GLASSER"
 
