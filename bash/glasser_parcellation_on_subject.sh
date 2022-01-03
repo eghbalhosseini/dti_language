@@ -61,7 +61,7 @@ cp -vr "${run_fs_dir}/${run_subj_name}/." "${SUBJECTS_DIR}/${run_subj_name}/"
 chmod 775 -R "${SUBJECTS_DIR}/${run_subj_name}/"
 
 
-bash /mindhive/evlab/Shared/diffusionzeynep/GLASSER/create_subj_volume_parcellation.sh -L "${run_subj_glasser_txt}" -a HCPMMP1 -d ""${run_gsslasser_rel_dir}"
+bash /mindhive/evlab/Shared/diffusionzeynep/GLASSER/create_subj_volume_parcellation.sh -L "${run_subj_glasser_txt}" -a HCPMMP1 -d "${run_gsslasser_rel_dir}"
 # copy files from relative location to DTI folder:
 #SUB_HCPMM_FILE_IN_FS="${run_fs_dir}/${run_glasser_rel_dir}/${run_subj_name}/HCPMMP1.nii.gz"
 
