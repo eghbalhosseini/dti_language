@@ -14,6 +14,8 @@ LINE_COUNT=0
 SUBJECT_GLASSER_FILE="${TEMP_DIR}/${analyze_glasser}.txt"
 rm -f $SUBJECT_GLASSER_FILE
 touch $SUBJECT_GLASSER_FILE
+printf "%d,%s,%s,%s,%s,%s,%s,%s\n" "row" "subject_name" "subject_dir" "subject_fs_dir" "sub_text_file_for_script" "loc_of_recons" "loc_of_recond_in_sub_dir" "glasser_run_dir"  >> $SUBJECT_GLASSER_FILE
+
 echo "looking at ${DTI_DIR} "
 SUBJ_LINE=0
 while read x; do
