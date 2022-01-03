@@ -8,10 +8,10 @@ SUBJECTS_DIR="${TEMP_DIR}"
 export TEMP_DIR
 #
 GLASSER_LOC='glasser_output'
-analyze_glasser='subject_for_glasser'
+analyze_glasser='all_subject_for_glasser'
 i=0
 LINE_COUNT=0
-SUBJECT_GLASSER_FILE="${DTI_DIR}/${TEMP_DIR}/${analyze_glasser}.txt"
+SUBJECT_GLASSER_FILE="${TEMP_DIR}/${analyze_glasser}.txt"
 rm -f $SUBJECT_GLASSER_FILE
 touch $SUBJECT_GLASSER_FILE
 echo "looking at ${DTI_DIR} "
@@ -34,8 +34,8 @@ while read x; do
         touch $IND_GLASSER_FILE
         printf "%s\n" "$subject_name" >> $IND_GLASSER_FILE
         mkdir -p $possible_folder
-        # create softlink from FS folder to GLASSER
-        ls -s "${DTI_DIR}/${subject_name}/fs" "${TEMP_DIR}/${subject_name}"
+        # copy files from FS folder to GLASSER, this will be removed afterwards
+        cp -a "${DTI_DIR}/${subject_name}/fs/." "${TEMP_DIR}/${subject_name}/"
 
         printf "%d,%s,%s,%s,%s,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "$x" "$FS_DIR" "$IND_GLASSER_FILE" "$GLASSER_LOC" "$possible_folder" "$TEMP_DIR"  >> $SUBJECT_GLASSER_FILE
       fi
