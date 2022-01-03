@@ -31,7 +31,7 @@ while read x; do
       else
         echo "$possible_file dosent exists adding it"
         LINE_COUNT=$(expr ${LINE_COUNT} + 1)
-        IND_GLASSER_FILE="${TEMP_DIR}/list_for_glasser_${subject_name}.txt"
+        IND_GLASSER_FILE="${TEMP_DIR}/glasser_${subject_name}.txt"
         rm -f $IND_GLASSER_FILE
         touch $IND_GLASSER_FILE
         printf "%s\n" "$subject_name" >> $IND_GLASSER_FILE
