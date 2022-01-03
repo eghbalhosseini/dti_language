@@ -47,9 +47,9 @@ echo "txt file:${run_subj_glasser_txt}"
 echo "glasser_relative:${run_glasser_rel_dir}"
 echo "glasser destination:${run_glasser_dest_dir}"
 echo "subject dir:${SUBJECTS_DIR}"
-echo "source file:${SUB_HCPMM_FILE_IN_FS}"
-echo "target dir:${SUB_HCPMM_FILE_IN_DTI}"
-echo "temp dir:${run_temp_dir}"
+#echo "source file:${SUB_HCPMM_FILE_IN_FS}"
+#echo "target dir:${SUB_HCPMM_FILE_IN_DTI}"
+#echo "temp dir:${run_temp_dir}"
 
 # copy folder to temp:
 #cp -r "${run_fs_dir}/${run_subj_name}" $run_temp_dir

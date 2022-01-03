@@ -1,5 +1,5 @@
 #!/bin/bash
-DTI_DIR=/mindhive/evlab/Shared/diffusionzeynep/
+DTI_DIR=/mindhive/evlab/Shared/diffusionzeynep
 FS_DIR=/mindhive/evlab/u/Shared/SUBJECTS_FS/FS/
 TEMP_DIR="${DTI_DIR}/GLASSER"
 
@@ -48,7 +48,7 @@ run_val=0
 if [ "$LINE_COUNT" -gt "$run_val" ]; then
   echo "running  ${LINE_COUNT} "
    #nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT 150 200 50 glasser_parcellation_on_subject.sh  $SUBJECT_GLASSER_FILE &
-   nohup /cm/shared/admin/bin/submit-many-jobs 2 1 2 1 glasser_parcellation_on_subject.sh  $SUBJECT_GLASSER_FILE &
+   nohup /cm/shared/admin/bin/submit-many-jobs 2 1 2 1 glasser_parcellation_on_subject.sh  $SUBJECT_GLASSER_FILE
   else
     echo $LINE_COUNT
 fi
