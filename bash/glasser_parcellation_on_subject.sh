@@ -56,7 +56,7 @@ echo "copying FS files from ${run_fs_dir} to ${SUBJECTS_DIR}"
 
 # copy folder to temp:
 mkdir -p "${SUBJECTS_DIR}/${run_subj_name}"
-#cp -vr "${run_fs_dir}/${run_subj_name}/." $run_temp_dir
+cp -vr "${run_fs_dir}/${run_subj_name}/." "${SUBJECTS_DIR}/${run_subj_name}/"
 
 
 #bash /om/user/ehoseini/dti_language/glasser_to_native/create_subj_volume_parcellation.sh -L $run_subj_glasser_txt -a HCPMMP1 -d $run_gsslasser_rel_dir
