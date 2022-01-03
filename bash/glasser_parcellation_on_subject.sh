@@ -58,6 +58,8 @@ echo "copying FS files from ${run_fs_dir} to ${SUBJECTS_DIR}"
 mkdir -p "${SUBJECTS_DIR}/${run_subj_name}"
 cp -vr "${run_fs_dir}/${run_subj_name}/." "${SUBJECTS_DIR}/${run_subj_name}/"
 
+chmod 775 -R "${SUBJECTS_DIR}/${run_subj_name}/"
+
 
 bash /mindhive/evlab/Shared/diffusionzeynep/GLASSER/create_subj_volume_parcellation.sh -L $run_subj_glasser_txt -a HCPMMP1 -d $run_gsslasser_rel_dir
 # copy files from relative location to DTI folder:
