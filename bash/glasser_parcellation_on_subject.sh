@@ -63,7 +63,7 @@ chmod 775 -R "${SUBJECTS_DIR}/${run_subj_name}/"
 echo $SUBJECTS_DIR
 cd $SUBJECTS_DIR
 pwd
-bash /mindhive/evlab/Shared/diffusionzeynep/GLASSER/create_subj_volume_parcellation.sh -L "$run_subj_glasser_txt" -a HCPMMP1 -d "$run_glasser_rel_dir"
+bash /mindhive/evlab/Shared/diffusionzeynep/GLASSER/create_subj_volume_parcellation.sh -L "$run_subj_glasser_txt" -a HCPMMP1 -d "$run_glasser_rel_dir" -m YES -d YES
 # copy files from relative location to DTI folder:
 SUB_HCPMM_FILE_IN_FS="${SUBJECTS_DIR}/${run_glasser_rel_dir}/${run_subj_name}/HCPMMP1.nii.gz"
 
@@ -94,12 +94,12 @@ then
   then
     echo 'registration file already exist'
   else
-    bbregister --s "$run_subj_name" --mov "$subject_dti_file" --dti --reg "$subject_dti_reg"
+    bbregister --s "$run_subj_name" --mov "$subject_dti_file" --dti --init-fsl --reg "$subject_dti_reg"
   fi
   echo 'transferring volume to dti'
   target_nii_file="${run_glasser_dest_dir}/HCPMMP1.nii.gz"
   output_nii_file="${run_glasser_dest_dir}/HCPMMP1_in_DTI.nii.gz"
-  mri_vol2vol --mov "$target_nii_file" --o "$output_nii_file" --targ "$subject_dti_file"  --interp nearest --reg "$subject_dti_reg"
+  mri_vol2vol --mov "$target_nii_file" --o "$output_nii_file" --targ "$subject_dti_file" --inv --interp nearest --reg "$subject_dti_reg"
 else
   echo 'no dti volume file was found'
 fi
