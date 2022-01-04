@@ -56,7 +56,7 @@ echo "copying FS files from ${run_fs_dir} to ${SUBJECTS_DIR}"
 
 # copy folder to temp:
 mkdir -p "${SUBJECTS_DIR}/${run_subj_name}"
-cp -vr "${run_fs_dir}/${run_subj_name}/." "${SUBJECTS_DIR}/${run_subj_name}/"
+cp -r "${run_fs_dir}/${run_subj_name}/." "${SUBJECTS_DIR}/${run_subj_name}/"
 
 chmod 775 -R "${SUBJECTS_DIR}/${run_subj_name}/"
 
@@ -78,14 +78,22 @@ then
   # clear fs files in GLASSER dir
   #rm -r "${run_subj_name}/"
   rm "$run_subj_glasser_txt"
+  echo 'transfer was successful'
 else
-  echo 'operation was unsucessfull'
+  echo 'operation was unsuccessful'
 fi
-#SUB_HCPMM_FILE_IN_DTI="${run_glasser_dest_dir}/"
 
-#echo "copying from  ${SUB_HCPMM_FILE_IN_FS} to ${SUB_HCPMM_FILE_IN_DTI}"
-#cp $SUB_HCPMM_FILE_IN_FS $SUB_HCPMM_FILE_IN_DTI
-
+# next transform the file from subject space to dti space :
+# step 1 create registration between glasser and dti
+subject_dti_file="${run_sub_dti_dir}/dti/nodif_brain.nii.gz"
+subject_dti_reg="${run_glasser_dest_dir}/reg_FS2nodif.dat"
+if [ -f "$subject_dti_file" ]
+then
+  echo 'running bbregister'
+  bbregister --s "$run_subj_name" --mov "$subject_dti_file" --dti --reg "$subject_dti_reg"
+else
+  echo 'no dti volume file was found'
+fi
 
 
 
