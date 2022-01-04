@@ -90,11 +90,16 @@ subject_dti_reg="${run_glasser_dest_dir}/reg_FS2nodif.dat"
 if [ -f "$subject_dti_file" ]
 then
   echo 'running bbregister'
-  bbregister --s "$run_subj_name" --mov "$subject_dti_file" --dti --reg "$subject_dti_reg"
+  if [ -f "$subject_dti_reg" ]
+  then
+    echo 'registration file already exist'
+  else
+    bbregister --s "$run_subj_name" --mov "$subject_dti_file" --dti --reg "$subject_dti_reg"
+  fi
   echo 'transferring volume to dti'
   target_nii_file="${run_glasser_dest_dir}/HCPMMP1.nii.gz"
   output_nii_file="${run_glasser_dest_dir}/HCPMMP1_in_DTI.nii.gz"
-  mri_vol2vol --mov "$target_nii_file" --o "$output_nii_file" --interp nearest --reg "$subject_dti_reg"
+  mri_vol2vol --mov "$target_nii_file" --o "$output_nii_file" --targ "$subject_dti_file"  --interp nearest --reg "$subject_dti_reg"
 else
   echo 'no dti volume file was found'
 fi
