@@ -63,10 +63,21 @@ chmod 775 -R "${SUBJECTS_DIR}/${run_subj_name}/"
 echo $SUBJECTS_DIR
 cd $SUBJECTS_DIR
 pwd
-bash /mindhive/evlab/Shared/diffusionzeynep/GLASSER/create_subj_volume_parcellation.sh -L "$run_subj_glasser_txt" -a HCPMMP1 -d "$run_glasser_rel_dir"
+#bash /mindhive/evlab/Shared/diffusionzeynep/GLASSER/create_subj_volume_parcellation.sh -L "$run_subj_glasser_txt" -a HCPMMP1 -d "$run_glasser_rel_dir"
 # copy files from relative location to DTI folder:
-#SUB_HCPMM_FILE_IN_FS="${run_fs_dir}/${run_glasser_rel_dir}/${run_subj_name}/HCPMMP1.nii.gz"
+SUB_HCPMM_FILE_IN_FS="${run_fs_dir}/${run_glasser_rel_dir}/${run_subj_name}/HCPMMP1.nii.gz"
+SUB_HCPMM_TXT_IN_FS="${run_fs_dir}/${run_glasser_rel_dir}/${run_subj_name}/LUT_HCPMMP1.txt"
 
+if [ -f "$SUB_HCPMM_FILE_IN_FS" ]
+then
+  cp "${SUB_HCPMM_FILE_IN_FS}" ${run_glasser_dest_dir}
+  cp "${SUB_HCPMM_TXT_IN_FS}" ${run_glasser_dest_dir}
+  # clear fs files in GLASSER dir
+  #rm -r "${run_subj_name}/"
+  rm "$run_subj_glasser_txt"
+else
+  echo 'operation was unsucessfull'
+fi
 #SUB_HCPMM_FILE_IN_DTI="${run_glasser_dest_dir}/"
 
 #echo "copying from  ${SUB_HCPMM_FILE_IN_FS} to ${SUB_HCPMM_FILE_IN_DTI}"
