@@ -65,11 +65,11 @@ cd $SUBJECTS_DIR
 pwd
 #bash /mindhive/evlab/Shared/diffusionzeynep/GLASSER/create_subj_volume_parcellation.sh -L "$run_subj_glasser_txt" -a HCPMMP1 -d "$run_glasser_rel_dir"
 # copy files from relative location to DTI folder:
-SUB_HCPMM_FILE_IN_FS="${run_fs_dir}/${run_glasser_rel_dir}/${run_subj_name}/HCPMMP1.nii.gz"
+SUB_HCPMM_FILE_IN_FS="${SUBJECTS_DIR}/${run_glasser_rel_dir}/${run_subj_name}/HCPMMP1.nii.gz"
 
 echo "SUB_HCPMM_FILE_IN_FS:${SUB_HCPMM_FILE_IN_FS}"
 
-SUB_HCPMM_TXT_IN_FS="${run_fs_dir}/${run_glasser_rel_dir}/${run_subj_name}/LUT_HCPMMP1.txt"
+SUB_HCPMM_TXT_IN_FS="${SUBJECTS_DIR}/${run_glasser_rel_dir}/${run_subj_name}/LUT_HCPMMP1.txt"
 
 if [ -f "$SUB_HCPMM_FILE_IN_FS" ]
 then
