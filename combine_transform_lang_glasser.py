@@ -7,15 +7,14 @@ from tqdm import tqdm
 import os
 import subprocess
 import argparse
-from utils.parcel_utils import d_parcel_fsaverage, d_parcel_name_map
+
 from utils.fmri_utils import subj_lang_path, subj_FS_path,HOME_DIR
-from utils.lookuptable import lang_mask_ids, glasser_mask_ids
+from utils.lookuptable import FSLUT_lang_pd, FSLUT_glasser_pd
 fsaverage = datasets.fetch_surf_fsaverage(mesh='fsaverage')
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 from nilearn.image import load_img
-from utils.lookuptable import FSLUT, _FSLUT_HEADER
 from copy import deepcopy
 
 
