@@ -35,7 +35,6 @@ if __name__ == '__main__':
     glasser_np=np.asarray(glasser_img.dataobj).astype('int')
     # fixed variable here : this is from
     # make sure subject at least have 1 roi
-    set(FSLUT_lang_pd.id)
     assert(len(set(FSLUT_lang_pd.id).intersection(np.unique(lang_np)))>=1)
     assert (len(set(FSLUT_glasser_pd.id).intersection(np.unique(glasser_np))) >= 1)
     # make sure there is no overlap between lang and glasser ids

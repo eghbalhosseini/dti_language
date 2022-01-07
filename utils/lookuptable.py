@@ -7,6 +7,14 @@ import re
 import pandas as pd
 _FSLUT_HEADER = '''#No. Label Name:                            R   G   B   A
                 '''
+
+def fill_lines(textlines,dict_dat):
+    for key_id in sorted(dict_dat.keys()):
+        c=dict_dat[key_id][1]
+        n=dict_dat[key_id][0]
+        textlines.append(fmt.format(key_id, n, c[0],c[1],c[2],c[3]))
+    return textlines
+
 # check if FSLUT_lang_glasser_ctab exist
 FSLUT_lang_glasser=Path(f"{HOME_DIR}/FSLUT_lang_glasser/FSLUT_lang_glasser_ctab.txt")
 if FSLUT_lang_glasser.exists():
@@ -55,7 +63,7 @@ else:
         2506: ('RH_AngG_bottom_10', ())
     }
     glasser_mask_ids_pre={
-        1001:('LH_Unknown',(1,1,1,0)),
+        1001:('LH_Unknown',(0,0,0,0)),
         1002:('LH_V1_ROI',()),
         1003:('LH_MST_ROI',()),
         1004:('LH_V6_ROI',()),
@@ -235,7 +243,7 @@ else:
         1179:('LH_PI_ROI',()),
         1180:('LH_a32pr_ROI',()),
         1181:('LH_p24_ROI',()),
-        2001:('RH_Unknown',(2,2,2,0)),
+        2001:('RH_Unknown',(0,0,0,0)),
         2002:('RH_V1_ROI',()),
         2003:('RH_MST_ROI',()),
         2004:('RH_V6_ROI',()),
@@ -422,7 +430,7 @@ else:
     # find all colors
     colors=[re.findall(r'\d+', x) for x in FSLUT_lines]
     # drop non color rows
-    colors=[x  for x in colors if len(x)==5]
+    colors=[x for x in colors if len(x)==5]
     # reformat it to a dictionary
     colors_dict=dict()
     for x in colors:
@@ -452,32 +460,53 @@ else:
     newFSLUT_dict={**lang_mask_ids_pre, **glasser_mask_ids_pre}
     newFSLUT_dict.keys()
     walk_=0
+    # for key_id in newFSLUT_dict.keys():
+    #     if len(newFSLUT_dict[key_id][1])==0:
+    #         newFSLUT_dict[key_id]=(newFSLUT_dict[key_id][0],new_colors[walk_]+(0,))
+    #         walk_+=1
+    # assigns same color to both left and right hemisphere
+    area_names_ids = [[re.subn('RH_|LH_', '', newFSLUT_dict[key_id][0])[0],key_id] for key_id in newFSLUT_dict.keys()]
+    area_names=np.asarray([x[0] for x in area_names_ids])
+    area_ids=np.asarray([x[1] for x in area_names_ids])
+    unique_names=np.unique(area_names)
+    for x in unique_names:
+        assert(len(np.where(area_names==unique_names[0])[0])==2)
+    walk_ = 0
     for key_id in newFSLUT_dict.keys():
-        if len(newFSLUT_dict[key_id][1])==0:
-            newFSLUT_dict[key_id]=(newFSLUT_dict[key_id][0],new_colors[walk_]+(0,))
-            walk_+=1
+        if len(newFSLUT_dict[key_id][1]) == 0:
+            area_name = re.subn('RH_|LH_', '',newFSLUT_dict[key_id][0])[0]
+            area_idx=area_ids[np.where(area_names==area_name)[0]]
+            for area_key in area_idx:
+                newFSLUT_dict[area_key] = (newFSLUT_dict[area_key][0], new_colors[walk_] + (0,))
+            walk_ += 1
     # add a row for zero
+    lh_keys = [k for k in newFSLUT_dict.keys() if re.findall('LH_',newFSLUT_dict[k][0])]
+    rh_keys = [k for k in newFSLUT_dict.keys() if re.findall('RH_', newFSLUT_dict[k][0])]
+    LHFSLUT_lang_glass_dict = {key: newFSLUT_dict[key] for key in lh_keys}
+    RHFSLUT_lang_glass_dict={key: newFSLUT_dict[key] for key in rh_keys}
+    FSLUT_lang={key: newFSLUT_dict[key] for key in lang_mask_ids_pre.keys()}
+    FSLUT_glasser = {key: newFSLUT_dict[key] for key in glasser_mask_ids_pre.keys()}
     newFSLUT_dict[0]=('Unknown', (0,0,0,0 ))
+    LHFSLUT_lang_glass_dict[0] = ('Unknown', (0, 0, 0, 0))
+    RHFSLUT_lang_glass_dict[0] = ('Unknown', (0, 0, 0, 0))
+    FSLUT_lang[0] = ('Unknown', (0, 0, 0, 0))
+    FSLUT_glasser[0] = ('Unknown', (0, 0, 0, 0))
     # save the new newFLSUT as a text file
     fmt = '{:<19} ' * 2 + '{: >5} ' * 4
     txt_lines = ['#$ Id: FreeSurferColorLUT_dti_evlab.txt, Fall 2021 $',
                  fmt.format('#No.', 'Label Name:', 'R', 'G', 'B', 'A')]
     lh_txt_lines=copy.deepcopy(txt_lines)
+    rh_txt_lines = copy.deepcopy(txt_lines)
     lang_txt_lines=copy.deepcopy(txt_lines)
     glasser_txt_lines=copy.deepcopy(txt_lines)
-    rh_txt_lines=copy.deepcopy(txt_lines)
-    for key_id in sorted(newFSLUT_dict.keys()):
-        c=newFSLUT_dict[key_id][1]
-        n=newFSLUT_dict[key_id][0]
-        txt_lines.append(fmt.format(key_id, n, c[0],c[1],c[2],c[3]))
-        if 'RH_' in n:
-            rh_txt_lines.append(fmt.format(key_id, n, c[0],c[1],c[2],c[3]))
-        elif 'LH_' in n:
-            lh_txt_lines.append(fmt.format(key_id, n, c[0], c[1], c[2], c[3]))
-        if key_id in glasser_mask_ids_pre.keys():
-            glasser_txt_lines.append(fmt.format(key_id, n, c[0], c[1], c[2], c[3]))
-        elif key_id in lang_mask_ids_pre.keys():
-            lang_txt_lines.append(fmt.format(key_id, n, c[0], c[1], c[2], c[3]))
+
+    txt_lines=fill_lines(txt_lines,newFSLUT_dict)
+    lh_txt_lines = fill_lines(lh_txt_lines, LHFSLUT_lang_glass_dict)
+    rh_txt_lines = fill_lines(rh_txt_lines, RHFSLUT_lang_glass_dict)
+    lang_txt_lines = fill_lines(lang_txt_lines, FSLUT_lang)
+    glasser_txt_lines = fill_lines(glasser_txt_lines, FSLUT_glasser)
+
+
     # save as text files
     with open(f'{HOME_DIR}/FSLUT_lang_glasser/FSLUT_lang_glasser_ctab.txt', "w") as textfile:
         for element in txt_lines:
