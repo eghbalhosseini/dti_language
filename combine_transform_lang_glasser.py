@@ -31,24 +31,25 @@ if __name__ == '__main__':
     # make sure they have same size
     assert(lang_img.shape==glasser_img.shape)
     ## 1. combining glasser and lang images. we start by a glasser image and replace the voxel ids for language from lang_img
-    lang_np=np.asarray(lang_img.dataobj)
-    glasser_np=np.asarray(glasser_img.dataobj)
+    lang_np=np.asarray(lang_img.dataobj).astype('int')
+    glasser_np=np.asarray(glasser_img.dataobj).astype('int')
     # fixed variable here : this is from
     # make sure subject at least have 1 roi
-    assert(len(set(lang_mask_ids.keys()).intersection(np.unique(lang_np)))>=1)
-    assert (len(set(glasser_mask_ids.keys()).intersection(np.unique(glasser_np))) >= 1)
+    set(FSLUT_lang_pd.id)
+    assert(len(set(FSLUT_lang_pd.id).intersection(np.unique(lang_np)))>=1)
+    assert (len(set(FSLUT_glasser_pd.id).intersection(np.unique(glasser_np))) >= 1)
     # make sure there is no overlap between lang and glasser ids
-    assert (len(set(glasser_mask_ids.keys()).intersection(set(lang_mask_ids.keys()))) == 0)
+    assert (len(set(FSLUT_glasser_pd.id).intersection(set(FSLUT_lang_pd.id))) == 0)
     assert((lang_img.affine==glasser_img.affine).all())
     # reset image so it contain either glasser or lang ids
-    non_lang=~np.isin(lang_np,np.asarray(list(lang_mask_ids.keys())))
+    non_lang=~np.isin(lang_np,np.asarray(FSLUT_lang_pd.id))
     lang_np[non_lang]=0
     #
-    non_glasser = ~np.isin(glasser_np, np.asarray(list(glasser_mask_ids.keys())))
+    non_glasser = ~np.isin(glasser_np, np.asarray(FSLUT_glasser_pd.id))
     glasser_np[non_glasser] = 0
     #
     combined_np=deepcopy(glasser_np)
-    for _,key_id in tqdm(enumerate(lang_mask_ids.keys())):
+    for _,key_id in tqdm(enumerate(FSLUT_lang_pd.id)):
         mask_loc=np.isin(lang_np,key_id)
         print(f"\n {np.sum(mask_loc)} \n")
         combined_np[mask_loc]=key_id
