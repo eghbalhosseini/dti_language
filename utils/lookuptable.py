@@ -538,6 +538,24 @@ FSLUT_lang_glasser_pd=pd.read_csv(f'{HOME_DIR}/FSLUT_lang_glasser/FSLUT_lang_gla
 FSLUT_lang_pd=pd.read_csv(f'{HOME_DIR}/FSLUT_lang_glasser/FSLUT_lang_ctab.txt',delim_whitespace=True,comment='#',header=None,names=['id','label','R','G','B','A'])
 FSLUT_glasser_pd=pd.read_csv(f'{HOME_DIR}/FSLUT_lang_glasser/FSLUT_glasser_ctab.txt',delim_whitespace=True,comment='#',header=None,names=['id','label','R','G','B','A'])
 
+# save a text file for names of left and right hemsphere regions
+targets_lang_glasser_LH_file=Path(f"{HOME_DIR}/targets_lang_glasser_LH.txt")
+if targets_lang_glasser_LH_file.exists():
+    pass
+else :
+    with open(str(targets_lang_glasser_LH_file),'w') as target_lh:
+        for label in list(FSLUT_LH_lang_glasser_pd.label):
+            target_lh.write(label + "\n")
+    target_lh.close()
+
+targets_lang_glasser_RH_file=Path(f"{HOME_DIR}/targets_lang_glasser_RH.txt")
+if targets_lang_glasser_RH_file.exists():
+    pass
+else :
+    with open(str(targets_lang_glasser_RH_file),'w') as target_rh:
+        for label in list(FSLUT_RH_lang_glasser_pd.label):
+            target_rh.write(label + "\n")
+    target_rh.close()
 
 
 FSLUT = '''
