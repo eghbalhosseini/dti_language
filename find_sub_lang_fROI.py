@@ -13,11 +13,11 @@ from pathlib import Path
 from shutil import copyfile
 import matplotlib.pyplot as plt
 from nilearn.image import load_img, math_img
-from matplotlib.colors import ListedColormap, LinearSegmentedColormap
-from utils.lookuptable import FSLUT, _FSLUT_HEADER
+from matplotlib.colors import ListedColormap
+from utils.lookuptable import FSLUT
 
 parser = argparse.ArgumentParser(description='find_subj_actvation_in_language_ROIs')
-parser.add_argument('subj_id', type=str) # DEBUG
+parser.add_argument('subj_id', type=str)
 parser.add_argument('network_id', type=str)#, default='lang')
 parser.add_argument('threshold', type=int)#, default=90)
 parser.add_argument('thr_type',type=str,default='top') # top or bottom
@@ -25,17 +25,16 @@ args=parser.parse_args()
 
 
 if __name__ == '__main__':
-    #subj_id = args.subj_id
-    # subj_id='sub239'
-    subj_id='sub721'
-    # threshold = 90
-    #network_id = args.network_id # 'lang'
-    network_id='lang'
-    threshold= 10
-    thr_type='bottom'
-    #threshold = args.threshold
+    subj_id = args.subj_id
+    #subj_id='sub721'
+    network_id = args.network_id # 'lang'
+    #network_id='lang'
+    threshold=args.threshold
+    #threshold= 10
+    thr_type=args.thr_type
+    #thr_type='bottom'
+    ####################
     file_name = 'fsig'
-
     my_env = os.environ.copy()
     my_env['SUBJECTS_DIR'] = subj_FS_path
 
