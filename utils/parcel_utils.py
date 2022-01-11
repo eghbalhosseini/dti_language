@@ -118,16 +118,17 @@ else:
                                                                      ROI_file.replace('.gii', '.png')))
 
 # register MNI parcels on MNI surface
-parcel_file=glob.glob(os.path.join(path_to_masks, 'allParcels_language_79x95x69.nii'))
+if False:
+    parcel_file=glob.glob(os.path.join(path_to_masks, 'allParcels_language_79x95x69.nii'))
 
-for hemi in ['lh','rh']:
-    unix_pattern = ['mri_vol2surf',
-                '--src',parcel_file[0],
-                '--out',parcel_file[0].replace('.nii',f'_on_mni_surface_{hemi}.img'),
-                '--hemi', hemi,
-                '--regheader', 'cvs_avg35_inMNI152',
-                '--surf', 'pial']
-    output = subprocess.Popen(unix_pattern)
-    output.communicate()
+    for hemi in ['lh','rh']:
+        unix_pattern = ['mri_vol2surf',
+                    '--src',parcel_file[0],
+                    '--out',parcel_file[0].replace('.nii',f'_on_mni_surface_{hemi}.img'),
+                    '--hemi', hemi,
+                    '--regheader', 'cvs_avg35_inMNI152',
+                    '--surf', 'pial']
+        output = subprocess.Popen(unix_pattern)
+        output.communicate()
 
 
