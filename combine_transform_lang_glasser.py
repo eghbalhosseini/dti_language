@@ -10,12 +10,21 @@ from pathlib import Path
 from nilearn.image import load_img
 from copy import deepcopy
 
+parser = argparse.ArgumentParser(description='combine fmri and glasser data ')
+parser.add_argument('subj_id', type=str)
+parser.add_argument('network_id', type=str)#, default='lang')
+parser.add_argument('threshold', type=int)#, default=90)
+parser.add_argument('thr_type',type=str,default='top') # top or bottom
+args=parser.parse_args()
 
 if __name__ == '__main__':
-    subj_id = 'sub721'
-    network_id = 'lang'
-    threshold = 90
-    thr_type = 'top'
+    subj_id = args.subj_id
+    # subj_id='sub721'
+    network_id = args.network_id  # 'lang'
+    # network_id='lang'
+    threshold = args.threshold
+    # threshold= 10
+    thr_type = args.thr_type
     file_name = 'fsig'
     sub_lang_path=Path(f"{HOME_DIR}/{subj_id}/fmri")
     sub_mri_path=Path(f"{HOME_DIR}/{subj_id}/fs/mri/brain.mgz")
