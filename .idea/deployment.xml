@@ -9,6 +9,76 @@
           </mappings>
         </serverdata>
       </paths>
+      <paths name="ehoseini@evnode_X11:22 agent (1)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/om/user/ehoseini/dti_language" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="ehoseini@evnode_X11:22 agent (10)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/om/user/ehoseini/dti_language" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="ehoseini@evnode_X11:22 agent (2)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/om/user/ehoseini/dti_language" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="ehoseini@evnode_X11:22 agent (3)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/om/user/ehoseini/dti_language" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="ehoseini@evnode_X11:22 agent (4)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/om/user/ehoseini/dti_language" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="ehoseini@evnode_X11:22 agent (5)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/om/user/ehoseini/dti_language" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="ehoseini@evnode_X11:22 agent (6)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/om/user/ehoseini/dti_language" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="ehoseini@evnode_X11:22 agent (7)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/om/user/ehoseini/dti_language" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="ehoseini@evnode_X11:22 agent (8)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/om/user/ehoseini/dti_language" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="ehoseini@evnode_X11:22 agent (9)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/om/user/ehoseini/dti_language" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
     </serverData>
   </component>
 </project>

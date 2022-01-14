@@ -20,6 +20,7 @@ while IFS=, read -r line_count subj_name sub_dti_dir fs_dir subj_glasser_txt gla
   if [ $JID == $line_count ]
     then
       echo "found the right match ${line_count}"
+      run_line=$line_count
       run_subj_name=$subj_name
       run_sub_dti_dir=$sub_dti_dir
       run_fs_dir=$fs_dir
@@ -39,6 +40,7 @@ done <"${GRAND_FILE}"
 SUB_HCPMM_FILE_IN_FS="${run_fs_dir}/${run_glasser_rel_dir}/${run_subj_name}/HCPMMP1.nii.gz"
 SUB_HCPMM_FILE_IN_DTI="${run_glasser_dest_dir}/"
 
+echo "run id:${run_line}"
 echo "subj:${run_subj_name}"
 echo "dti_dir:${run_sub_dti_dir}"
 echo "fs_dir:${run_fs_dir}"
@@ -74,7 +76,7 @@ echo "removing ${possible_file}"
 rm $possible_file
 
 
-bash /mindhive/evlab/Shared/diffusionzeynep/GLASSER/create_subj_volume_parcellation.sh -L "$run_subj_glasser_txt" -a HCPMMP1 -d "$run_glasser_rel_dir"
+bash /mindhive/evlab/Shared/diffusionzeynep/GLASSER/create_subj_volume_parcellation.sh -L "$run_subj_glasser_txt" -f "$run_line" -l "$run_line"  -a HCPMMP1 -d "$run_glasser_rel_dir"
 # copy files from relative location to DTI folder:
 SUB_HCPMM_FILE_IN_FS="${SUBJECTS_DIR}/${run_glasser_rel_dir}/${run_subj_name}/HCPMMP1.nii.gz"
 
