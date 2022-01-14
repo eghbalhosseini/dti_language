@@ -40,12 +40,12 @@ while read x; do
         #IND_GLASSER_FILE="${TEMP_DIR}/glasser_${subject_name}.txt"
         #rm -f $IND_GLASSER_FILE
         #touch $IND_GLASSER_FILE
-        printf "%s\n" "$subject_name" >> $SUBJECT_GLASSER_FILE
+        printf "%s\n" "$subject_name" >> $GLASSER_TXT
         mkdir -p $possible_folder
         # copy files from FS folder to GLASSER, this will be removed afterwards
         #cp -a "${DTI_DIR}/${subject_name}/fs/." "${TEMP_DIR}/${subject_name}/"
 
-        printf "%d,%s,%s,%s,%s,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "$x" "$FS_DIR" "$SUBJECT_GLASSER_FILE" "$GLASSER_LOC" "$possible_folder" "$TEMP_DIR"  >> $SUBJECT_GLASSER_FILE
+        printf "%d,%s,%s,%s,%s,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "$x" "$FS_DIR" "$GLASSER_TXT" "$GLASSER_LOC" "$possible_folder" "$TEMP_DIR"  >> $SUBJECT_GLASSER_FILE
       fi
 done < <(find $DTI_DIR -type d -maxdepth 1 -name "sub*")
 
