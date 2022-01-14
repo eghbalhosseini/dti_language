@@ -78,6 +78,7 @@ bash /mindhive/evlab/Shared/diffusionzeynep/GLASSER/create_subj_volume_parcellat
 # copy files from relative location to DTI folder:
 SUB_HCPMM_FILE_IN_FS="${SUBJECTS_DIR}/${run_glasser_rel_dir}/${run_subj_name}/HCPMMP1.nii.gz"
 
+
 echo "SUB_HCPMM_FILE_IN_FS:${SUB_HCPMM_FILE_IN_FS}"
 
 SUB_HCPMM_TXT_IN_FS="${SUBJECTS_DIR}/${run_glasser_rel_dir}/${run_subj_name}/LUT_HCPMMP1.txt"
@@ -89,6 +90,7 @@ then
   # clear fs files in GLASSER dir
   #rm -r "${run_subj_name}/"
   rm "$run_subj_glasser_txt"
+  echo "${SUB_HCPMM_FILE_IN_FS} was generataed \n"
   echo 'transfer was successful'
 else
   echo 'operation was unsuccessful'
