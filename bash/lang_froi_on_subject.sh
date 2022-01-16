@@ -2,7 +2,7 @@
 #SBATCH -c 8
 #SBATCH --exclude node[017-018]
 #SBATCH -t 5:00:00
-
+#SBATCH --mem=32G
 GRAND_FILE=$1
 OVERWRITE='false' # or 'true'
 #
