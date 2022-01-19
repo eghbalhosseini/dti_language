@@ -26,7 +26,7 @@ def mock_get_args():
     new_args = mock_args('sub721', 'lang', '90', 'top')
     return new_args
 
-debug=False
+debug=True
 
 if __name__ == '__main__':
     if debug:
