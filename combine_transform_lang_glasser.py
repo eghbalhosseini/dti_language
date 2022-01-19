@@ -2,6 +2,7 @@ import nibabel as nib
 from nilearn import datasets
 import numpy as np
 import subprocess
+import pandas as pd
 import argparse
 from utils.fmri_utils import subj_lang_path, subj_FS_path,HOME_DIR
 from utils.lookuptable import FSLUT_lang_pd, FSLUT_glasser_pd, FSLUT_RH_lang_glasser_pd, FSLUT_LH_lang_glasser_pd
@@ -9,22 +10,34 @@ fsaverage = datasets.fetch_surf_fsaverage(mesh='fsaverage')
 from pathlib import Path
 from nilearn.image import load_img
 from copy import deepcopy
+from collections import namedtuple
 
-parser = argparse.ArgumentParser(description='combine fmri and glasser data ')
-parser.add_argument('subj_id', type=str)
-parser.add_argument('network_id', type=str)#, default='lang')
-parser.add_argument('threshold', type=int)#, default=90)
-parser.add_argument('thr_type',type=str,default='top') # top or bottom
-args=parser.parse_args()
+def get_args():
+    parser = argparse.ArgumentParser(description='combine fmri and glasser data ')
+    parser.add_argument('subj_id', type=str)
+    parser.add_argument('network_id', type=str)#, default='lang')
+    parser.add_argument('threshold', type=int)#, default=90)
+    parser.add_argument('thr_type',type=str,default='top') # top or bottom
+    args=parser.parse_args()
+    return args
+
+def mock_get_args():
+    mock_args = namedtuple('debug', ['subj_id', 'network_id', 'threshold', 'thr_type'])
+    new_args = mock_args('sub721', 'lang', '90', 'top')
+    return new_args
+
+debug=False
 
 if __name__ == '__main__':
+    if debug:
+        args=mock_get_args()
+    else:
+        args=get_args()
     subj_id = args.subj_id
-    # subj_id='sub721'
     network_id = args.network_id  # 'lang'
-    # network_id='lang'
     threshold = args.threshold
-    # threshold= 10
     thr_type = args.thr_type
+    #
     file_name = 'fsig'
     sub_lang_path=Path(f"{HOME_DIR}/{subj_id}/fmri")
     sub_mri_path=Path(f"{HOME_DIR}/{subj_id}/fs/mri/brain.mgz")
@@ -61,6 +74,16 @@ if __name__ == '__main__':
     combine_file_pth=Path(f"{HOME_DIR}/{subj_id}/lang_glasser/lang_glasser_BOTH.nii.gz")
     combine_file_pth.parent.mkdir(parents=True, exist_ok=True)
     nib.save(combine_img,str(combine_file_pth))
+    # save a table for voxel per region
+    [reg_id,reg_count]=np.unique(combined_np,return_counts=True)
+    FSLUT_pd=pd.concat([FSLUT_lang_pd,FSLUT_glasser_pd]).drop_duplicates()
+    assert(len(np.setdiff1d(reg_id,np.unique(FSLUT_pd.id)))==0)
+    FSLUT_reg=pd.concat([FSLUT_pd[FSLUT_pd.id==x] for x in reg_id])
+    FSLUT_reg.insert(2,'num_voxel',reg_count)
+    FSLUT_reg=FSLUT_reg.drop(['R','G','B','A'],axis=1)
+    FSLUT_reg=FSLUT_reg.drop(0)
+    combine_count_pth = Path(f"{HOME_DIR}/{subj_id}/lang_glasser/lang_glasser_BOTH_count.csv")
+    FSLUT_reg.to_csv(str(combine_count_pth))
     #   SAVE HEMSPHERIC VERSIONS
     # left
     left_lang_glass_np=deepcopy(combined_np)
@@ -70,6 +93,16 @@ if __name__ == '__main__':
     left_file_pth = Path(f"{HOME_DIR}/{subj_id}/lang_glasser/lang_glasser_LH.nii.gz")
     left_file_pth.parent.mkdir(parents=True, exist_ok=True)
     nib.save(left_img, str(left_file_pth))
+    # save a table for voxel per region
+    [reg_id, reg_count] = np.unique(left_lang_glass_np, return_counts=True)
+    assert (len(np.setdiff1d(reg_id, np.unique(FSLUT_LH_lang_glasser_pd.id))) == 0)
+    FSLUT_L_reg = pd.concat([FSLUT_LH_lang_glasser_pd[FSLUT_LH_lang_glasser_pd.id == x] for x in reg_id])
+    FSLUT_L_reg.insert(2, 'num_voxel', reg_count)
+    FSLUT_L_reg = FSLUT_L_reg.drop(['R', 'G', 'B', 'A'], axis=1)
+    FSLUT_L_reg = FSLUT_L_reg.drop(0)
+    lh_count_pth = Path(f"{HOME_DIR}/{subj_id}/lang_glasser/lang_glasser_LH_count.csv")
+    FSLUT_L_reg.to_csv(str(lh_count_pth))
+
     # right
     right_lang_glass_np = deepcopy(combined_np)
     non_right = ~np.isin(right_lang_glass_np, FSLUT_RH_lang_glasser_pd.id.drop(0))
@@ -78,7 +111,17 @@ if __name__ == '__main__':
     right_file_pth = Path(f"{HOME_DIR}/{subj_id}/lang_glasser/lang_glasser_RH.nii.gz")
     right_file_pth.parent.mkdir(parents=True, exist_ok=True)
     nib.save(right_img, str(right_file_pth))
+    # save a table for voxel per region
+    [reg_id, reg_count] = np.unique(right_lang_glass_np, return_counts=True)
+    assert (len(np.setdiff1d(reg_id, np.unique(FSLUT_RH_lang_glasser_pd.id))) == 0)
+    FSLUT_R_reg = pd.concat([FSLUT_RH_lang_glasser_pd[FSLUT_RH_lang_glasser_pd.id == x] for x in reg_id])
+    FSLUT_R_reg.insert(2, 'num_voxel', reg_count)
+    FSLUT_R_reg = FSLUT_R_reg.drop(['R', 'G', 'B', 'A'], axis=1)
+    FSLUT_R_reg = FSLUT_R_reg.drop(0)
+    rh_count_pth = Path(f"{HOME_DIR}/{subj_id}/lang_glasser/lang_glasser_RH_count.csv")
+    FSLUT_R_reg.to_csv(str(rh_count_pth))
 
+    # save a
     ## 2. tranform the volume to dti space
     dti_vol_file=f'{HOME_DIR}/{subj_id}/dti/nodif_brain.nii.gz'
     reg_file_pth=Path(f'{HOME_DIR}/{subj_id}/lang_glasser/reg_FS2nodif.dat')

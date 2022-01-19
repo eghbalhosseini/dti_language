@@ -155,8 +155,7 @@ if __name__ == '__main__':
         network_fsavg = np.asarray(network_img.dataobj).flatten()
 
         # load subject native activation, this is for plotting only
-        sub_func_native_dir = os.path.join(subj_lang_path, 'archive', 'n810_archived_18Oct2021',
-                                           subj_id, 'bold', functional_native_path, file_name+'.nii.gz')
+        sub_func_native_dir = os.path.join(subj_lang_path,subj_id, 'bold', functional_native_path, file_name+'.nii.gz')
         network_native_img = nib.load(sub_func_native_dir)
         network_native = np.asarray(network_native_img.dataobj).flatten()
 
