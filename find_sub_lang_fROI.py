@@ -156,8 +156,9 @@ if __name__ == '__main__':
 
         # load subject native activation, this is for plotting only
         sub_func_native_dir = os.path.join(subj_lang_path,subj_id, 'bold', functional_native_path, file_name+'.nii.gz')
-        network_native_img = nib.load(sub_func_native_dir)
-        network_native = np.asarray(network_native_img.dataobj).flatten()
+        if os.path.exists(sub_func_native_dir):
+            network_native_img = nib.load(sub_func_native_dir)
+            network_native = np.asarray(network_native_img.dataobj).flatten()
 
         subj_surf_file = Path(subj_FS_path, subj_id, 'surf', hemis_[idx].lower() + '.inflated')
         subj_sulc_file = Path(subj_FS_path, subj_id, 'surf', hemis_[idx].lower() + '.sulc')
@@ -175,23 +176,25 @@ if __name__ == '__main__':
                 output = subprocess.Popen(unix_pattern, env=my_env)
                 output.communicate()
                 #
-                fig, ax = plt.subplots(nrows=2, ncols=1,subplot_kw={'projection': '3d'},figsize=[8,11])
-                # plot fsaverage:
-                label_roi = nib.freesurfer.read_label(f'{sub_dti_dir}/{ROI_name}_roi_{file_name}_{thr_type}_{threshold}_fsavg.label')
-                network_fsaverage_ROI = np.zeros(network_fsavg.shape)
-                network_fsaverage_ROI[label_roi] = 1
-                plotting.plot_surf_roi(surf_mesh=fsaverage['infl_' + hemi], roi_map=network_fsaverage_ROI,hemi=hemi,
+                try:
+                    fig, ax = plt.subplots(nrows=2, ncols=1,subplot_kw={'projection': '3d'},figsize=[8,11])
+                    # plot fsaverage:
+                    label_roi = nib.freesurfer.read_label(f'{sub_dti_dir}/{ROI_name}_roi_{file_name}_{thr_type}_{threshold}_fsavg.label')
+                    network_fsaverage_ROI = np.zeros(network_fsavg.shape)
+                    network_fsaverage_ROI[label_roi] = 1
+                    plotting.plot_surf_roi(surf_mesh=fsaverage['infl_' + hemi], roi_map=network_fsaverage_ROI,hemi=hemi,
                                        view='lateral', cmap='hot',bg_map=network_fsavg, bg_on_data=True,darkness=1,axes=ax[0])
-                ax[0].set_title(f'fsaverage, {ROI_name}_roi, #vox: {np.sum(network_fsaverage_ROI)}')
-                # plot fs native
-                label_roi = nib.freesurfer.read_label(f'{sub_dti_native_dir}/{ROI_name}_roi_{file_name}_{thr_type}_{threshold}_fsavg.label')
-                network_fsnative_ROI = np.zeros(network_native.shape)
-                network_fsnative_ROI[label_roi] = 1
-                plotting.plot_surf_roi(str(subj_surf_file), roi_map=network_fsnative_ROI,hemi=hemi, view='lateral',
+                    ax[0].set_title(f'fsaverage, {ROI_name}_roi, #vox: {np.sum(network_fsaverage_ROI)}')
+                    # plot fs native
+                    label_roi = nib.freesurfer.read_label(f'{sub_dti_native_dir}/{ROI_name}_roi_{file_name}_{thr_type}_{threshold}_fsavg.label')
+                    network_fsnative_ROI = np.zeros(network_native.shape)
+                    network_fsnative_ROI[label_roi] = 1
+                    plotting.plot_surf_roi(str(subj_surf_file), roi_map=network_fsnative_ROI,hemi=hemi, view='lateral',
                                        cmap='hot',bg_map=network_native, bg_on_data=True,darkness=1,axes=ax[1])
-                ax[1].set_title(f'fsnative, {ROI_name}_roi, #vox: {np.sum(network_fsnative_ROI)}')
-                fig.savefig(f'{sub_dti_native_dir}/{ROI_name}_roi_{file_name}_{thr_type}_{threshold}.png',edgecolor='none')
-
+                    ax[1].set_title(f'fsnative, {ROI_name}_roi, #vox: {np.sum(network_fsnative_ROI)}')
+                    fig.savefig(f'{sub_dti_native_dir}/{ROI_name}_roi_{file_name}_{thr_type}_{threshold}.png',edgecolor='none')
+                except:
+                    print('couldent creat the plots for fsnative')
     #####################################################################
     # Part 3 : transforming native label to volume for subject
     # 3.A transform labels to annoation first
