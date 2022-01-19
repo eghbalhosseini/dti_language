@@ -31,18 +31,19 @@ while IFS=, read -r line_count subj_name network_id threshold thr_type ; do
   fi
 
 done <"${GRAND_FILE}"
-echo "subj:${run_subj_name}"
-echo "network:${run_network_id}"
-echo "threshold:${run_threshold}"
-echo "threshold_type :${run_thr_type}"
-echo $SUBJECTS_DIR
+if $do_run; then
+  echo "subj:${run_subj_name}"
+  echo "network:${run_network_id}"
+  echo "threshold:${run_threshold}"
+  echo "threshold_type :${run_thr_type}"
+  echo $SUBJECTS_DIR
 
 
-. ~/.bash_profile
-conda activate dti_language
-echo $(which python)
-python /om/user/ehoseini/dti_language/combine_transform_lang_glasser.py "$run_subj_name" "$run_network_id" "$run_threshold" "$run_thr_type"
+  . ~/.bash_profile
+  conda activate dti_language
+  echo $(which python)
+  python /om/user/ehoseini/dti_language/combine_transform_lang_glasser.py "$run_subj_name" "$run_network_id" "$run_threshold" "$run_thr_type"
 
-
+fi
 
 
