@@ -544,7 +544,7 @@ if targets_lang_glasser_LH_file.exists():
     pass
 else :
     with open(str(targets_lang_glasser_LH_file),'w') as target_lh:
-        for label in list(FSLUT_LH_lang_glasser_pd.label):
+        for label in list(FSLUT_LH_lang_glasser_pd.drop(0).label):
             target_lh.write(label + "\n")
     target_lh.close()
 
@@ -553,7 +553,7 @@ if targets_lang_glasser_RH_file.exists():
     pass
 else :
     with open(str(targets_lang_glasser_RH_file),'w') as target_rh:
-        for label in list(FSLUT_RH_lang_glasser_pd.label):
+        for label in list(FSLUT_RH_lang_glasser_pd.drop(0).label):
             target_rh.write(label + "\n")
     target_rh.close()
 
