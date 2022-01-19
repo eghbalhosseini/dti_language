@@ -63,7 +63,7 @@ else:
         2506: ('RH_AngG_bottom_10', ())
     }
     glasser_mask_ids_pre={
-        1001:('LH_Unknown',(0,0,0,0)),
+        #1001:('LH_Unknown',(0,0,0,0)),
         1002:('LH_V1_ROI',()),
         1003:('LH_MST_ROI',()),
         1004:('LH_V6_ROI',()),
@@ -243,7 +243,7 @@ else:
         1179:('LH_PI_ROI',()),
         1180:('LH_a32pr_ROI',()),
         1181:('LH_p24_ROI',()),
-        2001:('RH_Unknown',(0,0,0,0)),
+        #2001:('RH_Unknown',(0,0,0,0)),
         2002:('RH_V1_ROI',()),
         2003:('RH_MST_ROI',()),
         2004:('RH_V6_ROI',()),
