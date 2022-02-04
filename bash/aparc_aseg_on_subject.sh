@@ -67,5 +67,5 @@ label_all_general('${SUB}','/mindhive/evlab/Shared/diffusionzeynep/','lang_glass
 # step 4
 
 
-cp  "/mindhive/evlab/Shared/diffusionzeynep/${SUB}/indti/Labels/aparc+aseg/all*" "/mindhive/evlab/Shared/diffusionzeynep/${SUB}//indti/Labels/lang_glasser_LH/."
-cp  "/mindhive/evlab/Shared/diffusionzeynep/${SUB}//indti/Labels/aparc+aseg/all*" "/mindhive/evlab/Shared/diffusionzeynep/${SUB}//indti/Labels/lang_glasser_RH/."
+cp  "/mindhive/evlab/Shared/diffusionzeynep/${SUB}/indti/Labels/aparc+aseg/"all* "/mindhive/evlab/Shared/diffusionzeynep/${SUB}//indti/Labels/lang_glasser_LH/."
+cp  "/mindhive/evlab/Shared/diffusionzeynep/${SUB}//indti/Labels/aparc+aseg/"all* "/mindhive/evlab/Shared/diffusionzeynep/${SUB}//indti/Labels/lang_glasser_RH/."
