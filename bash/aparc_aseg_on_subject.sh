@@ -49,12 +49,12 @@ label_all_eh('${SUB}','/mindhive/evlab/Shared/diffusionzeynep/','aparc+aseg');ex
 
 link_src="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/indti/lang_glasser_LH_indti.nii.gz"
 link_targ="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/indti/lang_glasser_LH-in-dti.nii.gz"
-ln -s "${link_src}" "${link_targ}"
+ln -sf "${link_src}" "${link_targ}"
 
 link_src="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/indti/lang_glasser_RH_indti.nii.gz"
 link_targ="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/indti/lang_glasser_RH-in-dti.nii.gz"
 
-ln -s "${link_src}" "${link_targ}"
+ln -sf "${link_src}" "${link_targ}"
 
 
 # step 3
@@ -69,3 +69,5 @@ label_all_general('${SUB}','/mindhive/evlab/Shared/diffusionzeynep/','lang_glass
 
 cp  "/mindhive/evlab/Shared/diffusionzeynep/${SUB}/indti/Labels/aparc+aseg/"all* "/mindhive/evlab/Shared/diffusionzeynep/${SUB}//indti/Labels/lang_glasser_LH/."
 cp  "/mindhive/evlab/Shared/diffusionzeynep/${SUB}//indti/Labels/aparc+aseg/"all* "/mindhive/evlab/Shared/diffusionzeynep/${SUB}//indti/Labels/lang_glasser_RH/."
+
+echo "${SUB} successfully processed!"
