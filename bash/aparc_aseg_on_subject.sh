@@ -44,8 +44,8 @@ mri_vol2vol --targ "${targ_file}" --reg "${reg_file}" --mov "${mov_file}"--inv -
 # step 2
 
 matlab -nosplash -nojvm -r "cd('/mindhive/evlab/Shared/diffusionzeynep/scripts/Architract/');\
-label_all('$SUB','/mindhive/evlab/Shared/diffusionzeynep/','aparc+aseg');\
-exit"
+label_all('${SUB}','/mindhive/evlab/Shared/diffusionzeynep/','aparc+aseg'/);\
+print('step 2 is done');exit"
 
 link_src="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/indti/lang_glasser_LH_indti.nii.gz"
 link_targ="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/indti/lang_glasser_LH-in-dti.nii.gz"
@@ -60,9 +60,9 @@ ln -s "${link_src}" "${link_targ}"
 # step 3
 
 matlab -nosplash -nojvm -r "cd('/mindhive/evlab/Shared/diffusionzeynep/scripts/Architract/');\
-label_all_general('$SUB','/mindhive/evlab/Shared/diffusionzeynep/','lang_glasser_LH','/mindhive/evlab/Shared/diffusionzeynep/FSLUT_lang_glasser/FSLUT_LH_lang_glasser_ctab.txt’);\
-label_all_general('$SUB','/mindhive/evlab/Shared/diffusionzeynep/','lang_glasser_RH','/mindhive/evlab/Shared/diffusionzeynep/FSLUT_lang_glasser/FSLUT_RH_lang_glasser_ctab.txt’);\
-exit"
+label_all_general('${SUB}','/mindhive/evlab/Shared/diffusionzeynep/','lang_glasser_LH','/mindhive/evlab/Shared/diffusionzeynep/FSLUT_lang_glasser/FSLUT_LH_lang_glasser_ctab.txt');\
+label_all_general('${SUB}','/mindhive/evlab/Shared/diffusionzeynep/','lang_glasser_RH','/mindhive/evlab/Shared/diffusionzeynep/FSLUT_lang_glasser/FSLUT_RH_lang_glasser_ctab.txt');\
+print('step 3 is done');exit"
 
 # step 4
 
