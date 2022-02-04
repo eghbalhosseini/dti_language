@@ -40,7 +40,7 @@ reg_file="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/lang_glasser/reg_FS2nodi
 mov_file="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/dti/nodif_brain.nii.gz"
 targ_file="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/fs/mri/aparc+aseg.mgz"
 out_file="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/indti/aparc+aseg-in-dti.nii.gz"
-mri_vol2vol --targ "${targ_file}" --reg "${reg_file}" --mov "${mov_file}"--inv --nearest --o "${out_file}"
+mri_vol2vol --targ "${targ_file}" --reg "${reg_file}" --mov "${mov_file}" --inv --nearest --o "${out_file}"
 
 # step 2
 
