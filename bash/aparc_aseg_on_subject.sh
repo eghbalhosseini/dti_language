@@ -32,6 +32,7 @@ echo "subj:${SUB}"
 
 
 . ~/.bash_profile
+. ~/.bashrc
 conda activate dti_language
 
 # step 1
