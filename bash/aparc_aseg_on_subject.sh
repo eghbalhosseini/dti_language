@@ -45,8 +45,7 @@ mri_vol2vol --targ "${targ_file}" --reg "${reg_file}" --mov "${mov_file}" --inv 
 # step 2
 
 matlab -nosplash -nojvm -r "cd('/mindhive/evlab/Shared/diffusionzeynep/scripts/Architract/');\
-label_all_eh('${SUB}','/mindhive/evlab/Shared/diffusionzeynep/','aparc+aseg');\
-print('step 2 is done');exit"
+label_all_eh('${SUB}','/mindhive/evlab/Shared/diffusionzeynep/','aparc+aseg');exit"
 
 link_src="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/indti/lang_glasser_LH_indti.nii.gz"
 link_targ="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/indti/lang_glasser_LH-in-dti.nii.gz"
