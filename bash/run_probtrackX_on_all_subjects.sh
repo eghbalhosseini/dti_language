@@ -23,13 +23,14 @@ while read x; do
 
       if [ ! -d "$lh_folder" ]
       then
-        printf "%d,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "lang_glasser_LH" "LH" >> $SUBJECT_PROBX_FILE
         LINE_COUNT=$(expr ${LINE_COUNT} + 1)
+        printf "%d,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "lang_glasser_LH" "LH" >> $SUBJECT_PROBX_FILE
+
       fi
       if [ ! -d "$rh_folder" ]
       then
-        printf "%d,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "lang_glasser_RH" "RH">> $SUBJECT_PROBX_FILE
         LINE_COUNT=$(expr ${LINE_COUNT} + 1)
+        printf "%d,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "lang_glasser_RH" "RH">> $SUBJECT_PROBX_FILE
       fi
 done < <(find $DTI_DIR -maxdepth 1 -type d -name "sub*")
 
