@@ -40,8 +40,12 @@ reg_file="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/lang_glasser/reg_FS2nodi
 mov_file="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/dti/nodif_brain.nii.gz"
 targ_file="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/fs/mri/aparc+aseg.mgz"
 out_file="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/indti/aparc+aseg-in-dti.nii.gz"
-mri_vol2vol --targ "${targ_file}" --reg "${reg_file}" --mov "${mov_file}" --inv --nearest --o "${out_file}"
-
+if [ -f "$out_file" ]
+then
+  true
+else
+  mri_vol2vol --targ "${targ_file}" --reg "${reg_file}" --mov "${mov_file}" --inv --nearest --o "${out_file}"
+fi
 # step 2
 
 matlab -nosplash -nojvm -r "cd('/mindhive/evlab/Shared/diffusionzeynep/scripts/Architract/');\
