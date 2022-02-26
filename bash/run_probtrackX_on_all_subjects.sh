@@ -18,16 +18,16 @@ while read x; do
       correction=''
       subject_name="${x/$original/$correction}"
 
-      lh_folder="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_LH"
-      rh_folder="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_RH"
+      lh_folder="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_LH/fdt_paths.nii.gz"
+      rh_folder="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_RH/fdt_paths.nii.gz"
 
-      if [ ! -d "$lh_folder" ]
+      if [ ! -f "$lh_folder" ]
       then
         LINE_COUNT=$(expr ${LINE_COUNT} + 1)
         printf "%d,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "lang_glasser_LH" "LH" >> $SUBJECT_PROBX_FILE
 
       fi
-      if [ ! -d "$rh_folder" ]
+      if [ ! -f "$rh_folder" ]
       then
         LINE_COUNT=$(expr ${LINE_COUNT} + 1)
         printf "%d,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "lang_glasser_RH" "RH">> $SUBJECT_PROBX_FILE
