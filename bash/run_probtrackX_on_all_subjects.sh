@@ -38,7 +38,7 @@ run_val=0
 if [ "$LINE_COUNT" -gt "$run_val" ]; then
   echo "running  ${LINE_COUNT} jobs"
    #nohup /cm/shared/admin/bin/submit-many-jobs 3 2 3 1 probtrackX_on_subject.sh  $SUBJECT_PROBX_FILE
-   nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT 75 100 25 probtrackX_on_subject.sh  $SUBJECT_PROBX_FILE
+   nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT 75 100 25 probtrackX_on_subject.sh  $SUBJECT_PROBX_FILE &
   else
     echo $LINE_COUNT
 fi
