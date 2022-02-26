@@ -36,37 +36,37 @@ echo "subj:${SUB}"
 conda activate dti_language
 
 # step 1
-reg_file="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/lang_glasser/reg_FS2nodif.dat"
-mov_file="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/dti/nodif_brain.nii.gz"
-targ_file="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/fs/mri/aparc+aseg.mgz"
-out_file="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/indti/aparc+aseg-in-dti.nii.gz"
-if [ -f "$out_file" ]
-then
-  true
-else
-  mri_vol2vol --targ "${targ_file}" --reg "${reg_file}" --mov "${mov_file}" --inv --nearest --o "${out_file}"
-fi
+#reg_file="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/lang_glasser/reg_FS2nodif.dat"
+#mov_file="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/dti/nodif_brain.nii.gz"
+#targ_file="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/fs/mri/aparc+aseg.mgz"
+#out_file="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/indti/aparc+aseg-in-dti.nii.gz"
+#if [ -f "$out_file" ]
+#then
+#  true
+#else
+#  mri_vol2vol --targ "${targ_file}" --reg "${reg_file}" --mov "${mov_file}" --inv --nearest --o "${out_file}"
+#fi
 # step 2
 
 #matlab -nosplash -nojvm -r "cd('/mindhive/evlab/Shared/diffusionzeynep/scripts/Architract/');\
 #label_all_eh('${SUB}','/mindhive/evlab/Shared/diffusionzeynep/','aparc+aseg');exit"
 #
-#link_src="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/indti/lang_glasser_LH_indti.nii.gz"
-#link_targ="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/indti/lang_glasser_LH-in-dti.nii.gz"
-#ln -sf "${link_src}" "${link_targ}"
-#
-#link_src="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/indti/lang_glasser_RH_indti.nii.gz"
-#link_targ="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/indti/lang_glasser_RH-in-dti.nii.gz"
-#
-#ln -sf "${link_src}" "${link_targ}"
+link_src="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/indti/lang_glasser_LH_indti.nii.gz"
+link_targ="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/indti/lang_glasser_LH-in-dti.nii.gz"
+ln -sf "${link_src}" "${link_targ}"
+
+link_src="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/indti/lang_glasser_RH_indti.nii.gz"
+link_targ="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/indti/lang_glasser_RH-in-dti.nii.gz"
+
+ln -sf "${link_src}" "${link_targ}"
 #
 #
 ## step 3
 #
-#matlab -nosplash -nojvm -r "cd('/mindhive/evlab/Shared/diffusionzeynep/scripts/Architract/');\
-#label_all_general('${SUB}','/mindhive/evlab/Shared/diffusionzeynep/','lang_glasser_LH','/mindhive/evlab/Shared/diffusionzeynep/FSLUT_lang_glasser/FSLUT_LH_lang_glasser_ctab.txt');\
-#label_all_general('${SUB}','/mindhive/evlab/Shared/diffusionzeynep/','lang_glasser_RH','/mindhive/evlab/Shared/diffusionzeynep/FSLUT_lang_glasser/FSLUT_RH_lang_glasser_ctab.txt');\
-#;exit"
+matlab -nosplash -nojvm -r "cd('/mindhive/evlab/Shared/diffusionzeynep/scripts/Architract/');\
+label_all_general('${SUB}','/mindhive/evlab/Shared/diffusionzeynep/','lang_glasser_LH','/mindhive/evlab/Shared/diffusionzeynep/FSLUT_lang_glasser/FSLUT_LH_lang_glasser_ctab.txt');\
+label_all_general('${SUB}','/mindhive/evlab/Shared/diffusionzeynep/','lang_glasser_RH','/mindhive/evlab/Shared/diffusionzeynep/FSLUT_lang_glasser/FSLUT_RH_lang_glasser_ctab.txt');\
+;exit"
 
 # step 4
 

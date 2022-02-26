@@ -22,7 +22,7 @@ while read x; do
       rh_folder="${DTI_DIR}/${subject_name}/indti/Labels/lang_glasser_RH"
       aparc_aseg_folder="${DTI_DIR}/${subject_name}/indti/Labels/aparc+aseg"
 
-      if [ -d "$lh_folder" ] && [ -d "$rh_folder" ] && [ -d "$aparc_aseg_folder" ]
+      if [ -d "$lh_folder" ] && [ -d "$rh_folder" ] && [ -d "$aparc_aseg_folder" ] && false
       then
         true
       else
