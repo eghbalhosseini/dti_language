@@ -15,7 +15,7 @@ fi
 echo "${GRAND_FILE}"
 echo $JID
 
-while IFS=, read -r line_count subj_name segment_name hemi ; do
+while IFS=, read -r line_count subj_name hemi fdt_file ; do
   #echo "line_count ${model}"
   if [ $JID == $line_count ]
     then
@@ -23,6 +23,7 @@ while IFS=, read -r line_count subj_name segment_name hemi ; do
       SUB=$subj_name
       SEGNAME=$segment_name
       HEMI=$hemi
+      FILE_NAME=$fdt_file
       do_run=true
       break
     else

@@ -4,8 +4,8 @@ FS_DIR=/mindhive/evlab/u/Shared/SUBJECTS_FS/FS/
 
 
 network_id="lang"
-threshold="90"
-thr_type="top"
+threshold="10"
+thr_type="bottom"
 #
 
 analyze_fROI='all_subject_for_fROI'
