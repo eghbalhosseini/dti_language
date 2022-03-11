@@ -252,7 +252,7 @@ if __name__ == '__main__':
                         '--annot-path', f'{sub_dti_native_dir}/{hemis_[idx].lower()}.{network_id}_roi_{thr_type}_{threshold}',
                         # NOTE: we do not observe any difference in the output generated using the
                         # --surf pial or --surf orig flags. we may use either one.
-                        '--surf', 'orig',  # '--surf', 'orig',
+                        '--surf', 'orig',  # '--surf', 'orig', # Note this is an option for verision 6.0.0 of freesurfer
                         '--offset', f'{offset}'  # NOTE: expects offset of 0 for lh and rh
                         ]
         for idy, y in enumerate(hemi_rois_idx):

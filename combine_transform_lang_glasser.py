@@ -11,19 +11,18 @@ from pathlib import Path
 from nilearn.image import load_img
 from copy import deepcopy
 from collections import namedtuple
+from glob import glob
 
 def get_args():
     parser = argparse.ArgumentParser(description='combine fmri and glasser data ')
     parser.add_argument('subj_id', type=str)
     parser.add_argument('network_id', type=str)#, default='lang')
-    parser.add_argument('threshold', type=int)#, default=90)
-    parser.add_argument('thr_type',type=str,default='top') # top or bottom
     args=parser.parse_args()
     return args
 
 def mock_get_args():
-    mock_args = namedtuple('debug', ['subj_id', 'network_id', 'threshold', 'thr_type'])
-    new_args = mock_args('sub721', 'lang', '90', 'top')
+    mock_args = namedtuple('debug', ['subj_id', 'network_id'])
+    new_args = mock_args('sub721', 'lang')
     return new_args
 
 debug=False
@@ -35,30 +34,44 @@ if __name__ == '__main__':
         args=get_args()
     subj_id = args.subj_id
     network_id = args.network_id  # 'lang'
-    threshold = args.threshold
-    thr_type = args.thr_type
     #
     file_name = 'fsig'
     sub_lang_path=Path(f"{HOME_DIR}/{subj_id}/fmri")
     sub_mri_path=Path(f"{HOME_DIR}/{subj_id}/fs/mri/brain.mgz")
-    lang_img = load_img(f'{str(sub_lang_path)}/x.fsnative.{network_id}_roi_{thr_type}_{threshold}.nii.gz')
+    # find images for network of interest
+    network_paths=np.asarray(glob(Path(f"{sub_lang_path}/x.fsnative.{network_id}*").__str__()))
+    non_dti=[not 'DTI' in x for x in network_paths]
+    network_paths_non_dti=network_paths[non_dti]
+    lang_imges = [load_img(x) for x in network_paths_non_dti]
     glasser_img=load_img(f'{str(sub_lang_path.parent)}/glasser/HCPMMP1.nii.gz')
     # make sure they have same size
-    assert(lang_img.shape==glasser_img.shape)
+    for im in lang_imges:
+        assert(im.shape==glasser_img.shape)
+        assert((im.affine == glasser_img.affine).all())
     ## 1. combining glasser and lang images. we start by a glasser image and replace the voxel ids for language from lang_img
-    lang_np=np.asarray(lang_img.dataobj)
+    lang_np_lst=[np.asarray(x.dataobj) for x in lang_imges]
     glasser_np=np.asarray(glasser_img.dataobj)
     # fixed variable here : this is from
     # make sure subject at least have 1 roi
-    assert(len(set(FSLUT_lang_pd.id).intersection(np.unique(lang_np)))>=1)
+    for l_np in lang_np_lst:
+        assert(len(set(FSLUT_lang_pd.id).intersection(np.unique(l_np)))>=1)
+
     assert (len(set(FSLUT_glasser_pd.id).intersection(np.unique(glasser_np))) >= 1)
     # make sure there is no overlap between lang and glasser ids
     assert (len(set(FSLUT_glasser_pd.id).intersection(set(FSLUT_lang_pd.id))) ==1)
-    assert((lang_img.affine==glasser_img.affine).all())
+
     # reset image so it contain either glasser or lang ids
-    non_lang=~np.isin(lang_np,np.asarray(FSLUT_lang_pd.id.drop(0)))
-    lang_np[non_lang]=0
+    for idx, l_np in enumerate(lang_np_lst):
+        non_lang=~np.isin(l_np,np.asarray(FSLUT_lang_pd.id.drop(0)))
+        l_np[non_lang]=0
+        lang_np_lst[idx]=l_np
     #
+    # combine language nps to only one
+    # first make sure there is no overlap
+    a = lang_np_lst[0] > 0
+    b = lang_np_lst[1] > 0
+    assert (np.sum(np.multiply(a,b))==0)
+    lang_np=lang_np_lst[0]+lang_np_lst[1]
     non_glasser = ~np.isin(glasser_np, np.asarray(FSLUT_glasser_pd.id.drop(0)))
     glasser_np[non_glasser] = 0
     #
@@ -70,7 +83,7 @@ if __name__ == '__main__':
         print(f"\n {key_id} {np.sum(mask_loc)} \n")
         combined_np[mask_loc]=key_id
     # format the image for saving
-    combine_img=nib.Nifti1Image(combined_np,lang_img.affine,lang_img.header)
+    combine_img=nib.Nifti1Image(combined_np,lang_imges[0].affine,lang_imges[0].header)
     combine_file_pth=Path(f"{HOME_DIR}/{subj_id}/lang_glasser/lang_glasser_BOTH.nii.gz")
     combine_file_pth.parent.mkdir(parents=True, exist_ok=True)
     nib.save(combine_img,str(combine_file_pth))
@@ -89,7 +102,7 @@ if __name__ == '__main__':
     left_lang_glass_np=deepcopy(combined_np)
     non_left=~np.isin(left_lang_glass_np,FSLUT_LH_lang_glasser_pd.id.drop(0))
     left_lang_glass_np[non_left] = 0
-    left_img = nib.Nifti1Image(left_lang_glass_np, lang_img.affine, lang_img.header)
+    left_img = nib.Nifti1Image(left_lang_glass_np, lang_imges[0].affine, lang_imges[0].header)
     left_file_pth = Path(f"{HOME_DIR}/{subj_id}/lang_glasser/lang_glasser_LH.nii.gz")
     left_file_pth.parent.mkdir(parents=True, exist_ok=True)
     nib.save(left_img, str(left_file_pth))
@@ -107,7 +120,7 @@ if __name__ == '__main__':
     right_lang_glass_np = deepcopy(combined_np)
     non_right = ~np.isin(right_lang_glass_np, FSLUT_RH_lang_glasser_pd.id.drop(0))
     right_lang_glass_np[non_right] = 0
-    right_img = nib.Nifti1Image(right_lang_glass_np, lang_img.affine, lang_img.header)
+    right_img = nib.Nifti1Image(right_lang_glass_np, lang_imges[0].affine, lang_imges[0].header)
     right_file_pth = Path(f"{HOME_DIR}/{subj_id}/lang_glasser/lang_glasser_RH.nii.gz")
     right_file_pth.parent.mkdir(parents=True, exist_ok=True)
     nib.save(right_img, str(right_file_pth))
