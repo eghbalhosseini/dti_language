@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -c 8
+#SBATCH -n 1 # one core
 #SBATCH --exclude node[017-018]
 #SBATCH -t 5:00:00
 #SBATCH --mem=32G
