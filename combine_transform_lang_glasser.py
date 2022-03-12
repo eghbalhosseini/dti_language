@@ -22,7 +22,7 @@ def get_args():
 
 def mock_get_args():
     mock_args = namedtuple('debug', ['subj_id', 'network_id'])
-    new_args = mock_args('sub087', 'lang')
+    new_args = mock_args('sub540', 'lang')
     return new_args
 
 debug=True
