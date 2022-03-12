@@ -42,8 +42,7 @@ if $do_run; then
   . ~/.bash_profile
   conda activate dti_language
   echo $(which python)
-  python /om/user/ehoseini/dti_language/combine_transform_lang_glasser.py "$run_subj_name" "$run_network_id" "$run_threshold" "$run_thr_type"
-
+  python /om/user/ehoseini/dti_language/combine_transform_lang_glasser.py "$run_subj_name" "$run_network_id"
 fi
 
 
