@@ -31,7 +31,7 @@ while read x; do
       subject_name="${x/$original/$correction}"
       possible_folder="${DTI_DIR}/${subject_name}/glasser"
       possible_file="${possible_folder}/HCPMMP1.nii.gz"
-      if [ -f "$possible_file" ]
+      if false #[ -f "$possible_file" ]
       then
         true
       else
@@ -53,8 +53,8 @@ echo $LINE_COUNT
 run_val=0
 if [ "$LINE_COUNT" -gt "$run_val" ]; then
   echo "running  ${LINE_COUNT} "
-   #nohup /cm/shared/admin/bin/submit-many-jobs 3 2 3 1 glasser_parcellation_on_subject.sh  $SUBJECT_GLASSER_FILE
-   nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT 80 100 20 glasser_parcellation_on_subject.sh  $SUBJECT_GLASSER_FILE &
+   nohup /cm/shared/admin/bin/submit-many-jobs 3 2 3 1 glasser_parcellation_on_subject.sh  $SUBJECT_GLASSER_FILE
+   #nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT 80 100 20 glasser_parcellation_on_subject.sh  $SUBJECT_GLASSER_FILE &
   else
     echo $LINE_COUNT
 fi

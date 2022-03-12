@@ -22,10 +22,10 @@ def get_args():
 
 def mock_get_args():
     mock_args = namedtuple('debug', ['subj_id', 'network_id'])
-    new_args = mock_args('sub721', 'lang')
+    new_args = mock_args('sub087', 'lang')
     return new_args
 
-debug=False
+debug=True
 
 if __name__ == '__main__':
     if debug:
@@ -58,7 +58,7 @@ if __name__ == '__main__':
 
     assert (len(set(FSLUT_glasser_pd.id).intersection(np.unique(glasser_np))) >= 1)
     # make sure there is no overlap between lang and glasser ids
-    assert (len(set(FSLUT_glasser_pd.id).intersection(set(FSLUT_lang_pd.id))) ==1)
+    assert (set(FSLUT_glasser_pd.id).intersection(set(FSLUT_lang_pd.id)) =={0})
 
     # reset image so it contain either glasser or lang ids
     for idx, l_np in enumerate(lang_np_lst):
@@ -98,6 +98,7 @@ if __name__ == '__main__':
     combine_count_pth = Path(f"{HOME_DIR}/{subj_id}/lang_glasser/lang_glasser_BOTH_count.csv")
     FSLUT_reg.to_csv(str(combine_count_pth))
     #   SAVE HEMSPHERIC VERSIONS
+    # here we drop the zero index
     # left
     left_lang_glass_np=deepcopy(combined_np)
     non_left=~np.isin(left_lang_glass_np,FSLUT_LH_lang_glasser_pd.id.drop(0))
@@ -108,7 +109,10 @@ if __name__ == '__main__':
     nib.save(left_img, str(left_file_pth))
     # save a table for voxel per region
     [reg_id, reg_count] = np.unique(left_lang_glass_np, return_counts=True)
-    assert (len(np.setdiff1d(reg_id, np.unique(FSLUT_LH_lang_glasser_pd.id))) == 0)
+    np.argwhere(reg_id==0)
+    np.delete(reg_id,[0])
+    np.delete(reg_count,np.argwhere(reg_id==0))
+    assert (np.setdiff1d(reg_id, np.unique(FSLUT_LH_lang_glasser_pd.id)) == 0)
     FSLUT_L_reg = pd.concat([FSLUT_LH_lang_glasser_pd[FSLUT_LH_lang_glasser_pd.id == x] for x in reg_id])
     FSLUT_L_reg.insert(2, 'num_voxel', reg_count)
     FSLUT_L_reg = FSLUT_L_reg.drop(['R', 'G', 'B', 'A'], axis=1)
