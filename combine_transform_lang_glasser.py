@@ -9,6 +9,7 @@ from utils.lookuptable import FSLUT_lang_pd, FSLUT_glasser_pd, FSLUT_RH_lang_gla
 fsaverage = datasets.fetch_surf_fsaverage(mesh='fsaverage')
 from pathlib import Path
 from nilearn.image import load_img
+from nilearn import plotting
 from copy import deepcopy
 from collections import namedtuple
 from glob import glob
@@ -25,7 +26,7 @@ def mock_get_args():
     new_args = mock_args('sub540', 'lang')
     return new_args
 
-debug=True
+debug=False
 
 if __name__ == '__main__':
     if debug:
@@ -44,6 +45,8 @@ if __name__ == '__main__':
     network_paths_non_dti=network_paths[non_dti]
     lang_imges = [load_img(x) for x in network_paths_non_dti]
     glasser_img=load_img(f'{str(sub_lang_path.parent)}/glasser/HCPMMP1.nii.gz')
+    #plotting.plot_roi(glasser_img,bg_img=network_paths[0],vmin=0,vmax=999)
+    #plotting.show()
     # make sure they have same size
     for im in lang_imges:
         assert(im.shape==glasser_img.shape)
@@ -51,29 +54,32 @@ if __name__ == '__main__':
     ## 1. combining glasser and lang images. we start by a glasser image and replace the voxel ids for language from lang_img
     lang_np_lst=[np.asarray(x.dataobj) for x in lang_imges]
     glasser_np=np.asarray(glasser_img.dataobj)
+    # reset all non HCPMM1 label indicies to zero -- this is because Glasser regions are from 1001 - 1180 and 2001- 2180
+    glasser_np[np.logical_or(glasser_np<1001,glasser_np==2000)]=0
+
     # fixed variable here : this is from
     # make sure subject at least have 1 roi
     for l_np in lang_np_lst:
         assert(len(set(FSLUT_lang_pd.id).intersection(np.unique(l_np)))>=1)
-
-    assert (len(set(FSLUT_glasser_pd.id).intersection(np.unique(glasser_np))) >= 1)
+    assert (len(set(FSLUT_glasser_pd.id).intersection(np.unique(glasser_np))) == (179*2+1))
     # make sure there is no overlap between lang and glasser ids
     assert (set(FSLUT_glasser_pd.id).intersection(set(FSLUT_lang_pd.id)) =={0})
 
-    # reset image so it contain either glasser or lang ids
+    # reset image so it contain either lang ids
     for idx, l_np in enumerate(lang_np_lst):
         non_lang=~np.isin(l_np,np.asarray(FSLUT_lang_pd.id.drop(0)))
         l_np[non_lang]=0
         lang_np_lst[idx]=l_np
-    #
     # combine language nps to only one
     # first make sure there is no overlap
     a = lang_np_lst[0] > 0
     b = lang_np_lst[1] > 0
     assert (np.sum(np.multiply(a,b))==0)
     lang_np=lang_np_lst[0]+lang_np_lst[1]
+    # reset image so it contain either glasser ids
     non_glasser = ~np.isin(glasser_np, np.asarray(FSLUT_glasser_pd.id.drop(0)))
     glasser_np[non_glasser] = 0
+    assert(len(np.unique(glasser_np))==(179*2+1))
     #
     combined_np=deepcopy(glasser_np)
     # drop unknown
@@ -109,10 +115,10 @@ if __name__ == '__main__':
     nib.save(left_img, str(left_file_pth))
     # save a table for voxel per region
     [reg_id, reg_count] = np.unique(left_lang_glass_np, return_counts=True)
-    np.argwhere(reg_id==0)
-    np.delete(reg_id,[0])
-    np.delete(reg_count,np.argwhere(reg_id==0))
-    assert (np.setdiff1d(reg_id, np.unique(FSLUT_LH_lang_glasser_pd.id)) == 0)
+    #np.argwhere(reg_id==0)
+    #np.delete(reg_id,[0])
+    #np.delete(reg_count,np.argwhere(reg_id==0))
+    assert (len(np.setdiff1d(reg_id, np.unique(FSLUT_LH_lang_glasser_pd.id)))==0)
     FSLUT_L_reg = pd.concat([FSLUT_LH_lang_glasser_pd[FSLUT_LH_lang_glasser_pd.id == x] for x in reg_id])
     FSLUT_L_reg.insert(2, 'num_voxel', reg_count)
     FSLUT_L_reg = FSLUT_L_reg.drop(['R', 'G', 'B', 'A'], axis=1)
