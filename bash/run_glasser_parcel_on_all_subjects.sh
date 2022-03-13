@@ -31,7 +31,7 @@ while read x; do
       subject_name="${x/$original/$correction}"
       possible_folder="${DTI_DIR}/${subject_name}/glasser"
       possible_file="${possible_folder}/HCPMMP1.nii.gz"
-      if false #[ -f "$possible_file" ]
+      if [ -f "$possible_file" ]
       then
         true
       else
