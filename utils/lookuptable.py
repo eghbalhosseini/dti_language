@@ -486,11 +486,11 @@ else:
     RHFSLUT_lang_glass_dict={key: newFSLUT_dict[key] for key in rh_keys}
     FSLUT_lang={key: newFSLUT_dict[key] for key in lang_mask_ids_pre.keys()}
     FSLUT_glasser = {key: newFSLUT_dict[key] for key in glasser_mask_ids_pre.keys()}
-    newFSLUT_dict[0]=('Unknown', (0,0,0,0 ))
-    LHFSLUT_lang_glass_dict[0] = ('Unknown', (0, 0, 0, 0))
-    RHFSLUT_lang_glass_dict[0] = ('Unknown', (0, 0, 0, 0))
-    FSLUT_lang[0] = ('Unknown', (0, 0, 0, 0))
-    FSLUT_glasser[0] = ('Unknown', (0, 0, 0, 0))
+    #newFSLUT_dict[0]=('Unknown', (0,0,0,0 ))
+    #LHFSLUT_lang_glass_dict[0] = ('Unknown', (0, 0, 0, 0))
+    #RHFSLUT_lang_glass_dict[0] = ('Unknown', (0, 0, 0, 0))
+    #FSLUT_lang[0] = ('Unknown', (0, 0, 0, 0))
+    #FSLUT_glasser[0] = ('Unknown', (0, 0, 0, 0))
     # save the new newFLSUT as a text file
     fmt = '{:<19} ' * 2 + '{: >5} ' * 4
     txt_lines = ['#$ Id: FreeSurferColorLUT_dti_evlab.txt, Fall 2021 $',

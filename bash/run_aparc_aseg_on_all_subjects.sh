@@ -19,10 +19,12 @@ while read x; do
       subject_name="${x/$original/$correction}"
 
       lh_folder="${DTI_DIR}/${subject_name}/indti/Labels/lang_glasser_LH"
+      rm -rf $lh_folder
       rh_folder="${DTI_DIR}/${subject_name}/indti/Labels/lang_glasser_RH"
+      rm -rf $rh_folder
       aparc_aseg_folder="${DTI_DIR}/${subject_name}/indti/Labels/aparc+aseg"
 
-      if false #[ -d "$lh_folder" ] && [ -d "$rh_folder" ] && [ -d "$aparc_aseg_folder" ] && false
+      if  [ -d "$lh_folder" ] && [ -d "$rh_folder" ] && [ -d "$aparc_aseg_folder" ] && false
       then
         true
       else
