@@ -25,7 +25,7 @@ while read x; do
       subject_name="${x/$original/$correction}"
       possible_folder="${DTI_DIR}/${subject_name}/indti"
       possible_file="${possible_folder}/lang_glasser_BOTH_indti.nii.gz"
-      if false #[ -f "$possible_file" ]
+      if [ -f "$possible_file" ]
       then
         true
       else
