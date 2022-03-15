@@ -40,4 +40,4 @@ SUBJECT_SEGMENT_FILE="${DTI_DIR}/${SUB}/targets_lang_glasser_${HEMI}.txt"
 
 matlab -nosplash -nojvm -r "addpath('/om/user/ehoseini/dti_language/');\
 cd('/om/user/ehoseini/dti_language/');\
-transform_probtrackX_output('${FILE_NAME}','${SUBJECT_SEGMENT_FILE}','${SAVE_NAME}','${HEMI}');exit"
+transform_probtrackX_output('folder_dir','${FILE_NAME}','target_mask_file','${SUBJECT_SEGMENT_FILE}','save_dir','${SAVE_NAME}','hemi','${HEMI}');exit"
