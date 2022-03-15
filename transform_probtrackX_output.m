@@ -1,6 +1,6 @@
 function output=transform_probtrackX_output(varargin)
 p=inputParser();
-addParameter(p, 'folder_dir', '');
+addParameter(p, 'file_id', '');
 addParameter(p, 'target_mask_file', '');
 addParameter(p, 'save_dir', '');
 addParameter(p, 'hemi', '');
