@@ -38,7 +38,7 @@ elseif ~isempty(unique(cell2mat((strfind(B,'RH_')))))
     hemi='RH';
     assert(length(unique(cell2mat((strfind(B,'RH_'))))==1));
 end 
-assert(hemi==ops.hemi);
+assert(strcmp(hemi,ops.hemi));
 sub_id=regexp(A(1),'sub\d+','match');
 fdt_st=struct;
 fdt_st.sub_id=sub_id;
