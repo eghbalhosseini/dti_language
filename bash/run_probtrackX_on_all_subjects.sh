@@ -19,10 +19,10 @@ while read x; do
       subject_name="${x/$original/$correction}"
 
       lh_folder="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_LH/fdt_paths.nii.gz"
-      rm $lh_folder
+      #rm $lh_folder
 
       rh_folder="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_RH/fdt_paths.nii.gz"
-      rm $rh_folder
+      #rm $rh_folder
 
       if [ ! -f "$lh_folder" ]
       then
