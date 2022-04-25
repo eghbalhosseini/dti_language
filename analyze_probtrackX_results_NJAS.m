@@ -48,7 +48,7 @@ RH_targets=[RH_cell{:,2}];
 RH_fdt=[RH_cell(:,1)];
 arrayfun(@(x) assert(length(unique(RH_targets(x,:)))==1), 1:size(RH_targets,1));
 
-%% do some cleanning 
+%% do some cleaning 
 % LH 
 % make symmetric by summing up upper and lower halves
 temp_fdt=cellfun(@(t) (triu(t)+transpose(tril(t)))/2, LH_fdt,'uni',false); 
