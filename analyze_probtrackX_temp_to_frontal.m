@@ -7,9 +7,17 @@ sub_ids=regexp({fdt_files(:).name},'sub\d+','match');
 sub_ids=cellfun(@(x) x(1) , sub_ids);
 unique_subs=unique(sub_ids);
 % pick a random set of 60 subject 
+
+% pick a random set of 60 subject 
 rng(1)
-ids=randi(length(unique_subs),1,60);
-train_subs=unique_subs(ids);
+% ids=randi(length(unique_subs),1,60);
+% train_subs=unique_subs(ids);
+train_subs=datasample(unique_subs,60,'Replace',false);
+
+% rng(1)
+% ids=randi(length(unique_subs),1,60);
+% train_subs=unique_subs(ids);
+
 % get the files for these subjects 
 LH_cell={};
 RH_cell={};
