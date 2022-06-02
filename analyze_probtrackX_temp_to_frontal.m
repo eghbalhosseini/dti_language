@@ -1,4 +1,6 @@
 % probtrack results folder
+clear all 
+close all 
 probtrack_folder='/Users/eghbalhosseini/MyData/dti_language/probtrackX_results';
 analysis_path='/Users/eghbalhosseini/MyData/dti_language/analysis';
 % get files both LH and RH 
@@ -40,6 +42,7 @@ for id_sub=1:length(train_subs)
         end 
     end 
 end 
+
 %% do some checks to make sure everything is properly aligned across subjects
 LH_targets=[LH_cell{:,2}];
 LH_fdt=[LH_cell(:,1)];
@@ -58,17 +61,44 @@ assert(all(cellfun(@(x,y) strcmp(x,y), RH_subs,LH_subs)));
 % make symmetric by summing up upper and lower halves
 temp_fdt=cellfun(@(t) (triu(t)+transpose(tril(t)))/2, LH_fdt,'uni',false); 
 temp_fdt=cellfun(@(t_sym) t_sym+transpose(triu(t_sym)), temp_fdt,'uni',false); 
-% devide values by the sum of weights 
-temp_fdt=cellfun(@(t) t./(.5*sum(sum(t))),temp_fdt,'uni',false);
-cellfun(@(x) assert(issymmetric(x)),temp_fdt)
-LH_fdt=temp_fdt;
+temp_fdt_sum=cellfun(@(t) t./(.5*sum(sum(t))),temp_fdt,'uni',false);
+temp_fdt_max=cellfun(@(t) t./(max(max(t))),temp_fdt,'uni',false);
+cellfun(@(x) assert(issymmetric(x)),temp_fdt_sum)
+cellfun(@(x) assert(issymmetric(x)),temp_fdt_max)
+LH_fdt_raw=temp_fdt;
+LH_fdt_max=temp_fdt_max;
+LH_fdt_sum=temp_fdt_sum;
 % RH 
 temp_fdt=cellfun(@(t) (triu(t)+transpose(tril(t)))/2, RH_fdt,'uni',false); 
 temp_fdt=cellfun(@(t_sym) t_sym+transpose(triu(t_sym)), temp_fdt,'uni',false); 
-% devide values by the sum of weights 
-temp_fdt=cellfun(@(t) t./(.5*sum(sum(t))),temp_fdt,'uni',false);
+temp_fdt_sum=cellfun(@(t) t./(.5*sum(sum(t))),temp_fdt,'uni',false);
+temp_fdt_max=cellfun(@(t) t./(max(max(t))),temp_fdt,'uni',false);
 cellfun(@(x) assert(issymmetric(x)),temp_fdt)
-RH_fdt=temp_fdt;
+cellfun(@(x) assert(issymmetric(x)),temp_fdt_sum)
+cellfun(@(x) assert(issymmetric(x)),temp_fdt_max)
+RH_fdt_raw=temp_fdt;
+RH_fdt_max=temp_fdt_max;
+RH_fdt_sum=temp_fdt_sum;
+
+
+assert(all(cellfun(@(x,y) strcmp(x,y),LH_subs,train_subs')))
+assert(all(cellfun(@(x,y) strcmp(x,y),RH_subs,train_subs')))
+%% save it as a structure for future use 
+train_dti=struct;
+train_dti.train_subs=train_subs;
+train_dti.train_LH_targets=LH_targets;
+train_dti.train_RH_targets=RH_targets;
+
+train_dti.train_LH_fdt_raw=LH_fdt_raw;
+train_dti.train_LH_fdt_max=LH_fdt_max;
+train_dti.train_LH_fdt_sum=LH_fdt_sum;
+
+train_dti.train_RH_fdt_raw=RH_fdt_raw;
+train_dti.train_RH_fdt_max=RH_fdt_max;
+train_dti.train_RH_fdt_sum=RH_fdt_sum;
+
+
+save(fullfile(probtrack_folder,'train_dti_analysis'),'train_dti');
 %% do some checks to see if the data is well formatted 
 % plot all the subjects 
 y_plot=LH_fdt;
@@ -168,7 +198,7 @@ for kk=1:size(LH_mask,1)
     LH_mask_1{kk,1}=LH_;
 end 
 LH_mask_1=cell2mat(LH_mask_1);
-LH_corr=squareform(pdist(LH_mask_1,'coorelation'));
+LH_corr=squareform(pdist(LH_mask_1,'correlation'));
 
 ff=figure()
 ff.Units='Inches';
