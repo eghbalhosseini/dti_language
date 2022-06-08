@@ -39,7 +39,7 @@ echo "hemi :${HEMI}"
 # step 1 check if segment text files exist.
 SUBJECT_SEGMENT_FILE="${DTI_DIR}/${SUB}/targets_${SEGNAME}_${TARGET}.txt"
 SEARCH_DIR=${DTI_DIR}/${SUB}/indti/Labels/${SEGNAME}
-rm $SUBJECT_SEGMENT_FILE
+rm -f $SUBJECT_SEGMENT_FILE
 
 if [ ! -f "${SUBJECT_SEGMENT_FILE}" ]
       then
