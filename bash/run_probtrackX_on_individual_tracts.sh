@@ -29,7 +29,7 @@ while read x; do
       if [ ! -f "$lh_folder" ]
       then
         LINE_COUNT=$(expr ${LINE_COUNT} + 1)
-        printf "%d,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "lang_glasser_LH" "$TARTGET" "LH" >> $SUBJECT_PROBX_FILE
+        printf "%d,%s,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "lang_glasser_LH" "$TARTGET" "LH" >> $SUBJECT_PROBX_FILE
 
       fi
       if [ ! -f "$rh_folder" ]
@@ -39,11 +39,11 @@ while read x; do
       fi
 done < <(find $DTI_DIR -maxdepth 1 -type d -name "sub*")
 
-#run_val=0
-#if [ "$LINE_COUNT" -gt "$run_val" ]; then
-#  echo "running  ${LINE_COUNT} jobs"
-#   nohup /cm/shared/admin/bin/submit-many-jobs 3 2 3 1 probtrackX_on_ind_tracts.sh  $SUBJECT_PROBX_FILE
-#   #nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT 75 100 25 probtrackX_on_ind_tracts.sh  $SUBJECT_PROBX_FILE &
-#  else
-#    echo $LINE_COUNT
-#fi
+run_val=0
+if [ "$LINE_COUNT" -gt "$run_val" ]; then
+  echo "running  ${LINE_COUNT} jobs"
+   nohup /cm/shared/admin/bin/submit-many-jobs 3 2 3 1 probtrackX_on_ind_tracts.sh  $SUBJECT_PROBX_FILE
+   #nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT 75 100 25 probtrackX_on_ind_tracts.sh  $SUBJECT_PROBX_FILE &
+  else
+    echo $LINE_COUNT
+fi
