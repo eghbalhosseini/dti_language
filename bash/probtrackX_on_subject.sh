@@ -43,6 +43,7 @@ if [ ! -f "${SUBJECT_SEGMENT_FILE}" ]
       then
         touch $SUBJECT_SEGMENT_FILE
         while read x ; do
+
           printf "%s\n" "${x}" >> $SUBJECT_SEGMENT_FILE
         done < <(find "${SEARCH_DIR}" -maxdepth 1 -type f -name "${HEMI}*" )
       else
