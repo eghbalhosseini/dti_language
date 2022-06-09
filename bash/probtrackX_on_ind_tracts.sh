@@ -85,7 +85,7 @@ probtrackx2 -x "${SUBJECT_SEGMENT_FILE}" \
   -s "${DTI_DIR}/${SUB}/dti.bedpostX/merged" \
   -m "${DTI_DIR}/${SUB}/indti/Labels/${SEGNAME}/all-whitematter+gray.nii.gz" \
   --dir="${DTI_DIR}/${SUB}/dti.probtrackx/${SEGNAME}/" \
-  --targetmasks="${DTI_DIR}/${SUB}/targets_lang_glasser_${HEMI}_{$TARGET}.txt" \
-  --wtstop="${DTI_DIR}/${SUB}/masks_lang_glasser_${HEMI}_{$TARGET}.txt" \
+  --targetmasks="${DTI_DIR}/${SUB}/targets_lang_glasser_${HEMI}_${TARGET}.txt" \
+  --wtstop="${DTI_DIR}/${SUB}/masks_lang_glasser_${HEMI}_${TARGET}.txt" \
   --network
 
