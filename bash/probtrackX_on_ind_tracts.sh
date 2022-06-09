@@ -15,7 +15,7 @@ fi
 echo "${GRAND_FILE}"
 echo $JID
 
-while IFS=, read -r line_count subj_name segment_name target hemi ; do
+while IFS=, read -r line_count subj_name segment_name target exclude hemi ; do
   #echo "line_count ${model}"
   if [ $JID == $line_count ]
     then
@@ -24,6 +24,7 @@ while IFS=, read -r line_count subj_name segment_name target hemi ; do
       SEGNAME=$segment_name
       HEMI=$hemi
       TARGET=$target
+      EXLUDE=$exclude
       do_run=true
       break
     else
@@ -34,6 +35,7 @@ done <"${GRAND_FILE}"
 echo "subj:${SUB}"
 echo "segment :${SEGNAME}"
 echo "target : ${TARGET}"
+echo "exclude : ${EXLUDE}"
 echo "hemi :${HEMI}"
 
 # step 1 check if segment text files exist.
@@ -48,9 +50,8 @@ if [ ! -f "${SUBJECT_SEGMENT_FILE}" ]
       then
         touch $SUBJECT_SEGMENT_FILE
         while read x ; do
-          if [[ $x == *"$TARGET"* ]]; then
-           echo "It's there!"
-           printf "%s\n" "${x}" >> $SUBJECT_MASK_FILE
+          if [[ $x == *"$EXCLUDE"* ]]; then
+           echo "excluding ${EXLUDE}!"
            else
              printf "%s\n" "${x}" >> $SUBJECT_SEGMENT_FILE
           fi
@@ -62,6 +63,22 @@ if [ ! -f "${SUBJECT_SEGMENT_FILE}" ]
       else
           true
 fi
+
+if [ ! -f "${SUBJECT_MASK_FILE}" ]
+      then
+        touch $SUBJECT_MASK_FILE
+        while read x ; do
+          if [[ $x == *"$TARGET"* ]]; then
+           echo "It's there!"
+           printf "%s\n" "${x}" >> $SUBJECT_MASK_FILE
+           else
+             true
+          fi
+        done < <(find "${SEARCH_DIR}" -maxdepth 1 -type f -name "${HEMI}*" )
+      else
+          true
+fi
+
 
 #probtrackx2 -x "${SUBJECT_SEGMENT_FILE}" \
 #  -l --pd -c  0.2 -S 2000 --steplength=0.5 -P 5000 --forcedir --opd \
