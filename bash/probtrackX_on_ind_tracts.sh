@@ -51,7 +51,7 @@ if [ ! -f "${SUBJECT_SEGMENT_FILE}" ]
         line_to_rm=$(find "${SEARCH_DIR}" -maxdepth 1 -type f -name "${HEMI}_${TARGET}*")
         echo $line_to_rm
         #sed "/^$line_to_rm/d" $SUBJECT_SEGMENT_FILE
-        #sed -i ".bak" '/$TARGET/d' $SUBJECT_SEGMENT_FILE
+        sed -i ".bak" '/$TARGET/d' $SUBJECT_SEGMENT_FILE
       else
           true
 fi
