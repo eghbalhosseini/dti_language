@@ -50,7 +50,7 @@ if [ ! -f "${SUBJECT_SEGMENT_FILE}" ]
       then
         touch $SUBJECT_SEGMENT_FILE
         while read x ; do
-          if [[ $x == *"$EXCLUDE"* ]]; then
+          if [[ $x == *"$EXLUDE"* ]]; then
            echo "excluding ${EXLUDE}!"
            else
              printf "%s\n" "${x}" >> $SUBJECT_SEGMENT_FILE
