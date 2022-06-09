@@ -38,8 +38,11 @@ echo "hemi :${HEMI}"
 
 # step 1 check if segment text files exist.
 SUBJECT_SEGMENT_FILE="${DTI_DIR}/${SUB}/targets_${SEGNAME}_${TARGET}.txt"
+SUBJECT_MASK_FILE="${DTI_DIR}/${SUB}/masks_${SEGNAME}_${TARGET}.txt"
+
 SEARCH_DIR=${DTI_DIR}/${SUB}/indti/Labels/${SEGNAME}
 rm -f $SUBJECT_SEGMENT_FILE
+rm -f $SUBJECT_MASK_FILE
 
 if [ ! -f "${SUBJECT_SEGMENT_FILE}" ]
       then
@@ -47,6 +50,7 @@ if [ ! -f "${SUBJECT_SEGMENT_FILE}" ]
         while read x ; do
           if [[ $x == *"$TARGET"* ]]; then
            echo "It's there!"
+           printf "%s\n" "${x}" >> $SUBJECT_MASK_FILE
            else
              printf "%s\n" "${x}" >> $SUBJECT_SEGMENT_FILE
           fi
