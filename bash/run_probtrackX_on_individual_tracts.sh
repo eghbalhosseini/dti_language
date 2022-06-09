@@ -6,7 +6,7 @@ probtrackX_labels_='all_subject_probtrackX_ind_tracts'
 i=0
 LINE_COUNT=0
 TARTGET='IFG_top_90'
-EXCLUDE= "IFGorb_top_90"
+EXCLUDE="IFGorb_top_90"
 SUBJECT_PROBX_FILE="${DTI_DIR}/${probtrackX_labels_}.txt"
 rm -f $SUBJECT_PROBX_FILE
 touch $SUBJECT_PROBX_FILE
