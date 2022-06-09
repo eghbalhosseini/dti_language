@@ -48,8 +48,8 @@ if [ ! -f "${SUBJECT_SEGMENT_FILE}" ]
           printf "%s\n" "${x}" >> $SUBJECT_SEGMENT_FILE
         done < <(find "${SEARCH_DIR}" -maxdepth 1 -type f -name "${HEMI}*" )
         # remove the target
-        #line_to_rm=find "${SEARCH_DIR}" -maxdepth 1 -type f -name "${HEMI}_${TARGET}*"
-        #echo $line_to_rm
+        line_to_rm=$(find "${SEARCH_DIR}" -maxdepth 1 -type f -name "${HEMI}_${TARGET}*")
+        echo $line_to_rm
         #sed "/^$line_to_rm/d" $SUBJECT_SEGMENT_FILE
         #sed -i ".bak" '/$TARGET/d' $SUBJECT_SEGMENT_FILE
       else
