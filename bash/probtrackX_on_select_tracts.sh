@@ -34,9 +34,13 @@ while IFS=, read -r line_count subj_name segment_name sourceJoin targetJoin hemi
 done <"${GRAND_FILE}"
 echo "subj:${SUB}"
 echo "segment :${SEGNAME}"
-echo "target : ${SOURCES}"
-echo "exclude : ${TARGETS}"
+echo "sources : ${SOURCES}"
+echo "targets : ${TARGETS}"
 echo "hemi :${HEMI}"
+
+target_array=(`echo $TARGETS | sed 's/-/\n/g'`)
+source_array=(`echo $SOURCES | sed 's/-/\n/g'`)
+
 
 # step 1 check if segment text files exist.
 #SUBJECT_SEGMENT_FILE="${DTI_DIR}/${SUB}/targets_${SEGNAME}_${TARGET}.txt"

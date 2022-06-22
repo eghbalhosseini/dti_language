@@ -68,7 +68,7 @@ if [ ! -f "${SUBJECT_MASK_FILE}" ]
       then
         touch $SUBJECT_MASK_FILE
         while read x ; do
-          if [[ $x == *"$TARGET"* ]]; then
+          if [[ $x == *"$EXLUDE"* ]]; then
            echo "It's there!"
            printf "%s\n" "${x}" >> $SUBJECT_MASK_FILE
            else
@@ -80,12 +80,12 @@ if [ ! -f "${SUBJECT_MASK_FILE}" ]
 fi
 
 
-probtrackx2 -x "${SUBJECT_SEGMENT_FILE}" \
-  -l --pd -c  0.2 -S 2000 --steplength=0.5 -P 5000 --forcedir --opd \
-  -s "${DTI_DIR}/${SUB}/dti.bedpostX/merged" \
-  -m "${DTI_DIR}/${SUB}/indti/Labels/${SEGNAME}/all-whitematter+gray.nii.gz" \
-  --dir="${DTI_DIR}/${SUB}/dti.probtrackx/${SEGNAME}_${TARGET}/" \
-  --targetmasks="${DTI_DIR}/${SUB}/targets_lang_glasser_${HEMI}_${TARGET}.txt" \
-  --wtstop="${DTI_DIR}/${SUB}/masks_lang_glasser_${HEMI}_${TARGET}.txt" \
-  --network
+#probtrackx2 -x "${SUBJECT_SEGMENT_FILE}" \
+#  -l --pd -c  0.2 -S 2000 --steplength=0.5 -P 5000 --forcedir --opd \
+#  -s "${DTI_DIR}/${SUB}/dti.bedpostX/merged" \
+#  -m "${DTI_DIR}/${SUB}/indti/Labels/${SEGNAME}/all-whitematter+gray.nii.gz" \
+#  --dir="${DTI_DIR}/${SUB}/dti.probtrackx/${SEGNAME}_${TARGET}/" \
+#  --targetmasks="${DTI_DIR}/${SUB}/targets_lang_glasser_${HEMI}_${TARGET}.txt" \
+#  --wtstop="${DTI_DIR}/${SUB}/masks_lang_glasser_${HEMI}_${TARGET}.txt" \
+#  --network
 
