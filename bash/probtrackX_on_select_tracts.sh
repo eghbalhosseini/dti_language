@@ -57,19 +57,19 @@ rm -f $SUBJECT_MASK_FILE
 #
 touch $SUBJECT_SOURCE_FILE
 for x in "${source_array[@]}"; do
-  source_file="${DTI_DIR}/${SUB}/indti/Labels/${SEGNAME}/${x}.nii.gz"
+  source_file="${DTI_DIR}/${SUB}/indti/Labels/${SEGNAME}/${HEMI}_${x}.nii.gz"
 	printf "%s\n" "${source_file}" >> $SUBJECT_SOURCE_FILE
 done
 
 touch $SUBJECT_TARGET_FILE
 for x in "${target_array[@]}"; do
-  target_file="${DTI_DIR}/${SUB}/indti/Labels/${SEGNAME}/${x}.nii.gz"
+  target_file="${DTI_DIR}/${SUB}/indti/Labels/${SEGNAME}/${HEMI}_${x}.nii.gz"
 	printf "%s\n" "${target_file}" >> $SUBJECT_TARGET_FILE
 done
 
 touch $SUBJECT_MASK_FILE
 for x in "${exclude_array[@]}"; do
-  mask_file="${DTI_DIR}/${SUB}/indti/Labels/${SEGNAME}/${x}.nii.gz"
+  mask_file="${DTI_DIR}/${SUB}/indti/Labels/${SEGNAME}/${HEMI}_${x}.nii.gz"
 	printf "%s\n" "${mask_file}" >> $SUBJECT_MASK_FILE
 done
 
