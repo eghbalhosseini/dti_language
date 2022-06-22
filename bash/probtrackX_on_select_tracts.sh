@@ -70,36 +70,12 @@ for x in "${exclude_array[@]}"; do
 	printf "%s\n" "${x}" >> $SUBJECT_MASK_FILE
 done
 
-#        # remove the target
-#        #line_to_rm=$(find "${SEARCH_DIR}" -maxdepth 1 -type f -name "${HEMI}_${TARGET}*")
-#        #echo $line_to_rm
-#        #sed "/^$line_to_rm/d" $SUBJECT_SEGMENT_FILE
-#      else
-#          true
-#fi
-#
-#if [ ! -f "${SUBJECT_MASK_FILE}" ]
-#      then
-#        touch $SUBJECT_MASK_FILE
-#        while read x ; do
-#          if [[ $x == *"$TARGET"* ]]; then
-#           echo "It's there!"
-#           printf "%s\n" "${x}" >> $SUBJECT_MASK_FILE
-#           else
-#             true
-#          fi
-#        done < <(find "${SEARCH_DIR}" -maxdepth 1 -type f -name "${HEMI}*" )
-#      else
-#          true
-#fi
-#
-#
-#probtrackx2 -x "${SUBJECT_SEGMENT_FILE}" \
-#  -l --pd -c  0.2 -S 2000 --steplength=0.5 -P 5000 --forcedir --opd \
-#  -s "${DTI_DIR}/${SUB}/dti.bedpostX/merged" \
-#  -m "${DTI_DIR}/${SUB}/indti/Labels/${SEGNAME}/all-whitematter+gray.nii.gz" \
-#  --dir="${DTI_DIR}/${SUB}/dti.probtrackx/${SEGNAME}_${TARGET}/" \
-#  --targetmasks="${DTI_DIR}/${SUB}/targets_lang_glasser_${HEMI}_${TARGET}.txt" \
-#  --wtstop="${DTI_DIR}/${SUB}/masks_lang_glasser_${HEMI}_${TARGET}.txt" \
-#  --network
+probtrackx2 -x "${SUBJECT_SOURCE_FILE}" \
+  -l --pd -c  0.2 -S 2000 --steplength=0.5 -P 5000 --forcedir --opd \
+  -s "${DTI_DIR}/${SUB}/dti.bedpostX/merged" \
+  -m "${DTI_DIR}/${SUB}/indti/Labels/${SEGNAME}/all-whitematter+gray.nii.gz" \
+  --dir="${DTI_DIR}/${SUB}/dti.probtrackx/${SEGNAME}_${SOURCES}_to_${TARGETS}/" \
+  --targetmasks="${SUBJECT_TARGET_FILE}" \
+  --wtstop="${SUBJECT_MASK_FILE}" \
+  --network
 
