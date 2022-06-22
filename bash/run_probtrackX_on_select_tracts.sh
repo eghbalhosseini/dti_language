@@ -6,17 +6,17 @@ FS_DIR=/mindhive/evlab/u/Shared/SUBJECTS_FS/FS/
 probtrackX_labels_='all_subject_probtrackX_select_tracts'
 i=0
 LINE_COUNT=0
-SOURCE=("IFG_top_90" "AntTemp_top_90")
+SOURCES=("IFG_top_90" "AntTemp_top_90")
 TARGETS=("IFG_top_90" "AntTemp_top_90")
-EXCLUDE=("MFG_top_90","IFG_top_90")
+EXCLUDES=("MFG_top_90" "IFG_top_90")
 
-SOURCEJoin=$(IFS=- ; echo "${SOURCE[*]}")
-echo $SOURCEjoin
+SOURCEJoin=$(IFS=- ; echo "${SOURCES[*]}")
+echo $SOURCEJoin
 
 TARGETSJoin=$(IFS=- ; echo "${TARGETS[*]}")
 echo $TARGETSJoin
 
-EXCLUDEJoin=$(IFS=- ; echo "${EXCLUDE[*]}")
+EXCLUDEJoin=$(IFS=- ; echo "${EXCLUDES[*]}")
 echo $EXCLUDEJoin
 
 
@@ -42,13 +42,13 @@ while read x; do
       if [ ! -f "$lh_folder" ]
       then
         LINE_COUNT=$(expr ${LINE_COUNT} + 1)
-        printf "%d,%s,%s,%s,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "lang_glasser_LH" "$SOURCEJoin" "$TARGETSJoin" "LH" >> $SUBJECT_PROBX_FILE
+        printf "%d,%s,%s,%s,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "lang_glasser_LH" "$SOURCEJoin" "$TARGETSJoin" "$EXCLUDEJoin" "LH" >> $SUBJECT_PROBX_FILE
 
       fi
       if [ ! -f "$rh_folder" ]
       then
         LINE_COUNT=$(expr ${LINE_COUNT} + 1)
-        printf "%d,%s,%s,%s,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "lang_glasser_RH" "$SOURCEJoin" "$TARGETSJoin" "RH">> $SUBJECT_PROBX_FILE
+        printf "%d,%s,%s,%s,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "lang_glasser_RH" "$SOURCEJoin" "$TARGETSJoin" "$EXCLUDEJoin" "RH">> $SUBJECT_PROBX_FILE
       fi
 done < <(find $DTI_DIR -maxdepth 1 -type d -name "sub*")
 
