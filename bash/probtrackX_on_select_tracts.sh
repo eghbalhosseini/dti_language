@@ -60,6 +60,16 @@ for x in "${source_array[@]}"; do
 	printf "%s\n" "${x}" >> $SUBJECT_SOURCE_FILE
 done
 
+touch $SUBJECT_TARGET_FILE
+for x in "${target_array[@]}"; do
+	printf "%s\n" "${x}" >> $SUBJECT_TARGET_FILE
+done
+
+touch $SUBJECT_MASK_FILE
+for x in "${exclude_array[@]}"; do
+	printf "%s\n" "${x}" >> $SUBJECT_MASK_FILE
+done
+
 #        # remove the target
 #        #line_to_rm=$(find "${SEARCH_DIR}" -maxdepth 1 -type f -name "${HEMI}_${TARGET}*")
 #        #echo $line_to_rm
