@@ -63,12 +63,14 @@ done
 
 touch $SUBJECT_TARGET_FILE
 for x in "${target_array[@]}"; do
-	printf "%s\n" "${x}" >> $SUBJECT_TARGET_FILE
+  target_file="${DTI_DIR}/${SUB}/indti/Labels/${SEGNAME}/${x}.nii.gz"
+	printf "%s\n" "${target_file}" >> $SUBJECT_TARGET_FILE
 done
 
 touch $SUBJECT_MASK_FILE
 for x in "${exclude_array[@]}"; do
-	printf "%s\n" "${x}" >> $SUBJECT_MASK_FILE
+  mask_file="${DTI_DIR}/${SUB}/indti/Labels/${SEGNAME}/${x}.nii.gz"
+	printf "%s\n" "${mask_file}" >> $SUBJECT_MASK_FILE
 done
 
 probtrackx2 -x "${SUBJECT_SOURCE_FILE}" \
