@@ -46,23 +46,20 @@ exclude_array=(`echo $EXCLUDES | sed 's/-/\n/g'`)
 
 
 # step 1 check if segment text files exist.
-#SUBJECT_SEGMENT_FILE="${DTI_DIR}/${SUB}/targets_${SEGNAME}_${TARGET}.txt"
-#SUBJECT_MASK_FILE="${DTI_DIR}/${SUB}/masks_${SEGNAME}_${TARGET}.txt"
+SUBJECT_SOURCE_FILE="${DTI_DIR}/${SUB}/sources_${SEGNAME}_${SOURCES}.txt"
+SUBJECT_TARGET_FILE="${DTI_DIR}/${SUB}/targets_${SEGNAME}_${TARGETS}.txt"
+SUBJECT_MASK_FILE="${DTI_DIR}/${SUB}/masks_${SEGNAME}_${EXCLUDES}.txt"
 #
 #SEARCH_DIR=${DTI_DIR}/${SUB}/indti/Labels/${SEGNAME}
-#rm -f $SUBJECT_SEGMENT_FILE
-#rm -f $SUBJECT_MASK_FILE
+rm -f $SUBJECT_SOURCE_FILE
+rm -f $SUBJECT_TARGET_FILE
+rm -f $SUBJECT_MASK_FILE
 #
-#if [ ! -f "${SUBJECT_SEGMENT_FILE}" ]
-#      then
-#        touch $SUBJECT_SEGMENT_FILE
-#        while read x ; do
-#          if [[ $x == *"$EXLUDE"* ]]; then
-#           echo "excluding ${EXLUDE}!"
-#           else
-#             printf "%s\n" "${x}" >> $SUBJECT_SEGMENT_FILE
-#          fi
-#        done < <(find "${SEARCH_DIR}" -maxdepth 1 -type f -name "${HEMI}*" )
+touch $SUBJECT_SOURCE_FILE
+for x in "${source_array[@]}"; do
+	printf "%s\n" "${x}" >> $SUBJECT_SOURCE_FILE
+done
+
 #        # remove the target
 #        #line_to_rm=$(find "${SEARCH_DIR}" -maxdepth 1 -type f -name "${HEMI}_${TARGET}*")
 #        #echo $line_to_rm
