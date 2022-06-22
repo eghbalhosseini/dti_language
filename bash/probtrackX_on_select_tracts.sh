@@ -15,7 +15,7 @@ fi
 echo "${GRAND_FILE}"
 echo $JID
 
-while IFS=, read -r line_count subj_name segment_name sourceJoin targetJoin hemi ; do
+while IFS=, read -r line_count subj_name segment_name sourceJoin targetJoin excludeJoin hemi ; do
   #echo "line_count ${model}"
   if [ $JID == $line_count ]
     then
@@ -25,6 +25,7 @@ while IFS=, read -r line_count subj_name segment_name sourceJoin targetJoin hemi
       HEMI=$hemi
       SOURCES=$sourceJoin
       TARGETS=$targetJoin
+      EXCLUDES=$excludeJoin
       do_run=true
       break
     else
@@ -36,10 +37,12 @@ echo "subj:${SUB}"
 echo "segment :${SEGNAME}"
 echo "sources : ${SOURCES}"
 echo "targets : ${TARGETS}"
+echo "excludes : ${EXCLUDES}"
 echo "hemi :${HEMI}"
 
-target_array=(`echo $TARGETS | sed 's/-/\n/g'`)
 source_array=(`echo $SOURCES | sed 's/-/\n/g'`)
+target_array=(`echo $TARGETS | sed 's/-/\n/g'`)
+exclude_array=(`echo $EXCLUDES | sed 's/-/\n/g'`)
 
 
 # step 1 check if segment text files exist.
