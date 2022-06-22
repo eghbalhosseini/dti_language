@@ -1,23 +1,19 @@
 #!/bin/bash
 DTI_DIR=/mindhive/evlab/Shared/diffusionzeynep/
-FS_DIR=/mindhive/evlab/u/Shared/SUBJECTS_FS/FS/
-
-
 probtrackX_labels_='all_subject_probtrackX_select_tracts'
-i=0
 LINE_COUNT=0
 SOURCES=("IFG_top_90" "AntTemp_top_90")
 TARGETS=("IFG_top_90" "AntTemp_top_90")
 EXCLUDES=("MFG_top_90" "IFG_top_90")
 
 SOURCEJoin=$(IFS=- ; echo "${SOURCES[*]}")
-echo $SOURCEJoin
+#echo $SOURCEJoin
 
 TARGETSJoin=$(IFS=- ; echo "${TARGETS[*]}")
-echo $TARGETSJoin
+#echo $TARGETSJoin
 
 EXCLUDEJoin=$(IFS=- ; echo "${EXCLUDES[*]}")
-echo $EXCLUDEJoin
+#echo $EXCLUDEJoin
 
 
 SUBJECT_PROBX_FILE="${DTI_DIR}/${probtrackX_labels_}.txt"
@@ -26,24 +22,19 @@ touch $SUBJECT_PROBX_FILE
 printf "%s,%s,%s,%s,%s,%s,%s\n" "row" "subject_name" "segment_name" "source_name" "target_name" "exclude_name" "hemi"   >> $SUBJECT_PROBX_FILE
 
 echo "looking at ${DTI_DIR} "
-SUBJ_LINE=0
 while read x; do
       # check if file already exist in labels dir
       original=$DTI_DIR
       correction=''
       subject_name="${x/$original/$correction}"
-
       lh_folder="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_LH_${TARGETSJoin}/fdt_paths.nii.gz"
       #rm $lh_folder
-
       rh_folder="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_RH_${TARGETSJoin}/fdt_paths.nii.gz"
       #rm $rh_folder
-
       if [ ! -f "$lh_folder" ]
       then
         LINE_COUNT=$(expr ${LINE_COUNT} + 1)
         printf "%d,%s,%s,%s,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "lang_glasser_LH" "$SOURCEJoin" "$TARGETSJoin" "$EXCLUDEJoin" "LH" >> $SUBJECT_PROBX_FILE
-
       fi
       if [ ! -f "$rh_folder" ]
       then
