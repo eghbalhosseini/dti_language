@@ -69,7 +69,7 @@ if [ ! -f "${SUBJECT_MASK_FILE}" ]
         touch $SUBJECT_MASK_FILE
         while read x ; do
           if [[ $x == *"$EXLUDE"* ]]; then
-           echo "It's there!"
+           #echo "It's there!"
            printf "%s\n" "${x}" >> $SUBJECT_MASK_FILE
            else
              true
