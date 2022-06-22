@@ -57,7 +57,8 @@ rm -f $SUBJECT_MASK_FILE
 #
 touch $SUBJECT_SOURCE_FILE
 for x in "${source_array[@]}"; do
-	printf "%s\n" "${x}" >> $SUBJECT_SOURCE_FILE
+  source_file="${DTI_DIR}/${SUB}/indti/Labels/${SEGNAME}/${x}.nii.gz"
+	printf "%s\n" "${source_file}" >> $SUBJECT_SOURCE_FILE
 done
 
 touch $SUBJECT_TARGET_FILE
