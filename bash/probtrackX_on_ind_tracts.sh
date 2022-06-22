@@ -46,39 +46,28 @@ SEARCH_DIR=${DTI_DIR}/${SUB}/indti/Labels/${SEGNAME}
 rm -f $SUBJECT_SEGMENT_FILE
 rm -f $SUBJECT_MASK_FILE
 
-if [ ! -f "${SUBJECT_SEGMENT_FILE}" ]
-      then
-        touch $SUBJECT_SEGMENT_FILE
-        while read x ; do
-          if [[ $x == *"$EXLUDE"* ]]; then
-           echo "excluding ${EXLUDE}!"
-           else
-             printf "%s\n" "${x}" >> $SUBJECT_SEGMENT_FILE
-          fi
-        done < <(find "${SEARCH_DIR}" -maxdepth 1 -type f -name "${HEMI}*" )
-        # remove the target
-        #line_to_rm=$(find "${SEARCH_DIR}" -maxdepth 1 -type f -name "${HEMI}_${TARGET}*")
-        #echo $line_to_rm
-        #sed "/^$line_to_rm/d" $SUBJECT_SEGMENT_FILE
-      else
-          true
-fi
 
-if [ ! -f "${SUBJECT_MASK_FILE}" ]
-      then
-        touch $SUBJECT_MASK_FILE
-        while read x ; do
-          if [[ $x == *"$EXLUDE"* ]]; then
-           #echo "It's there!"
-           printf "%s\n" "${x}" >> $SUBJECT_MASK_FILE
-           else
-             true
-          fi
-        done < <(find "${SEARCH_DIR}" -maxdepth 1 -type f -name "${HEMI}*" )
-      else
-          true
-fi
+touch $SUBJECT_SEGMENT_FILE
+while read x ; do
+  if [[ $x == *"$EXLUDE"* ]]; then
+   echo "excluding ${EXLUDE}!"
+   else
+     printf "%s\n" "${x}" >> $SUBJECT_SEGMENT_FILE
+  fi
+done < <(find "${SEARCH_DIR}" -maxdepth 1 -type f -name "${HEMI}*" )
 
+echo "created target"
+touch $SUBJECT_MASK_FILE
+while read x ; do
+  if [[ $x == *"$EXLUDE"* ]]; then
+   #echo "It's there!"
+   printf "%s\n" "${x}" >> $SUBJECT_MASK_FILE
+   else
+     true
+  fi
+done < <(find "${SEARCH_DIR}" -maxdepth 1 -type f -name "${HEMI}*" )
+
+echo "created mask"
 
 #probtrackx2 -x "${SUBJECT_SEGMENT_FILE}" \
 #  -l --pd -c  0.2 -S 2000 --steplength=0.5 -P 5000 --forcedir --opd \
