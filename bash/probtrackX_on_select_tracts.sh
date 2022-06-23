@@ -79,6 +79,6 @@ probtrackx2 -x "${SUBJECT_SOURCE_FILE}" \
   -m "${DTI_DIR}/${SUB}/indti/Labels/${SEGNAME}/all-whitematter+gray.nii.gz" \
   --dir="${DTI_DIR}/${SUB}/dti.probtrackx/${SEGNAME}_${SOURCES}_to_${TARGETS}/" \
   --targetmasks="${SUBJECT_TARGET_FILE}" \
-  --avoid="${SUBJECT_MASK_FILE}" \
+  --stop="${SUBJECT_MASK_FILE}" \
   --network
 
