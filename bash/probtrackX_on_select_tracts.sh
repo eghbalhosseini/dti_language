@@ -46,8 +46,8 @@ exclude_array=(`echo $EXCLUDES | sed 's/-/\n/g'`)
 
 
 # step 1 check if segment text files exist.
-SUBJECT_SOURCE_FILE="${DTI_DIR}/${SUB}/sources_${SEGNAME}_${SOURCES}.txt"
-SUBJECT_TARGET_FILE="${DTI_DIR}/${SUB}/targets_${SEGNAME}_${TARGETS}.txt"
+SUBJECT_SOURCE_FILE="${DTI_DIR}/${SUB}/sources_${SEGNAME}_${SOURCES}_EX_${EXCLUDES}.txt"
+SUBJECT_TARGET_FILE="${DTI_DIR}/${SUB}/targets_${SEGNAME}_${TARGETS}_${EXCLUDES}.txt"
 SUBJECT_MASK_FILE="${DTI_DIR}/${SUB}/masks_${SEGNAME}_${EXCLUDES}.txt"
 #
 #SEARCH_DIR=${DTI_DIR}/${SUB}/indti/Labels/${SEGNAME}
@@ -58,26 +58,36 @@ rm -f $SUBJECT_MASK_FILE
 touch $SUBJECT_SOURCE_FILE
 for x in "${source_array[@]}"; do
   source_file="${DTI_DIR}/${SUB}/indti/Labels/${SEGNAME}/${HEMI}_${x}.nii.gz"
-	printf "%s\n" "${source_file}" >> $SUBJECT_SOURCE_FILE
+  if [ -f "$source_file" ]
+  then
+	  printf "%s\n" "${source_file}" >> $SUBJECT_SOURCE_FILE
+	fi
 done
 
 touch $SUBJECT_TARGET_FILE
 for x in "${target_array[@]}"; do
   target_file="${DTI_DIR}/${SUB}/indti/Labels/${SEGNAME}/${HEMI}_${x}.nii.gz"
-	printf "%s\n" "${target_file}" >> $SUBJECT_TARGET_FILE
+  if [ -f "$target_file" ]
+   then
+     printf "%s\n" "${target_file}" >> $SUBJECT_TARGET_FILE
+  fi
+
 done
 
 touch $SUBJECT_MASK_FILE
 for x in "${exclude_array[@]}"; do
   mask_file="${DTI_DIR}/${SUB}/indti/Labels/${SEGNAME}/${HEMI}_${x}.nii.gz"
-	printf "%s\n" "${mask_file}" >> $SUBJECT_MASK_FILE
+  if [ -f "$mask_file" ]
+  then
+	  printf "%s\n" "${mask_file}" >> $SUBJECT_MASK_FILE
+	fi
 done
 
 probtrackx2 -x "${SUBJECT_SOURCE_FILE}" \
   -l --pd -c  0.2 -S 2000 --steplength=0.5 -P 5000 --forcedir --opd \
   -s "${DTI_DIR}/${SUB}/dti.bedpostX/merged" \
   -m "${DTI_DIR}/${SUB}/indti/Labels/${SEGNAME}/all-whitematter+gray.nii.gz" \
-  --dir="${DTI_DIR}/${SUB}/dti.probtrackx/${SEGNAME}_${SOURCES}_to_${TARGETS}/" \
+  --dir="${DTI_DIR}/${SUB}/dti.probtrackx/${SEGNAME}_${SOURCES}_TO_${TARGETS}_EX_${EXCLUDES}/" \
   --targetmasks="${SUBJECT_TARGET_FILE}" \
   --stop="${SUBJECT_MASK_FILE}" \
   --network

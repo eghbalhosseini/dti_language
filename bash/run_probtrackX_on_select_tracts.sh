@@ -8,7 +8,8 @@ LINE_COUNT=0
 
 SOURCES=("IFG_top_90" "PostTemp_top_90")
 TARGETS=("IFG_top_90" "PostTemp_top_90")
-EXCLUDES=("MFG_top_90" "IFGorb_top_90")
+#EXCLUDES=("MFG_top_90" "IFGorb_top_90")
+EXCLUDES=("IFGorb_top_90")
 
 
 
@@ -33,9 +34,9 @@ while read x; do
       original=$DTI_DIR
       correction=''
       subject_name="${x/$original/$correction}"
-      lh_folder="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_LH_${TARGETSJoin}/fdt_paths.nii.gz"
+      lh_folder="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_LH_${SOURCEJoin}_TO_${TARGETSJoin}_EX_${EXCLUDEJoin}/fdt_paths.nii.gz"
       #rm $lh_folder
-      rh_folder="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_RH_${TARGETSJoin}/fdt_paths.nii.gz"
+      rh_folder="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_RH_${SOURCEJoin}_TO_${TARGETSJoin}_EX_${EXCLUDEJoin}/fdt_paths.nii.gz"
       #rm $rh_folder
       if [ ! -f "$lh_folder" ]
       then
@@ -52,8 +53,8 @@ done < <(find $DTI_DIR -maxdepth 1 -type d -name "sub*")
 run_val=0
 if [ "$LINE_COUNT" -gt "$run_val" ]; then
   echo "running  ${LINE_COUNT} jobs"
-   #nohup /cm/shared/admin/bin/submit-many-jobs 3 2 3 1 probtrackX_on_select_tracts.sh  $SUBJECT_PROBX_FILE
-   nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT 75 100 25 probtrackX_on_select_tracts.sh  $SUBJECT_PROBX_FILE &
+   nohup /cm/shared/admin/bin/submit-many-jobs 3 2 3 1 probtrackX_on_select_tracts.sh  $SUBJECT_PROBX_FILE
+   #nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT 75 100 25 probtrackX_on_select_tracts.sh  $SUBJECT_PROBX_FILE &
   else
     echo $LINE_COUNT
 fi

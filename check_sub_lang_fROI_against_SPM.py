@@ -26,7 +26,7 @@ args=parser.parse_args()
 
 if __name__ == '__main__':
 
-    subj_id='sub842'
+    subj_id='sub537'
     network_id='lang'
     threshold= 90
     thr_type='top'
@@ -57,6 +57,33 @@ if __name__ == '__main__':
 
         network_img=nib.load(sub_func_dir)
         network = np.asarray(network_img.dataobj).flatten()
+
+        network_img_from_spm=nib.load('/mindhive/evlab/u/Shared/SUBJECTS/537_FED_20170126b_3T2_PL2017/firstlevel_langlocSN/mni_to_subject_inv_deformation_spmT_0003.nii')
+        network_from_spm=np.asarray(network_img_from_spm.dataobj).flatten()
+        network_from_spm.shape
+
+        subj_vol_path = os.path.join(subj_FS_path, subj_id, 'mri', 'brain.mgz')
+        subj_vol_path = os.path.join(subj_FS_path, 'sub721', 'mri', 'brain.mgz')
+
+        np.asarray(nib.load(subj_vol_path).dataobj).flatten().shape
+
+        plotting.plot_roi(network_from_spm, bg_img=subj_vol_path, axes=axs[idy], display_mode='ortho', draw_cross=False, alpha=1,
+                          annotate=False,
+                          black_bg=True, cmap=x)
+
+        network_img_from_dti=nib.load('/mindhive/evlab/Shared/diffusionzeynep/sub537/fmri/x.fsnative.lang_roi_top_90.nii.gz')
+        network_from_dti = np.asarray(network_img_from_dti.dataobj).flatten()
+        network_from_dti.shape
+
+        network_img_from_dti = nib.load(
+            '/mindhive/evlab/Shared/diffusionzeynep/sub537/fmri/x.fsnative.lang_roi_bottom_10.nii.gz')
+        network_from_dti = np.asarray(network_img_from_dti.dataobj).flatten()
+        network_from_dti.shape
+
+
+        deff_map=nib.load('/mindhive/evlab/u/Shared/SUBJECTS/537_FED_20170126b_3T2_PL2017/nii/y_c859000-3.nii')
+        print(deff_map.header)
+        np.asarray(deff_map.dataobj).shape
         sub_parcel_roi_vxl = np.zeros(network.shape).astype(int)
         sub_parcel_roi = np.zeros(network.shape).astype(int)
         hist_bins=np.linspace(min(network),max(network),100);
