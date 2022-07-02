@@ -47,7 +47,7 @@ exclude_array=(`echo $EXCLUDES | sed 's/-/\n/g'`)
 
 # step 1 check if segment text files exist.
 SUBJECT_SOURCE_FILE="${DTI_DIR}/${SUB}/sources_${SEGNAME}_${SOURCES}_EX_${EXCLUDES}.txt"
-SUBJECT_TARGET_FILE="${DTI_DIR}/${SUB}/targets_${SEGNAME}_${TARGETS}_${EXCLUDES}.txt"
+SUBJECT_TARGET_FILE="${DTI_DIR}/${SUB}/targets_${SEGNAME}_${TARGETS}_EX_${EXCLUDES}.txt"
 SUBJECT_MASK_FILE="${DTI_DIR}/${SUB}/masks_${SEGNAME}_${EXCLUDES}.txt"
 #
 #SEARCH_DIR=${DTI_DIR}/${SUB}/indti/Labels/${SEGNAME}
