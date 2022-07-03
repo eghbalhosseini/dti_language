@@ -41,7 +41,7 @@ while read x; do
         # folder to find the file
         lh_tr_file="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_LH_${SOURCEJoin}_TO_${TARGETSJoin}_EX_${EXCLUDEJoin}/fdt_network_matrix"
         SUBJECT_SOURCE_FILE="${DTI_DIR}/${subject_name}/sources_lang_glasser_LH_${SOURCEJoin}_EX_${EXCLUDEJoin}.txt"
-        printf "%d,%s,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "LH" "$lh_tr_file" "$SUBJECT_SOURCE_FILE" "$lh_file" >> $SUBJECT_PROBX_FILE
+        printf "%d,%s,%s,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "LH" "$lh_tr_file" "$SUBJECT_SOURCE_FILE" "$lh_file" >> $SUBJECT_PROBX_FILE
 
       fi
       if [ ! -f "$rh_file" ]
@@ -49,7 +49,7 @@ while read x; do
         LINE_COUNT=$(expr ${LINE_COUNT} + 1)
         rh_tr_file="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_RH_${SOURCEJoin}_TO_${TARGETSJoin}_EX_${EXCLUDEJoin}/fdt_network_matrix"
         SUBJECT_SOURCE_FILE="${DTI_DIR}/${subject_name}/sources_lang_glasser_RH_${SOURCEJoin}_EX_${EXCLUDEJoin}.txt"
-        printf "%d,%s,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "RH" "$rh_tr_file" "$SUBJECT_SOURCE_FILE" "$rh_file" >> $SUBJECT_PROBX_FILE
+        printf "%d,%s,%s,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "RH" "$rh_tr_file" "$SUBJECT_SOURCE_FILE" "$rh_file" >> $SUBJECT_PROBX_FILE
       fi
 done < <(find $DTI_DIR -maxdepth 1 -type d -name "sub*")
 
