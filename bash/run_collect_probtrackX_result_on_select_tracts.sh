@@ -18,7 +18,8 @@ EXCLUDES=("MFG_top_90")
 SOURCEJoin=$(IFS=- ; echo "${SOURCES[*]}")
 TARGETSJoin=$(IFS=- ; echo "${TARGETS[*]}")
 EXCLUDEJoin=$(IFS=- ; echo "${EXCLUDES[*]}")
-printf "%s,%s,%s,%s,%s\n" "row" "subject_name" "hemi" "file_loc" "save_loc"   >> $SUBJECT_PROBX_FILE
+
+printf "%s,%s,%s,%s,%s,%s\n" "row" "subject_name" "hemi" "file_loc" "segment_file" "save_loc"   >> $SUBJECT_PROBX_FILE
 
 echo "looking at ${DTI_DIR} "
 SUBJ_LINE=0
@@ -30,19 +31,25 @@ while read x; do
       lh_file="${DTI_DIR}/probtrackX_results_${SOURCEJoin}_TO_${TARGETSJoin}_EX_${EXCLUDEJoin}/${subject_name}_LH_fdt_network.mat"
       rh_file="${DTI_DIR}/probtrackX_results_${SOURCEJoin}_TO_${TARGETSJoin}_EX_${EXCLUDEJoin}/${subject_name}_RH_fdt_network.mat"
 
+
+
+
+
       if [ ! -f "$lh_file" ]
       then
         LINE_COUNT=$(expr ${LINE_COUNT} + 1)
         # folder to find the file
         lh_tr_file="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_LH_${SOURCEJoin}_TO_${TARGETSJoin}_EX_${EXCLUDEJoin}/fdt_network_matrix"
-        printf "%d,%s,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "LH" "$lh_tr_file" "$lh_file" >> $SUBJECT_PROBX_FILE
+        SUBJECT_SOURCE_FILE="${DTI_DIR}/${subject_name}/sources_lang_glasser_LH_${SOURCEJoin}_EX_${EXCLUDEJoin}.txt"
+        printf "%d,%s,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "LH" "$lh_tr_file" "$SUBJECT_SOURCE_FILE" "$lh_file" >> $SUBJECT_PROBX_FILE
 
       fi
       if [ ! -f "$rh_file" ]
       then
         LINE_COUNT=$(expr ${LINE_COUNT} + 1)
         rh_tr_file="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_RH_${SOURCEJoin}_TO_${TARGETSJoin}_EX_${EXCLUDEJoin}/fdt_network_matrix"
-        printf "%d,%s,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "RH" "$rh_tr_file" "$rh_file" >> $SUBJECT_PROBX_FILE
+        SUBJECT_SOURCE_FILE="${DTI_DIR}/${subject_name}/sources_lang_glasser_RH_${SOURCEJoin}_EX_${EXCLUDEJoin}.txt"
+        printf "%d,%s,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "RH" "$rh_tr_file" "$SUBJECT_SOURCE_FILE" "$rh_file" >> $SUBJECT_PROBX_FILE
       fi
 done < <(find $DTI_DIR -maxdepth 1 -type d -name "sub*")
 
