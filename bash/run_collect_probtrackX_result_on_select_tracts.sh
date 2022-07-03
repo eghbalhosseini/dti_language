@@ -14,7 +14,7 @@ SOURCES=("IFG_top_90" "PostTemp_top_90")
 TARGETS=("IFG_top_90" "PostTemp_top_90")
 #EXCLUDES=("MFG_top_90" "IFGorb_top_90")
 #EXCLUDES=("IFGorb_top_90")
-EXCLUDES=("MFG_top_90")
+EXCLUDES=("IFGorb_top_90")
 SOURCEJoin=$(IFS=- ; echo "${SOURCES[*]}")
 TARGETSJoin=$(IFS=- ; echo "${TARGETS[*]}")
 EXCLUDEJoin=$(IFS=- ; echo "${EXCLUDES[*]}")
@@ -23,6 +23,7 @@ printf "%s,%s,%s,%s,%s,%s\n" "row" "subject_name" "hemi" "file_loc" "segment_fil
 
 echo "looking at ${DTI_DIR} "
 SUBJ_LINE=0
+mkdir -p "${DTI_DIR}/probtrackX_results_${SOURCEJoin}_TO_${TARGETSJoin}_EX_${EXCLUDEJoin}"
 while read x; do
       # check if file already exist in labels dir
       original=$DTI_DIR
