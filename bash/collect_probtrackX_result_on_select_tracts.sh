@@ -15,7 +15,7 @@ fi
 echo "${GRAND_FILE}"
 echo $JID
 
-while IFS=, read -r line_count subj_name hemi fdt_file save_file ; do
+while IFS=, read -r line_count subj_name hemi fdt_file segment_file save_file ; do
   #echo "line_count ${model}"
   if [ $JID == $line_count ]
     then
@@ -23,6 +23,7 @@ while IFS=, read -r line_count subj_name hemi fdt_file save_file ; do
       SUB=$subj_name
       HEMI=$hemi
       FILE_NAME=$fdt_file
+      SEGMENT_NAME=$segment_file
       SAVE_NAME=$save_file
       do_run=true
       break
@@ -33,12 +34,13 @@ while IFS=, read -r line_count subj_name hemi fdt_file save_file ; do
 done <"${GRAND_FILE}"
 echo "subj:${SUB}"
 echo "segment :${SEGNAME}"
+echo "segment file :${SEGMENT_NAME}"
+echo "save file :${SAVE_NAME}"
 echo "hemi :${HEMI}"
 
 # step 1 check if segment text files exist.
-SUBJECT_SEGMENT_FILE="${DTI_DIR}/${SUB}/targets_lang_glasser_${HEMI}.txt"
 
 module load mit/matlab/2020b
 matlab -nosplash -nojvm -r "addpath('/om/user/ehoseini/dti_language/');\
 cd('/om/user/ehoseini/dti_language/');\
-transform_probtrackX_output('file_id','${FILE_NAME}','target_mask_file','${SUBJECT_SEGMENT_FILE}','save_dir','${SAVE_NAME}','hemi','${HEMI}');exit"
+transform_probtrackX_output('file_id','${FILE_NAME}','target_mask_file','${SEGMENT_NAME}','save_dir','${SAVE_NAME}','hemi','${HEMI}');exit"
