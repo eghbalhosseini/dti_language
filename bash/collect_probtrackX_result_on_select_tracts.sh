@@ -32,11 +32,11 @@ while IFS=, read -r line_count subj_name hemi fdt_file segment_file save_file ; 
   fi
 
 done <"${GRAND_FILE}"
-echo "subj:${SUB}"
-echo "segment :${SEGNAME}"
-echo "segment file :${SEGMENT_NAME}"
-echo "save file :${SAVE_NAME}"
-echo "hemi :${HEMI}"
+echo "subj: ${SUB}"
+echo "file: ${FILE_NAME}"
+echo "segment file: ${SEGMENT_NAME}"
+echo "save file: ${SAVE_NAME}"
+echo "hemi: ${HEMI}"
 
 # step 1 check if segment text files exist.
 
