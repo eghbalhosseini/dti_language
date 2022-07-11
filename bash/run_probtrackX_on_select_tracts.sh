@@ -4,15 +4,15 @@ probtrackX_labels_='all_subject_probtrackX_select_tracts'
 LINE_COUNT=0
 SOURCES=("IFGorb_top_90" "AntTemp_top_90")
 TARGETS=("IFGorb_top_90" "AntTemp_top_90")
-#EXCLUDES=("MFG_top_90" "IFG_top_90")
-#EXCLUDES=("MFG_top_90")
+EXCLUDES=("MFG_top_90" "IFG_top_90")
+EXCLUDES=("MFG_top_90")
 EXCLUDES=("IFG_top_90")
 
-#SOURCES=("IFG_top_90" "PostTemp_top_90")
-#TARGETS=("IFG_top_90" "PostTemp_top_90")
-#EXCLUDES=("MFG_top_90" "IFGorb_top_90")
-#EXCLUDES=("IFGorb_top_90")
-#EXCLUDES=("MFG_top_90")
+SOURCES=("IFG_top_90" "PostTemp_top_90")
+TARGETS=("IFG_top_90" "PostTemp_top_90")
+EXCLUDES=("MFG_top_90" "IFGorb_top_90")
+EXCLUDES=("IFGorb_top_90")
+EXCLUDES=("MFG_top_90")
 
 
 
