@@ -4,15 +4,15 @@ probtrackX_labels_='all_subject_probtrackX_select_tracts'
 LINE_COUNT=0
 SOURCES=("IFGorb_top_90" "AntTemp_top_90")
 TARGETS=("IFGorb_top_90" "AntTemp_top_90")
-EXCLUDES=("MFG_top_90" "IFG_top_90")
+#EXCLUDES=("MFG_top_90" "IFG_top_90")
 EXCLUDES=("MFG_top_90")
-EXCLUDES=("IFG_top_90")
+#EXCLUDES=("IFG_top_90")
 
-SOURCES=("IFG_top_90" "PostTemp_top_90")
-TARGETS=("IFG_top_90" "PostTemp_top_90")
-EXCLUDES=("MFG_top_90" "IFGorb_top_90")
-EXCLUDES=("IFGorb_top_90")
-EXCLUDES=("MFG_top_90")
+#SOURCES=("IFG_top_90" "PostTemp_top_90")
+#TARGETS=("IFG_top_90" "PostTemp_top_90")
+#EXCLUDES=("MFG_top_90" "IFGorb_top_90")
+#EXCLUDES=("IFGorb_top_90")
+#EXCLUDES=("MFG_top_90")
 
 
 
@@ -41,12 +41,14 @@ while read x; do
       #rm $lh_folder
       rh_folder="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_RH_${SOURCEJoin}_TO_${TARGETSJoin}_EX_${EXCLUDEJoin}/fdt_paths.nii.gz"
       #rm $rh_folder
-      if [ ! -f "$lh_folder" ]
+      #if [ ! -f "$lh_folder" ]
+      if [ true ]
       then
         LINE_COUNT=$(expr ${LINE_COUNT} + 1)
         printf "%d,%s,%s,%s,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "lang_glasser_LH" "$SOURCEJoin" "$TARGETSJoin" "$EXCLUDEJoin" "LH" >> $SUBJECT_PROBX_FILE
       fi
-      if [ ! -f "$rh_folder" ]
+      #if [ ! -f "$rh_folder" ]
+      if [ true ]
       then
         LINE_COUNT=$(expr ${LINE_COUNT} + 1)
         printf "%d,%s,%s,%s,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "lang_glasser_RH" "$SOURCEJoin" "$TARGETSJoin" "$EXCLUDEJoin" "RH">> $SUBJECT_PROBX_FILE
