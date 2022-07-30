@@ -18,15 +18,16 @@ def get_args():
     parser = argparse.ArgumentParser(description='combine fmri and glasser data ')
     parser.add_argument('subj_id', type=str)
     parser.add_argument('network_id', type=str)#, default='lang')
+    parser.add_argument('threshold', type=str)  # , default='lang')
     args=parser.parse_args()
     return args
 
 def mock_get_args():
-    mock_args = namedtuple('debug', ['subj_id', 'network_id'])
-    new_args = mock_args('sub540', 'lang')
+    mock_args = namedtuple('debug', ['subj_id', 'network_id','threshold'])
+    new_args = mock_args('sub114', 'lang',80)
     return new_args
 
-debug=False
+debug=True
 
 if __name__ == '__main__':
     if debug:
@@ -35,6 +36,7 @@ if __name__ == '__main__':
         args=get_args()
     subj_id = args.subj_id
     network_id = args.network_id  # 'lang'
+    thr=args.threshold
     #
     file_name = 'fsig'
     sub_lang_path=Path(f"{HOME_DIR}/{subj_id}/fmri")
