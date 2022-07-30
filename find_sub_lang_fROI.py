@@ -15,6 +15,7 @@ import matplotlib.pyplot as plt
 from nilearn.image import load_img, math_img
 from matplotlib.colors import ListedColormap
 from utils.lookuptable import FSLUT
+from glob import glob
 
 parser = argparse.ArgumentParser(description='find_subj_actvation_in_language_ROIs')
 parser.add_argument('subj_id', type=str)
@@ -179,119 +180,100 @@ if __name__ == '__main__':
     R_col = np.linspace(0, 255, len(d_parcel_name_map[network_id].values()), dtype=int)
     G_col = np.flip(R_col)
     # breakdown the areas based on hemisphere
-    #LUT_prime = _FSLUT_HEADER + '\n' + FSLUT
     LUT_prime = FSLUT
-    for idx, hemi in enumerate(hemis):
-        print(f'in step 3. processing hemisphere {hemi}.')
-        functional_path = f'bold.fsavg.sm4.{hemis_[idx].lower()}.lang/S-v-N'.replace('lang',f'lang_thr_{threshold}')
-        functional_native_path = functional_path.replace('fsavg', 'self')
-        sub_dti_dir = os.path.join(HOME_DIR, subj_id, 'fmri', functional_path)
-        sub_dti_native_dir = sub_dti_dir.replace('fsavg', 'fsnative')
-        # https://github.com/freesurfer/freesurfer/blob/e34ae4559d26a971ad42f5739d28e84d38659759/mri_aparc2aseg/mri_aparc2aseg.cpp#L836
-        # ACTUAL_OFFSET = {
-        #       OFFSET + 1000,  if LH
-        #       OFFSET + 2000,  if RH
-        # }
-        # these values are HARD-CODED in the freesurfer
-        if thr_type=='top':
-            offset = 400  # *1000+1000*idx # results in 2000 for lh; 4000 for rh
-        elif thr_type=='bottom':
-            offset = 500  # *1000+1000*idx # results in 2000 for lh; 4000 for rh
-        else:
-            raise Exception('unknown threshold type')
-
-        ROI_names = list(d_parcel_name_map[network_id].values())
-        hemi_rois_idx = np.where([x.__contains__(hemis_[idx]) for x in ROI_names])[0]
-
-        # create a nicely formatted ctab file
-        fmt = '{:<19} ' * 2 + '{: >5} ' * 4
-        # txt_lines = ['#$Id: FreeSurferColorLUT.txt,v 1.38.2.1 2007/08/20 01:52:07 nicks Exp $',
-        txt_lines = ['#$ Id: FreeSurferColorLUT_dti_evlab.txt, Fall 2021 $',
-                     fmt.format('#No.', 'Label Name:', 'R', 'G', 'B', 'A'),
-                     #fmt.format(offset, 'Unknown', 0, 0, 0, 0)]
-                     fmt.format(0, 'Unknown', 0, 0, 0, 0)]
-        #LUT_prime += '\n' + fmt.format(offset + 1000 + (1000 * idx), 'Unknown', 0, 0, 0, 0)
-        for idy, y in enumerate(hemi_rois_idx):
-            txt_lines.append(fmt.format(idy + offset + 1, f'{ROI_names[y]}_{thr_type}_{threshold}', R_col[y], G_col[y], 0, 1))
-            #txt_lines.append(
-            #    fmt.format(idy + offset + 1 + 1000 + (1000 * idx), f'{ROI_names[y]}_{thr_type}_{threshold}', R_col[y], G_col[y], 0, 1))
-            # does what freesurfer does internally to the indices it reads from the ctab files.
-            # for LH, we want to transform x -> x + 1000 + offset if LH, else x + 2000 + offset
-            LUT_prime += '\n' + fmt.format(idy + offset + 1 + 1000 + (1000 * idx), f'{ROI_names[y]}_{thr_type}_{threshold}', R_col[y], G_col[y], 0,1)
-        if os.path.exists(f'{sub_dti_native_dir}/{hemis_[idx].lower()}_{network_id}_roi_{thr_type}_{threshold}_ctab.txt'):
-            os.remove(f'{sub_dti_native_dir}/{hemis_[idx].lower()}_{network_id}_roi_{thr_type}_{threshold}_ctab.txt')
-        with open(f'{sub_dti_native_dir}/{hemis_[idx].lower()}_{network_id}_roi_{thr_type}_{threshold}_ctab.txt', "w") as textfile:
-           for element in txt_lines:
-               textfile.write(element + "\n")
-
-        # create the unix pattern to run mri_label2annot command:
-        unix_pattern = ['mris_label2annot',
-                        '--s', subj_id,
-                        '--h', hemis_[idx].lower(),
-                        '--ctab', f'{sub_dti_native_dir}/{hemis_[idx].lower()}_{network_id}_roi_{thr_type}_{threshold}_ctab.txt',
-                        '--annot-path', f'{sub_dti_native_dir}/{hemis_[idx].lower()}.{network_id}_roi_{thr_type}_{threshold}',
-                        # NOTE: we do not observe any difference in the output generated using the
-                        # --surf pial or --surf orig flags. we may use either one.
-                        '--surf', 'orig',  # '--surf', 'orig', # Note this is an option for verision 6.0.0 of freesurfer
-                        '--offset', f'{offset}'  # NOTE: expects offset of 0 for lh and rh
-                        #'--offset', f'{offset + 1000 + (1000 * idx)}'  # NOTE: expects offset of 0 for lh and rh
-                        ]
-        for idy, y in enumerate(hemi_rois_idx):
-            unix_pattern.append('--l'),
-            unix_pattern.append(f'{sub_dti_native_dir}/{ROI_names[y]}_roi_{file_name}_{thr_type}_{threshold}_fsavg.label')
-            #unix_pattern.append(f'{sub_dti_native_dir}/{hemis_[idx].lower()}.{ROI_names[y]}_roi.label')
-
-        output = subprocess.Popen(unix_pattern, env=my_env)
-        output.communicate()
-        #roi_annot = nib.freesurfer.read_annot(
-        #    f'{sub_dti_native_dir}/{hemis_[idx].lower()}.{network_id}_roi_{thr_type}_{threshold}.annot')
-        #np.sum(roi_annot[0]==2403)
-        #fig, ax = plt.subplots(nrows=1, ncols=1, figsize=[8, 11])
-        #plotting.plot_surf_roi(str(subj_surf_file), roi_map=roi_annot[0], hemi=hemi, view='lateral',
-        #                   threshold=1)
-        #fig.show()
-    #sub_dti_dir = os.path.join(subj_lang_path, 'DTI', subj_id, functional_path)
-    #p_target_dir = sub_dti_dir.replace('fsavg', 'fsnative')
-
-    with open(f'{os.path.join(HOME_DIR, subj_id)}/fmri/FSColorLUT_with_{network_id}_rois_{thr_type}_{threshold}.txt',"w") as ctab:
+    for thr_type in thr_types:
+        for idx, hemi in enumerate(hemis):
+            print(f'in step 3. processing hemisphere {hemi}.')
+            functional_path = f'bold.fsavg.sm4.{hemis_[idx].lower()}.lang/S-v-N'.replace('lang',f'lang_thr_{threshold}')
+            functional_native_path = functional_path.replace('fsavg', 'self')
+            sub_dti_dir = os.path.join(HOME_DIR, subj_id, 'fmri', functional_path)
+            sub_dti_native_dir = sub_dti_dir.replace('fsavg', 'fsnative')
+            # https://github.com/freesurfer/freesurfer/blob/e34ae4559d26a971ad42f5739d28e84d38659759/mri_aparc2aseg/mri_aparc2aseg.cpp#L836
+            # ACTUAL_OFFSET = { OFFSET + 1000,  if LH
+            #                   OFFSET + 2000,  if RH }
+            # these values are HARD-CODED in the freesurfer
+            if thr_type=='top':offset = 400
+            elif thr_type=='bottom':offset = 500
+            else:raise Exception('unknown threshold type')
+            ROI_names = list(d_parcel_name_map[network_id].values())
+            hemi_rois_idx = np.where([x.__contains__(hemis_[idx]) for x in ROI_names])[0]
+            # create a nicely formatted ctab file
+            fmt = '{:<19} ' * 2 + '{: >5} ' * 4
+            txt_lines = ['#$ Id: FreeSurferColorLUT_dti_evlab.txt, Fall 2021 $',
+                         fmt.format('#No.', 'Label Name:', 'R', 'G', 'B', 'A'),
+                         fmt.format(0, 'Unknown', 0, 0, 0, 0)]
+            for idy, y in enumerate(hemi_rois_idx):
+                txt_lines.append(fmt.format(idy + offset + 1, f'{ROI_names[y]}_{thr_type}_{threshold}', R_col[y], G_col[y], 0, 1))
+                # does what freesurfer does internally to the indices it reads from the ctab files.
+                # for LH, we want to transform x -> x + 1000 + offset if LH, else x + 2000 + offset
+                LUT_prime += '\n' + fmt.format(idy + offset + 1 + 1000 + (1000 * idx), f'{ROI_names[y]}_{thr_type}_{threshold}', R_col[y], G_col[y], 0,1)
+            if os.path.exists(f'{sub_dti_native_dir}/{hemis_[idx].lower()}_{network_id}_roi_{thr_type}_{threshold}_ctab.txt'):
+                os.remove(f'{sub_dti_native_dir}/{hemis_[idx].lower()}_{network_id}_roi_{thr_type}_{threshold}_ctab.txt')
+            with open(f'{sub_dti_native_dir}/{hemis_[idx].lower()}_{network_id}_roi_{thr_type}_{threshold}_ctab.txt', "w") as textfile:
+               for element in txt_lines:
+                   textfile.write(element + "\n")
+            # create the unix pattern to run mri_label2annot command:
+            unix_pattern = ['mris_label2annot',
+                            '--s', subj_id,'--h', hemis_[idx].lower(),
+                            '--ctab', f'{sub_dti_native_dir}/{hemis_[idx].lower()}_{network_id}_roi_{thr_type}_{threshold}_ctab.txt',
+                            '--annot-path', f'{sub_dti_native_dir}/{hemis_[idx].lower()}.{network_id}_roi_{thr_type}_{threshold}',
+                            # NOTE: we do not observe any difference in the output generated using the
+                            '--surf', 'orig',  # Note this is an option for verision 6.0.0 of freesurfer
+                            '--offset', f'{offset}'  # NOTE: expects offset of 0 for lh and rh
+                            ]
+            for idy, y in enumerate(hemi_rois_idx):
+                unix_pattern.append('--l'),
+                unix_pattern.append(f'{sub_dti_native_dir}/{ROI_names[y]}_roi_{file_name}_{thr_type}_{threshold}_fsavg.label')
+                #unix_pattern.append(f'{sub_dti_native_dir}/{hemis_[idx].lower()}.{ROI_names[y]}_roi.label')
+            output = subprocess.Popen(unix_pattern, env=my_env)
+            output.communicate()
+    #with open(f'{os.path.join(HOME_DIR, subj_id)}/fmri/FSColorLUT_with_{network_id}_rois_{thr_type}_{threshold}.txt',"w") as ctab:
+    #    ctab.write(LUT_prime)
+    with open(f'{os.path.join(HOME_DIR, subj_id)}/fmri/FSColorLUT_with_{network_id}_rois_threshold_{threshold}.txt',"w") as ctab:
         ctab.write(LUT_prime)
     # 3.B move from annotation in surface to volume
-    for idx, hemi in enumerate(hemis):
-        functional_path = f'bold.fsavg.sm4.{hemis_[idx].lower()}.lang/S-v-N'.replace('lang',f'lang_thr_{threshold}')
-        sub_dti_dir = os.path.join(HOME_DIR, subj_id, 'fmri', functional_path)
-        sub_dti_native_dir = sub_dti_dir.replace('fsavg', 'fsnative')
-        assert os.path.exists(f'{sub_dti_native_dir}/{hemis_[idx].lower()}.{network_id}_roi_{thr_type}_{threshold}.annot')
-        copyfile(f'{sub_dti_native_dir}/{hemis_[idx].lower()}.{network_id}_roi_{thr_type}_{threshold}.annot',
-                 f'{subj_FS_path}/{subj_id}/label/{hemis_[idx].lower()}.{network_id}_roi_{thr_type}_{threshold}.annot')
-
-    
-    # output a unified volume file (for both hemispheres) at the root of the fsnative folder 
-    # need to only do this once for the subject
-    unix_pattern = ['mri_aparc2aseg',
-                    '--s', subj_id,
-                    '--o', f'{str(Path(sub_dti_native_dir).parent.parent)}/x.fsnative.{network_id}_roi_{thr_type}_{threshold}.nii.gz',
-                    '--annot', f'{network_id}_roi_{thr_type}_{threshold}'
+    for thr_type in thr_types:
+        # delete any prior language rois
+        prior_rois = glob(f'{subj_FS_path}/{subj_id}/label/*.{network_id}_roi_*.annot')
+        [os.remove(roi_file) for roi_file in prior_rois]
+        for idx, hemi in enumerate(hemis):
+            functional_path = f'bold.fsavg.sm4.{hemis_[idx].lower()}.lang/S-v-N'.replace('lang',f'lang_thr_{threshold}')
+            sub_dti_dir = os.path.join(HOME_DIR, subj_id, 'fmri', functional_path)
+            sub_dti_native_dir = sub_dti_dir.replace('fsavg', 'fsnative')
+            # delete any prievious lang rois
+            assert os.path.exists(f'{sub_dti_native_dir}/{hemis_[idx].lower()}.{network_id}_roi_{thr_type}_{threshold}.annot')
+            copyfile(f'{sub_dti_native_dir}/{hemis_[idx].lower()}.{network_id}_roi_{thr_type}_{threshold}.annot',
+                     f'{subj_FS_path}/{subj_id}/label/{hemis_[idx].lower()}.{network_id}_roi_{thr_type}_{threshold}.annot')
+        # output a unified volume file (for both hemispheres) at the root of the fsnative folder
+        # need to only do this once for the subject
+        unix_pattern = ['mri_aparc2aseg',
+                    '--s', subj_id,'--annot', f'{network_id}_roi_{thr_type}_{threshold}',
+                    '--o', f'{str(Path(sub_dti_native_dir).parent.parent)}/x.fsnative.{network_id}_roi_{thr_type}_{threshold}.nii.gz'
                     ]
-
-    output = subprocess.Popen(unix_pattern, env=my_env)
-    output.communicate()
-    # do some plotting here
-    plt.close('all')
-    subj_vol_path = os.path.join(subj_FS_path, subj_id, 'mri', 'brain.mgz')
-    # plot hemispheres
-    test_img = load_img(f'{str(Path(sub_dti_native_dir).parent.parent)}/x.fsnative.{network_id}_roi_{thr_type}_{threshold}.nii.gz')
-    for idx, hemi in enumerate(hemis):
-        fig, axs = plt.subplots(nrows=2, ncols=3, subplot_kw={'projection': '3d'}, figsize=[11, 8])
-        plt.rcParams['axes.facecolor'] = 'black'
-        axs=axs.flatten()
-        hemi_rois_idx = np.where([x.__contains__(hemis_[idx]) for x in ROI_names])[0]
-        for idy, y in enumerate(hemi_rois_idx):
-            mask = math_img(f'np.logical_and(img>{ offset + 1000 + (1000 * idx)+idy},img<={offset + 1000 + (1000 * idx)+idy+1})', img=test_img)
-            x=ListedColormap([[R_col[y]/256, G_col[y]/256, 0]])
-            plotting.plot_roi(mask, bg_img=subj_vol_path, axes=axs[idy], display_mode='ortho',draw_cross=False,alpha=1,annotate=False,
-                              black_bg=True,cmap=x)
-            axs[idy].set_title(f'{ROI_names[y]}\nthreshold_{threshold}%', color='white')
-        fig.savefig(f'{str(Path(sub_dti_native_dir).parent.parent)}/{subj_id}_{hemis_[idx].lower()}._lang_roi_{thr_type}_{threshold}_in_vol.png', edgecolor='k',facecolor='k')
+        output = subprocess.Popen(unix_pattern, env=my_env)
+        output.communicate()
+        # do some plotting here
+        plt.close('all')
+        subj_vol_path = os.path.join(subj_FS_path, subj_id, 'mri', 'brain.mgz')
+        # plot hemispheres
+        test_img = load_img(f'{str(Path(sub_dti_native_dir).parent.parent)}/x.fsnative.{network_id}_roi_{thr_type}_{threshold}.nii.gz')
+        if thr_type == 'top':
+            offset = 400
+        elif thr_type == 'bottom':
+            offset = 500
+        for idx, hemi in enumerate(hemis):
+            fig, axs = plt.subplots(nrows=2, ncols=3, subplot_kw={'projection': '3d'}, figsize=[11, 8])
+            plt.rcParams['axes.facecolor'] = 'black'
+            axs=axs.flatten()
+            hemi_rois_idx = np.where([x.__contains__(hemis_[idx]) for x in ROI_names])[0]
+            for idy, y in enumerate(hemi_rois_idx):
+                mask = math_img(f'np.logical_and(img>{ offset + 1000 + (1000 * idx)+idy},img<={offset + 1000 + (1000 * idx)+idy+1})', img=test_img)
+                print(f'{ROI_names[y]} #vox: {np.sum(mask.dataobj)}')
+                x=ListedColormap([[R_col[y]/256, G_col[y]/256, 0]])
+                plotting.plot_roi(mask, bg_img=subj_vol_path, axes=axs[idy], display_mode='ortho',draw_cross=False,alpha=1,annotate=False,
+                                  black_bg=True,cmap=x)
+                axs[idy].set_title(f'{ROI_names[y]}\n{thr_type} {threshold}% #vox:{np.sum(mask.dataobj)}', color='white')
+            fig.savefig(f'{str(Path(sub_dti_native_dir).parent.parent)}/{subj_id}_{hemis_[idx].lower()}._lang_roi_{thr_type}_{threshold}_in_vol.png', edgecolor='k',facecolor='k')
 
     #####################################################################
     # part 4
