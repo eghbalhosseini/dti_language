@@ -16,546 +16,542 @@ def fill_lines(textlines,dict_dat):
     return textlines
 
 # check if FSLUT_lang_glasser_ctab exist
-FSLUT_lang_glasser=Path(f"{HOME_DIR}/FSLUT_lang_glasser/FSLUT_lang_glasser_ctab.txt")
-if FSLUT_lang_glasser.exists():
-    pass
-else:
-    # create skeleton of the regions
-    lang_mask_ids_pre={
-        # left hemisphere
-        #1401:('LH_IFGorb_top_90', (0,255,0,0 )),
-        #1402:('LH_IFG_top_90', (23,231,0,0 )),
-        #1403:('LH_MFG_top_90', (46,208,0,0 )),
-        #1404:('LH_AntTemp_top_90', (69,185,0,0 )),
-        #1405:('LH_PostTemp_top_90', (92,162,0,0 )),
-        #1406:('LH_AngG_top_90', (115,139,0,0 )),
-        1401:('LH_IFGorb_top_90', ()),
-        1402:('LH_IFG_top_90', ()),
-        1403:('LH_MFG_top_90', ()),
-        1404:('LH_AntTemp_top_90', ()),
-        1405:('LH_PostTemp_top_90', ()),
-        1406:('LH_AngG_top_90', ()),
+thresholds=[10,20,30]
+for thr in thresholds:
+    FSLUT_lang_glasser=Path(f"{HOME_DIR}/FSLUT_lang_glasser/FSLUT_lang_glasser_th_{thr}_ctab.txt")
+    if FSLUT_lang_glasser.exists():
+        pass
+    else:
+        # create skeleton of the regions
+        lang_mask_ids_pre={
+            # left hemisphere
+            1401:(f'LH_IFGorb_top_{thr}', ()),
+            1402:(f'LH_IFG_top_{thr}', ()),
+            1403:(f'LH_MFG_top_{thr}', ()),
+            1404:(f'LH_AntTemp_top_{thr}', ()),
+            1405:(f'LH_PostTemp_top_{thr}', ()),
+            1406:(f'LH_AngG_top_{thr}', ()),
+            1501: (f'LH_IFGorb_bottom_{thr}', ()),
+            1502: (f'LH_IFG_bottom_{thr}', ()),
+            1503: (f'LH_MFG_bottom_{thr}', ()),
+            1504: (f'LH_AntTemp_bottom_{thr}', ()),
+            1505: (f'LH_PostTemp_bottom_{thr}', ()),
+            1506: (f'LH_AngG_bottom_{thr}', ()),
+            # right hemisphere
+            2401:(f'RH_IFGorb_top_{thr}', ()),
+            2402:(f'RH_IFG_top_{thr}', ()),
+            2403:(f'RH_MFG_top_{thr}', ()),
+            2404:(f'RH_AntTemp_top_{thr}', ()),
+            2405:(f'RH_PostTemp_top_{thr}', ()),
+            2406:(f'RH_AngG_top_{thr}', ()),
+            2501: (f'RH_IFGorb_bottom_{thr}', ()),
+            2502: (f'RH_IFG_bottom_{thr}', ()),
+            2503: (f'RH_MFG_bottom_{thr}', ()),
+            2504: (f'RH_AntTemp_bottom_{thr}', ()),
+            2505: (f'RH_PostTemp_bottom_{thr}', ()),
+            2506: (f'RH_AngG_bottom_{thr}', ())
+        }
+        glasser_mask_ids_pre={
+            #1001:('LH_Unknown',(0,0,0,0)),
+            1002-1:('LH_V1_ROI',()),
+            1003-1:('LH_MST_ROI',()),
+            1004-1:('LH_V6_ROI',()),
+            1005-1:('LH_V2_ROI',()),
+            1006-1:('LH_V3_ROI',()),
+            1007-1:('LH_V4_ROI',()),
+            1008-1:('LH_V8_ROI',()),
+            1009-1:('LH_4_ROI',()),
+            1010-1:('LH_3b_ROI',()),
+            1011-1:('LH_FEF_ROI',()),
+            1012-1:('LH_PEF_ROI',()),
+            1013-1:('LH_55b_ROI',()),
+            1014-1:('LH_V3A_ROI',()),
+            1015-1:('LH_RSC_ROI',()),
+            1016-1:('LH_POS2_ROI',()),
+            1017-1:('LH_V7_ROI',()),
+            1018-1:('LH_IPS1_ROI',()),
+            1019-1:('LH_FFC_ROI',()),
+            1020-1:('LH_V3B_ROI',()),
+            1021-1:('LH_LO1_ROI',()),
+            1022-1:('LH_LO2_ROI',()),
+            1023-1:('LH_PIT_ROI',()),
+            1024-1:('LH_MT_ROI',()),
+            1025-1:('LH_A1_ROI',()),
+            1026-1:('LH_PSL_ROI',()),
+            1027-1:('LH_SFL_ROI',()),
+            1028-1:('LH_PCV_ROI',()),
+            1029-1:('LH_STV_ROI',()),
+            1030-1:('LH_7Pm_ROI',()),
+            1031-1:('LH_7m_ROI',()),
+            1032-1:('LH_POS1_ROI',()),
+            1033-1:('LH_23d_ROI',()),
+            1034-1:('LH_v23ab_ROI',()),
+            1035-1:('LH_d23ab_ROI',()),
+            1036-1:('LH_31pv_ROI',()),
+            1037-1:('LH_5m_ROI',()),
+            1038-1:('LH_5mv_ROI',()),
+            1039-1:('LH_23c_ROI',()),
+            1040-1:('LH_5L_ROI',()),
+            1041-1:('LH_24dd_ROI',()),
+            1042-1:('LH_24dv_ROI',()),
+            1043-1:('LH_7AL_ROI',()),
+            1044-1:('LH_SCEF_ROI',()),
+            1045-1:('LH_6ma_ROI',()),
+            1046-1:('LH_7Am_ROI',()),
+            1047-1:('LH_7PL_ROI',()),
+            1048-1:('LH_7PC_ROI',()),
+            1049-1:('LH_LIPv_ROI',()),
+            1050-1:('LH_VIP_ROI',()),
+            1051-1:('LH_MIP_ROI',()),
+            1052-1:('LH_1_ROI',()),
+            1053-1:('LH_2_ROI',()),
+            1054-1:('LH_3a_ROI',()),
+            1055-1:('LH_6d_ROI',()),
+            1056-1:('LH_6mp_ROI',()),
+            1057-1:('LH_6v_ROI',()),
+            1058-1:('LH_p24pr_ROI',()),
+            1059-1:('LH_33pr_ROI',()),
+            1060-1:('LH_a24pr_ROI',()),
+            1061-1:('LH_p32pr_ROI',()),
+            1062-1:('LH_a24_ROI',()),
+            1063-1:('LH_d32_ROI',()),
+            1064-1:('LH_8BM_ROI',()),
+            1065-1:('LH_p32_ROI',()),
+            1066-1:('LH_10r_ROI',()),
+            1067-1:('LH_47m_ROI',()),
+            1068-1:('LH_8Av_ROI',()),
+            1069-1:('LH_8Ad_ROI',()),
+            1070-1:('LH_9m_ROI',()),
+            1071-1:('LH_8BL_ROI',()),
+            1072-1:('LH_9p_ROI',()),
+            1073-1:('LH_10d_ROI',()),
+            1074-1:('LH_8C_ROI',()),
+            1075-1:('LH_44_ROI',()),
+            1076-1:('LH_45_ROI',()),
+            1077-1:('LH_47l_ROI',()),
+            1078-1:('LH_a47r_ROI',()),
+            1079-1:('LH_6r_ROI',()),
+            1080-1:('LH_IFJa_ROI',()),
+            1081-1:('LH_IFJp_ROI',()),
+            1082-1:('LH_IFSp_ROI',()),
+            1083-1:('LH_IFSa_ROI',()),
+            1084-1:('LH_p9-46v_ROI',()),
+            1085-1:('LH_46_ROI',()),
+            1086-1:('LH_a9-46v_ROI',()),
+            1087-1:('LH_9-46d_ROI',()),
+            1088-1:('LH_9a_ROI',()),
+            1089-1:('LH_10v_ROI',()),
+            1090-1:('LH_a10p_ROI',()),
+            1091-1:('LH_10pp_ROI',()),
+            1092-1:('LH_11l_ROI',()),
+            1093-1:('LH_13l_ROI',()),
+            1094-1:('LH_OFC_ROI',()),
+            1095-1:('LH_47s_ROI',()),
+            1096-1:('LH_LIPd_ROI',()),
+            1097-1:('LH_6a_ROI',()),
+            1098-1:('LH_i6-8_ROI',()),
+            1099-1:('LH_s6-8_ROI',()),
+            1100-1:('LH_43_ROI',()),
+            1101-1:('LH_OP4_ROI',()),
+            1102-1:('LH_OP1_ROI',()),
+            1103-1:('LH_OP2-3_ROI',()),
+            1104-1:('LH_52_ROI',()),
+            1105-1:('LH_RI_ROI',()),
+            1106-1:('LH_PFcm_ROI',()),
+            1107-1:('LH_PoI2_ROI',()),
+            1108-1:('LH_TA2_ROI',()),
+            1109-1:('LH_FOP4_ROI',()),
+            1110-1:('LH_MI_ROI',()),
+            1111-1:('LH_Pir_ROI',()),
+            1112-1:('LH_AVI_ROI',()),
+            1113-1:('LH_AAIC_ROI',()),
+            1114-1:('LH_FOP1_ROI',()),
+            1115-1:('LH_FOP3_ROI',()),
+            1116-1:('LH_FOP2_ROI',()),
+            1117-1:('LH_PFt_ROI',()),
+            1118-1:('LH_AIP_ROI',()),
+            1119-1:('LH_EC_ROI',()),
+            1120-1:('LH_PreS_ROI',()),
+            1122-1:('LH_ProS_ROI',()),
+            1123-1:('LH_PeEc_ROI',()),
+            1124-1:('LH_STGa_ROI',()),
+            1125-1:('LH_PBelt_ROI',()),
+            1126-1:('LH_A5_ROI',()),
+            1127-1:('LH_PHA1_ROI',()),
+            1128-1:('LH_PHA3_ROI',()),
+            1129-1:('LH_STSda_ROI',()),
+            1130-1:('LH_STSdp_ROI',()),
+            1131-1:('LH_STSvp_ROI',()),
+            1132-1:('LH_TGd_ROI',()),
+            1133-1:('LH_TE1a_ROI',()),
+            1134-1:('LH_TE1p_ROI',()),
+            1135-1:('LH_TE2a_ROI',()),
+            1136-1:('LH_TF_ROI',()),
+            1137-1:('LH_TE2p_ROI',()),
+            1138-1:('LH_PHT_ROI',()),
+            1139-1:('LH_PH_ROI',()),
+            1140-1:('LH_TPOJ1_ROI',()),
+            1141-1:('LH_TPOJ2_ROI',()),
+            1142-1:('LH_TPOJ3_ROI',()),
+            1143-1:('LH_DVT_ROI',()),
+            1144-1:('LH_PGp_ROI',()),
+            1145-1:('LH_IP2_ROI',()),
+            1146-1:('LH_IP1_ROI',()),
+            1147-1:('LH_IP0_ROI',()),
+            1148-1:('LH_PFop_ROI',()),
+            1149-1:('LH_PF_ROI',()),
+            1150-1:('LH_PFm_ROI',()),
+            1151-1:('LH_PGi_ROI',()),
+            1152-1:('LH_PGs_ROI',()),
+            1153-1:('LH_V6A_ROI',()),
+            1154-1:('LH_VMV1_ROI',()),
+            1155-1:('LH_VMV3_ROI',()),
+            1156-1:('LH_PHA2_ROI',()),
+            1157-1:('LH_V4t_ROI',()),
+            1158-1:('LH_FST_ROI',()),
+            1159-1:('LH_V3CD_ROI',()),
+            1160-1:('LH_LO3_ROI',()),
+            1161-1:('LH_VMV2_ROI',()),
+            1162-1:('LH_31pd_ROI',()),
+            1163-1:('LH_31a_ROI',()),
+            1164-1:('LH_VVC_ROI',()),
+            1165-1:('LH_25_ROI',()),
+            1166-1:('LH_s32_ROI',()),
+            1167-1:('LH_pOFC_ROI',()),
+            1168-1:('LH_PoI1_ROI',()),
+            1169-1:('LH_Ig_ROI',()),
+            1170-1:('LH_FOP5_ROI',()),
+            1171-1:('LH_p10p_ROI',()),
+            1172-1:('LH_p47r_ROI',()),
+            1173-1:('LH_TGv_ROI',()),
+            1174-1:('LH_MBelt_ROI',()),
+            1175-1:('LH_LBelt_ROI',()),
+            1176-1:('LH_A4_ROI',()),
+            1177-1:('LH_STSva_ROI',()),
+            1178-1:('LH_TE1m_ROI',()),
+            1179-1:('LH_PI_ROI',()),
+            1180-1:('LH_a32pr_ROI',()),
+            1181-1:('LH_p24_ROI',()),
+            #2001-1:('RH_Unknown',(0,0,0,0)),
+            2002-1:('RH_V1_ROI',()),
+            2003-1:('RH_MST_ROI',()),
+            2004-1:('RH_V6_ROI',()),
+            2005-1:('RH_V2_ROI',()),
+            2006-1:('RH_V3_ROI',()),
+            2007-1:('RH_V4_ROI',()),
+            2008-1:('RH_V8_ROI',()),
+            2009-1:('RH_4_ROI',()),
+            2010-1:('RH_3b_ROI',()),
+            2011-1:('RH_FEF_ROI',()),
+            2012-1:('RH_PEF_ROI',()),
+            2013-1:('RH_55b_ROI',()),
+            2014-1:('RH_V3A_ROI',()),
+            2015-1:('RH_RSC_ROI',()),
+            2016-1:('RH_POS2_ROI',()),
+            2017-1:('RH_V7_ROI',()),
+            2018-1:('RH_IPS1_ROI',()),
+            2019-1:('RH_FFC_ROI',()),
+            2020-1:('RH_V3B_ROI',()),
+            2021-1:('RH_LO1_ROI',()),
+            2022-1:('RH_LO2_ROI',()),
+            2023-1:('RH_PIT_ROI',()),
+            2024-1:('RH_MT_ROI',()),
+            2025-1:('RH_A1_ROI',()),
+            2026-1:('RH_PSL_ROI',()),
+            2027-1:('RH_SFL_ROI',()),
+            2028-1:('RH_PCV_ROI',()),
+            2029-1:('RH_STV_ROI',()),
+            2030-1:('RH_7Pm_ROI',()),
+            2031-1:('RH_7m_ROI',()),
+            2032-1:('RH_POS1_ROI',()),
+            2033-1:('RH_23d_ROI',()),
+            2034-1:('RH_v23ab_ROI',()),
+            2035-1:('RH_d23ab_ROI',()),
+            2036-1:('RH_31pv_ROI',()),
+            2037-1:('RH_5m_ROI',()),
+            2038-1:('RH_5mv_ROI',()),
+            2039-1:('RH_23c_ROI',()),
+            2040-1:('RH_5L_ROI',()),
+            2041-1:('RH_24dd_ROI',()),
+            2042-1:('RH_24dv_ROI',()),
+            2043-1:('RH_7AL_ROI',()),
+            2044-1:('RH_SCEF_ROI',()),
+            2045-1:('RH_6ma_ROI',()),
+            2046-1:('RH_7Am_ROI',()),
+            2047-1:('RH_7PL_ROI',()),
+            2048-1:('RH_7PC_ROI',()),
+            2049-1:('RH_LIPv_ROI',()),
+            2050-1:('RH_VIP_ROI',()),
+            2051-1:('RH_MIP_ROI',()),
+            2052-1:('RH_1_ROI',()),
+            2053-1:('RH_2_ROI',()),
+            2054-1:('RH_3a_ROI',()),
+            2055-1:('RH_6d_ROI',()),
+            2056-1:('RH_6mp_ROI',()),
+            2057-1:('RH_6v_ROI',()),
+            2058-1:('RH_p24pr_ROI',()),
+            2059-1:('RH_33pr_ROI',()),
+            2060-1:('RH_a24pr_ROI',()),
+            2061-1:('RH_p32pr_ROI',()),
+            2062-1:('RH_a24_ROI',()),
+            2063-1:('RH_d32_ROI',()),
+            2064-1:('RH_8BM_ROI',()),
+            2065-1:('RH_p32_ROI',()),
+            2066-1:('RH_10r_ROI',()),
+            2067-1:('RH_47m_ROI',()),
+            2068-1:('RH_8Av_ROI',()),
+            2069-1:('RH_8Ad_ROI',()),
+            2070-1:('RH_9m_ROI',()),
+            2071-1:('RH_8BL_ROI',()),
+            2072-1:('RH_9p_ROI',()),
+            2073-1:('RH_10d_ROI',()),
+            2074-1:('RH_8C_ROI',()),
+            2075-1:('RH_44_ROI',()),
+            2076-1:('RH_45_ROI',()),
+            2077-1:('RH_47l_ROI',()),
+            2078-1:('RH_a47r_ROI',()),
+            2079-1:('RH_6r_ROI',()),
+            2080-1:('RH_IFJa_ROI',()),
+            2081-1:('RH_IFJp_ROI',()),
+            2082-1:('RH_IFSp_ROI',()),
+            2083-1:('RH_IFSa_ROI',()),
+            2084-1:('RH_p9-46v_ROI',()),
+            2085-1:('RH_46_ROI',()),
+            2086-1:('RH_a9-46v_ROI',()),
+            2087-1:('RH_9-46d_ROI',()),
+            2088-1:('RH_9a_ROI',()),
+            2089-1:('RH_10v_ROI',()),
+            2090-1:('RH_a10p_ROI',()),
+            2091-1:('RH_10pp_ROI',()),
+            2092-1:('RH_11l_ROI',()),
+            2093-1:('RH_13l_ROI',()),
+            2094-1:('RH_OFC_ROI',()),
+            2095-1:('RH_47s_ROI',()),
+            2096-1:('RH_LIPd_ROI',()),
+            2097-1:('RH_6a_ROI',()),
+            2098-1:('RH_i6-8_ROI',()),
+            2099-1:('RH_s6-8_ROI',()),
+            2100-1:('RH_43_ROI',()),
+            2101-1:('RH_OP4_ROI',()),
+            2102-1:('RH_OP1_ROI',()),
+            2103-1:('RH_OP2-3_ROI',()),
+            2104-1:('RH_52_ROI',()),
+            2105-1:('RH_RI_ROI',()),
+            2106-1:('RH_PFcm_ROI',()),
+            2107-1:('RH_PoI2_ROI',()),
+            2108-1:('RH_TA2_ROI',()),
+            2109-1:('RH_FOP4_ROI',()),
+            2110-1:('RH_MI_ROI',()),
+            2111-1:('RH_Pir_ROI',()),
+            2112-1:('RH_AVI_ROI',()),
+            2113-1:('RH_AAIC_ROI',()),
+            2114-1:('RH_FOP1_ROI',()),
+            2115-1:('RH_FOP3_ROI',()),
+            2116-1:('RH_FOP2_ROI',()),
+            2117-1:('RH_PFt_ROI',()),
+            2118-1:('RH_AIP_ROI',()),
+            2119-1:('RH_EC_ROI',()),
+            2120-1:('RH_PreS_ROI',()),
+            2122-1:('RH_ProS_ROI',()),
+            2123-1:('RH_PeEc_ROI',()),
+            2124-1:('RH_STGa_ROI',()),
+            2125-1:('RH_PBelt_ROI',()),
+            2126-1:('RH_A5_ROI',()),
+            2127-1:('RH_PHA1_ROI',()),
+            2128-1:('RH_PHA3_ROI',()),
+            2129-1:('RH_STSda_ROI',()),
+            2130-1:('RH_STSdp_ROI',()),
+            2131-1:('RH_STSvp_ROI',()),
+            2132-1:('RH_TGd_ROI',()),
+            2133-1:('RH_TE1a_ROI',()),
+            2134-1:('RH_TE1p_ROI',()),
+            2135-1:('RH_TE2a_ROI',()),
+            2136-1:('RH_TF_ROI',()),
+            2137-1:('RH_TE2p_ROI',()),
+            2138-1:('RH_PHT_ROI',()),
+            2139-1:('RH_PH_ROI',()),
+            2140-1:('RH_TPOJ1_ROI',()),
+            2141-1:('RH_TPOJ2_ROI',()),
+            2142-1:('RH_TPOJ3_ROI',()),
+            2143-1:('RH_DVT_ROI',()),
+            2144-1:('RH_PGp_ROI',()),
+            2145-1:('RH_IP2_ROI',()),
+            2146-1:('RH_IP1_ROI',()),
+            2147-1:('RH_IP0_ROI',()),
+            2148-1:('RH_PFop_ROI',()),
+            2149-1:('RH_PF_ROI',()),
+            2150-1:('RH_PFm_ROI',()),
+            2151-1:('RH_PGi_ROI',()),
+            2152-1:('RH_PGs_ROI',()),
+            2153-1:('RH_V6A_ROI',()),
+            2154-1:('RH_VMV1_ROI',()),
+            2155-1:('RH_VMV3_ROI',()),
+            2156-1:('RH_PHA2_ROI',()),
+            2157-1:('RH_V4t_ROI',()),
+            2158-1:('RH_FST_ROI',()),
+            2159-1:('RH_V3CD_ROI',()),
+            2160-1:('RH_LO3_ROI',()),
+            2161-1:('RH_VMV2_ROI',()),
+            2162-1:('RH_31pd_ROI',()),
+            2163-1:('RH_31a_ROI',()),
+            2164-1:('RH_VVC_ROI',()),
+            2165-1:('RH_25_ROI',()),
+            2166-1:('RH_s32_ROI',()),
+            2167-1:('RH_pOFC_ROI',()),
+            2168-1:('RH_PoI1_ROI',()),
+            2169-1:('RH_Ig_ROI',()),
+            2170-1:('RH_FOP5_ROI',()),
+            2171-1:('RH_p10p_ROI',()),
+            2172-1:('RH_p47r_ROI',()),
+            2173-1:('RH_TGv_ROI',()),
+            2174-1:('RH_MBelt_ROI',()),
+            2175-1:('RH_LBelt_ROI',()),
+            2176-1:('RH_A4_ROI',()),
+            2177-1:('RH_STSva_ROI',()),
+            2178-1:('RH_TE1m_ROI',()),
+            2179-1:('RH_PI_ROI',()),
+            2180-1:('RH_a32pr_ROI',()),
+            2181-1:('RH_p24_ROI',())}
+        # load freesurfer LUT file
+        FSLUT_file=Path(f"{HOME_DIR}/GLASSER/FreeSurferColorLUT.txt")
+        with open(str(FSLUT_file), 'r', encoding='utf-8') as fsfile:
+            FSLUT_lines=fsfile.readlines()
+        # find all colors
+        colors=[re.findall(r'\d+', x) for x in FSLUT_lines]
+        # drop non color rows
+        colors=[x for x in colors if len(x)==5]
+        # reformat it to a dictionary
+        colors_dict=dict()
+        for x in colors:
+            y = [int(xx) for xx in x]
+            colors_dict[y[0]]=tuple(y[1:])
+        # fix glasser_mask_ids
+        for key_id in glasser_mask_ids_pre.keys():
+            if key_id in colors_dict:
+                glasser_mask_ids_pre[key_id]=(glasser_mask_ids_pre[key_id][0],colors_dict[key_id])
+        for key_id in lang_mask_ids_pre.keys():
+            if key_id in colors_dict:
+                lang_mask_ids_pre[key_id]=(lang_mask_ids_pre[key_id][0],colors_dict[key_id])
+        # fill remaining rows:
+        hsv=cm.get_cmap('hsv')
+        RGB=hsv(np.arange(10000)/10000)*255
+        RGB=RGB.astype('int')
+        # drop alpha
+        RGB=RGB[:,:3]
+        FLSLUT_COLORS=np.asarray(list(colors_dict.values()))[:,:3]
+        # find color that are not in the FS color map
+        aset = set([tuple(x) for x in RGB])
+        bset = set([tuple(x) for x in FLSLUT_COLORS])
+        new_colors=list(aset-bset)
+        np.random.seed(seed=15)
+        reordering=np.random.randint(0,len(new_colors),size=len(new_colors))
+        new_colors=[new_colors[x] for x in reordering]
+        newFSLUT_dict={**lang_mask_ids_pre, **glasser_mask_ids_pre}
+        newFSLUT_dict.keys()
+        walk_=0
+        # for key_id in newFSLUT_dict.keys():
+        #     if len(newFSLUT_dict[key_id][1])==0:
+        #         newFSLUT_dict[key_id]=(newFSLUT_dict[key_id][0],new_colors[walk_]+(0,))
+        #         walk_+=1
+        # assigns same color to both left and right hemisphere
+        area_names_ids = [[re.subn('RH_|LH_', '', newFSLUT_dict[key_id][0])[0],key_id] for key_id in newFSLUT_dict.keys()]
+        area_names=np.asarray([x[0] for x in area_names_ids])
+        area_ids=np.asarray([x[1] for x in area_names_ids])
+        unique_names=np.unique(area_names)
+        for x in unique_names:
+            assert(len(np.where(area_names==unique_names[0])[0])==2)
+        walk_ = 0
+        for key_id in newFSLUT_dict.keys():
+            if len(newFSLUT_dict[key_id][1]) == 0:
+                area_name = re.subn('RH_|LH_', '',newFSLUT_dict[key_id][0])[0]
+                area_idx=area_ids[np.where(area_names==area_name)[0]]
+                for area_key in area_idx:
+                    newFSLUT_dict[area_key] = (newFSLUT_dict[area_key][0], new_colors[walk_] + (0,))
+                walk_ += 1
+        # add a row for zero
+        lh_keys = [k for k in newFSLUT_dict.keys() if re.findall('LH_',newFSLUT_dict[k][0])]
+        rh_keys = [k for k in newFSLUT_dict.keys() if re.findall('RH_', newFSLUT_dict[k][0])]
+        LHFSLUT_lang_glass_dict = {key: newFSLUT_dict[key] for key in lh_keys}
+        RHFSLUT_lang_glass_dict={key: newFSLUT_dict[key] for key in rh_keys}
+        FSLUT_lang={key: newFSLUT_dict[key] for key in lang_mask_ids_pre.keys()}
+        FSLUT_glasser = {key: newFSLUT_dict[key] for key in glasser_mask_ids_pre.keys()}
+        #newFSLUT_dict[0]=('Unknown', (0,0,0,0 ))
+        #LHFSLUT_lang_glass_dict[0] = ('Unknown', (0, 0, 0, 0))
+        #RHFSLUT_lang_glass_dict[0] = ('Unknown', (0, 0, 0, 0))
+        #FSLUT_lang[0] = ('Unknown', (0, 0, 0, 0))
+        #FSLUT_glasser[0] = ('Unknown', (0, 0, 0, 0))
+        # save the new newFLSUT as a text file
+        fmt = '{:<19} ' * 2 + '{: >5} ' * 4
+        txt_lines = ['#$ Id: FreeSurferColorLUT_dti_evlab.txt, Fall 2021 $',
+                     fmt.format('#No.', 'Label Name:', 'R', 'G', 'B', 'A')]
+        lh_txt_lines=copy.deepcopy(txt_lines)
+        rh_txt_lines = copy.deepcopy(txt_lines)
+        lang_txt_lines=copy.deepcopy(txt_lines)
+        glasser_txt_lines=copy.deepcopy(txt_lines)
 
-        1501: ('LH_IFGorb_bottom_10', ()),
-        1502: ('LH_IFG_bottom_10', ()),
-        1503: ('LH_MFG_bottom_10', ()),
-        1504: ('LH_AntTemp_bottom_10', ()),
-        1505: ('LH_PostTemp_bottom_10', ()),
-        1506: ('LH_AngG_bottom_10', ()),
-        # right hemisphere
-        #2401:('RH_IFGorb_top_90', (139,115,0,0 )),
-        #2402:('RH_IFG_top_90', (162,92,0,0 )),
-        #2403:('RH_MFG_top_90', (185,69,0,0 )),
-        #2404:('RH_AntTemp_top_90', (208,46,0,0 )),
-        #2405:('RH_PostTemp_top_90', (231,23,0,0 )),
-        #2406:('RH_AngG_top_90', (255,0,0,0 )),
-        2401:('RH_IFGorb_top_90', ()),
-        2402:('RH_IFG_top_90', ()),
-        2403:('RH_MFG_top_90', ()),
-        2404:('RH_AntTemp_top_90', ()),
-        2405:('RH_PostTemp_top_90', ()),
-        2406:('RH_AngG_top_90', ()),
-        2501: ('RH_IFGorb_bottom_10', ()),
-        2502: ('RH_IFG_bottom_10', ()),
-        2503: ('RH_MFG_bottom_10', ()),
-        2504: ('RH_AntTemp_bottom_10', ()),
-        2505: ('RH_PostTemp_bottom_10', ()),
-        2506: ('RH_AngG_bottom_10', ())
-    }
-    glasser_mask_ids_pre={
-        #1001:('LH_Unknown',(0,0,0,0)),
-        1002-1:('LH_V1_ROI',()),
-        1003-1:('LH_MST_ROI',()),
-        1004-1:('LH_V6_ROI',()),
-        1005-1:('LH_V2_ROI',()),
-        1006-1:('LH_V3_ROI',()),
-        1007-1:('LH_V4_ROI',()),
-        1008-1:('LH_V8_ROI',()),
-        1009-1:('LH_4_ROI',()),
-        1010-1:('LH_3b_ROI',()),
-        1011-1:('LH_FEF_ROI',()),
-        1012-1:('LH_PEF_ROI',()),
-        1013-1:('LH_55b_ROI',()),
-        1014-1:('LH_V3A_ROI',()),
-        1015-1:('LH_RSC_ROI',()),
-        1016-1:('LH_POS2_ROI',()),
-        1017-1:('LH_V7_ROI',()),
-        1018-1:('LH_IPS1_ROI',()),
-        1019-1:('LH_FFC_ROI',()),
-        1020-1:('LH_V3B_ROI',()),
-        1021-1:('LH_LO1_ROI',()),
-        1022-1:('LH_LO2_ROI',()),
-        1023-1:('LH_PIT_ROI',()),
-        1024-1:('LH_MT_ROI',()),
-        1025-1:('LH_A1_ROI',()),
-        1026-1:('LH_PSL_ROI',()),
-        1027-1:('LH_SFL_ROI',()),
-        1028-1:('LH_PCV_ROI',()),
-        1029-1:('LH_STV_ROI',()),
-        1030-1:('LH_7Pm_ROI',()),
-        1031-1:('LH_7m_ROI',()),
-        1032-1:('LH_POS1_ROI',()),
-        1033-1:('LH_23d_ROI',()),
-        1034-1:('LH_v23ab_ROI',()),
-        1035-1:('LH_d23ab_ROI',()),
-        1036-1:('LH_31pv_ROI',()),
-        1037-1:('LH_5m_ROI',()),
-        1038-1:('LH_5mv_ROI',()),
-        1039-1:('LH_23c_ROI',()),
-        1040-1:('LH_5L_ROI',()),
-        1041-1:('LH_24dd_ROI',()),
-        1042-1:('LH_24dv_ROI',()),
-        1043-1:('LH_7AL_ROI',()),
-        1044-1:('LH_SCEF_ROI',()),
-        1045-1:('LH_6ma_ROI',()),
-        1046-1:('LH_7Am_ROI',()),
-        1047-1:('LH_7PL_ROI',()),
-        1048-1:('LH_7PC_ROI',()),
-        1049-1:('LH_LIPv_ROI',()),
-        1050-1:('LH_VIP_ROI',()),
-        1051-1:('LH_MIP_ROI',()),
-        1052-1:('LH_1_ROI',()),
-        1053-1:('LH_2_ROI',()),
-        1054-1:('LH_3a_ROI',()),
-        1055-1:('LH_6d_ROI',()),
-        1056-1:('LH_6mp_ROI',()),
-        1057-1:('LH_6v_ROI',()),
-        1058-1:('LH_p24pr_ROI',()),
-        1059-1:('LH_33pr_ROI',()),
-        1060-1:('LH_a24pr_ROI',()),
-        1061-1:('LH_p32pr_ROI',()),
-        1062-1:('LH_a24_ROI',()),
-        1063-1:('LH_d32_ROI',()),
-        1064-1:('LH_8BM_ROI',()),
-        1065-1:('LH_p32_ROI',()),
-        1066-1:('LH_10r_ROI',()),
-        1067-1:('LH_47m_ROI',()),
-        1068-1:('LH_8Av_ROI',()),
-        1069-1:('LH_8Ad_ROI',()),
-        1070-1:('LH_9m_ROI',()),
-        1071-1:('LH_8BL_ROI',()),
-        1072-1:('LH_9p_ROI',()),
-        1073-1:('LH_10d_ROI',()),
-        1074-1:('LH_8C_ROI',()),
-        1075-1:('LH_44_ROI',()),
-        1076-1:('LH_45_ROI',()),
-        1077-1:('LH_47l_ROI',()),
-        1078-1:('LH_a47r_ROI',()),
-        1079-1:('LH_6r_ROI',()),
-        1080-1:('LH_IFJa_ROI',()),
-        1081-1:('LH_IFJp_ROI',()),
-        1082-1:('LH_IFSp_ROI',()),
-        1083-1:('LH_IFSa_ROI',()),
-        1084-1:('LH_p9-46v_ROI',()),
-        1085-1:('LH_46_ROI',()),
-        1086-1:('LH_a9-46v_ROI',()),
-        1087-1:('LH_9-46d_ROI',()),
-        1088-1:('LH_9a_ROI',()),
-        1089-1:('LH_10v_ROI',()),
-        1090-1:('LH_a10p_ROI',()),
-        1091-1:('LH_10pp_ROI',()),
-        1092-1:('LH_11l_ROI',()),
-        1093-1:('LH_13l_ROI',()),
-        1094-1:('LH_OFC_ROI',()),
-        1095-1:('LH_47s_ROI',()),
-        1096-1:('LH_LIPd_ROI',()),
-        1097-1:('LH_6a_ROI',()),
-        1098-1:('LH_i6-8_ROI',()),
-        1099-1:('LH_s6-8_ROI',()),
-        1100-1:('LH_43_ROI',()),
-        1101-1:('LH_OP4_ROI',()),
-        1102-1:('LH_OP1_ROI',()),
-        1103-1:('LH_OP2-3_ROI',()),
-        1104-1:('LH_52_ROI',()),
-        1105-1:('LH_RI_ROI',()),
-        1106-1:('LH_PFcm_ROI',()),
-        1107-1:('LH_PoI2_ROI',()),
-        1108-1:('LH_TA2_ROI',()),
-        1109-1:('LH_FOP4_ROI',()),
-        1110-1:('LH_MI_ROI',()),
-        1111-1:('LH_Pir_ROI',()),
-        1112-1:('LH_AVI_ROI',()),
-        1113-1:('LH_AAIC_ROI',()),
-        1114-1:('LH_FOP1_ROI',()),
-        1115-1:('LH_FOP3_ROI',()),
-        1116-1:('LH_FOP2_ROI',()),
-        1117-1:('LH_PFt_ROI',()),
-        1118-1:('LH_AIP_ROI',()),
-        1119-1:('LH_EC_ROI',()),
-        1120-1:('LH_PreS_ROI',()),
-        1122-1:('LH_ProS_ROI',()),
-        1123-1:('LH_PeEc_ROI',()),
-        1124-1:('LH_STGa_ROI',()),
-        1125-1:('LH_PBelt_ROI',()),
-        1126-1:('LH_A5_ROI',()),
-        1127-1:('LH_PHA1_ROI',()),
-        1128-1:('LH_PHA3_ROI',()),
-        1129-1:('LH_STSda_ROI',()),
-        1130-1:('LH_STSdp_ROI',()),
-        1131-1:('LH_STSvp_ROI',()),
-        1132-1:('LH_TGd_ROI',()),
-        1133-1:('LH_TE1a_ROI',()),
-        1134-1:('LH_TE1p_ROI',()),
-        1135-1:('LH_TE2a_ROI',()),
-        1136-1:('LH_TF_ROI',()),
-        1137-1:('LH_TE2p_ROI',()),
-        1138-1:('LH_PHT_ROI',()),
-        1139-1:('LH_PH_ROI',()),
-        1140-1:('LH_TPOJ1_ROI',()),
-        1141-1:('LH_TPOJ2_ROI',()),
-        1142-1:('LH_TPOJ3_ROI',()),
-        1143-1:('LH_DVT_ROI',()),
-        1144-1:('LH_PGp_ROI',()),
-        1145-1:('LH_IP2_ROI',()),
-        1146-1:('LH_IP1_ROI',()),
-        1147-1:('LH_IP0_ROI',()),
-        1148-1:('LH_PFop_ROI',()),
-        1149-1:('LH_PF_ROI',()),
-        1150-1:('LH_PFm_ROI',()),
-        1151-1:('LH_PGi_ROI',()),
-        1152-1:('LH_PGs_ROI',()),
-        1153-1:('LH_V6A_ROI',()),
-        1154-1:('LH_VMV1_ROI',()),
-        1155-1:('LH_VMV3_ROI',()),
-        1156-1:('LH_PHA2_ROI',()),
-        1157-1:('LH_V4t_ROI',()),
-        1158-1:('LH_FST_ROI',()),
-        1159-1:('LH_V3CD_ROI',()),
-        1160-1:('LH_LO3_ROI',()),
-        1161-1:('LH_VMV2_ROI',()),
-        1162-1:('LH_31pd_ROI',()),
-        1163-1:('LH_31a_ROI',()),
-        1164-1:('LH_VVC_ROI',()),
-        1165-1:('LH_25_ROI',()),
-        1166-1:('LH_s32_ROI',()),
-        1167-1:('LH_pOFC_ROI',()),
-        1168-1:('LH_PoI1_ROI',()),
-        1169-1:('LH_Ig_ROI',()),
-        1170-1:('LH_FOP5_ROI',()),
-        1171-1:('LH_p10p_ROI',()),
-        1172-1:('LH_p47r_ROI',()),
-        1173-1:('LH_TGv_ROI',()),
-        1174-1:('LH_MBelt_ROI',()),
-        1175-1:('LH_LBelt_ROI',()),
-        1176-1:('LH_A4_ROI',()),
-        1177-1:('LH_STSva_ROI',()),
-        1178-1:('LH_TE1m_ROI',()),
-        1179-1:('LH_PI_ROI',()),
-        1180-1:('LH_a32pr_ROI',()),
-        1181-1:('LH_p24_ROI',()),
-        #2001-1:('RH_Unknown',(0,0,0,0)),
-        2002-1:('RH_V1_ROI',()),
-        2003-1:('RH_MST_ROI',()),
-        2004-1:('RH_V6_ROI',()),
-        2005-1:('RH_V2_ROI',()),
-        2006-1:('RH_V3_ROI',()),
-        2007-1:('RH_V4_ROI',()),
-        2008-1:('RH_V8_ROI',()),
-        2009-1:('RH_4_ROI',()),
-        2010-1:('RH_3b_ROI',()),
-        2011-1:('RH_FEF_ROI',()),
-        2012-1:('RH_PEF_ROI',()),
-        2013-1:('RH_55b_ROI',()),
-        2014-1:('RH_V3A_ROI',()),
-        2015-1:('RH_RSC_ROI',()),
-        2016-1:('RH_POS2_ROI',()),
-        2017-1:('RH_V7_ROI',()),
-        2018-1:('RH_IPS1_ROI',()),
-        2019-1:('RH_FFC_ROI',()),
-        2020-1:('RH_V3B_ROI',()),
-        2021-1:('RH_LO1_ROI',()),
-        2022-1:('RH_LO2_ROI',()),
-        2023-1:('RH_PIT_ROI',()),
-        2024-1:('RH_MT_ROI',()),
-        2025-1:('RH_A1_ROI',()),
-        2026-1:('RH_PSL_ROI',()),
-        2027-1:('RH_SFL_ROI',()),
-        2028-1:('RH_PCV_ROI',()),
-        2029-1:('RH_STV_ROI',()),
-        2030-1:('RH_7Pm_ROI',()),
-        2031-1:('RH_7m_ROI',()),
-        2032-1:('RH_POS1_ROI',()),
-        2033-1:('RH_23d_ROI',()),
-        2034-1:('RH_v23ab_ROI',()),
-        2035-1:('RH_d23ab_ROI',()),
-        2036-1:('RH_31pv_ROI',()),
-        2037-1:('RH_5m_ROI',()),
-        2038-1:('RH_5mv_ROI',()),
-        2039-1:('RH_23c_ROI',()),
-        2040-1:('RH_5L_ROI',()),
-        2041-1:('RH_24dd_ROI',()),
-        2042-1:('RH_24dv_ROI',()),
-        2043-1:('RH_7AL_ROI',()),
-        2044-1:('RH_SCEF_ROI',()),
-        2045-1:('RH_6ma_ROI',()),
-        2046-1:('RH_7Am_ROI',()),
-        2047-1:('RH_7PL_ROI',()),
-        2048-1:('RH_7PC_ROI',()),
-        2049-1:('RH_LIPv_ROI',()),
-        2050-1:('RH_VIP_ROI',()),
-        2051-1:('RH_MIP_ROI',()),
-        2052-1:('RH_1_ROI',()),
-        2053-1:('RH_2_ROI',()),
-        2054-1:('RH_3a_ROI',()),
-        2055-1:('RH_6d_ROI',()),
-        2056-1:('RH_6mp_ROI',()),
-        2057-1:('RH_6v_ROI',()),
-        2058-1:('RH_p24pr_ROI',()),
-        2059-1:('RH_33pr_ROI',()),
-        2060-1:('RH_a24pr_ROI',()),
-        2061-1:('RH_p32pr_ROI',()),
-        2062-1:('RH_a24_ROI',()),
-        2063-1:('RH_d32_ROI',()),
-        2064-1:('RH_8BM_ROI',()),
-        2065-1:('RH_p32_ROI',()),
-        2066-1:('RH_10r_ROI',()),
-        2067-1:('RH_47m_ROI',()),
-        2068-1:('RH_8Av_ROI',()),
-        2069-1:('RH_8Ad_ROI',()),
-        2070-1:('RH_9m_ROI',()),
-        2071-1:('RH_8BL_ROI',()),
-        2072-1:('RH_9p_ROI',()),
-        2073-1:('RH_10d_ROI',()),
-        2074-1:('RH_8C_ROI',()),
-        2075-1:('RH_44_ROI',()),
-        2076-1:('RH_45_ROI',()),
-        2077-1:('RH_47l_ROI',()),
-        2078-1:('RH_a47r_ROI',()),
-        2079-1:('RH_6r_ROI',()),
-        2080-1:('RH_IFJa_ROI',()),
-        2081-1:('RH_IFJp_ROI',()),
-        2082-1:('RH_IFSp_ROI',()),
-        2083-1:('RH_IFSa_ROI',()),
-        2084-1:('RH_p9-46v_ROI',()),
-        2085-1:('RH_46_ROI',()),
-        2086-1:('RH_a9-46v_ROI',()),
-        2087-1:('RH_9-46d_ROI',()),
-        2088-1:('RH_9a_ROI',()),
-        2089-1:('RH_10v_ROI',()),
-        2090-1:('RH_a10p_ROI',()),
-        2091-1:('RH_10pp_ROI',()),
-        2092-1:('RH_11l_ROI',()),
-        2093-1:('RH_13l_ROI',()),
-        2094-1:('RH_OFC_ROI',()),
-        2095-1:('RH_47s_ROI',()),
-        2096-1:('RH_LIPd_ROI',()),
-        2097-1:('RH_6a_ROI',()),
-        2098-1:('RH_i6-8_ROI',()),
-        2099-1:('RH_s6-8_ROI',()),
-        2100-1:('RH_43_ROI',()),
-        2101-1:('RH_OP4_ROI',()),
-        2102-1:('RH_OP1_ROI',()),
-        2103-1:('RH_OP2-3_ROI',()),
-        2104-1:('RH_52_ROI',()),
-        2105-1:('RH_RI_ROI',()),
-        2106-1:('RH_PFcm_ROI',()),
-        2107-1:('RH_PoI2_ROI',()),
-        2108-1:('RH_TA2_ROI',()),
-        2109-1:('RH_FOP4_ROI',()),
-        2110-1:('RH_MI_ROI',()),
-        2111-1:('RH_Pir_ROI',()),
-        2112-1:('RH_AVI_ROI',()),
-        2113-1:('RH_AAIC_ROI',()),
-        2114-1:('RH_FOP1_ROI',()),
-        2115-1:('RH_FOP3_ROI',()),
-        2116-1:('RH_FOP2_ROI',()),
-        2117-1:('RH_PFt_ROI',()),
-        2118-1:('RH_AIP_ROI',()),
-        2119-1:('RH_EC_ROI',()),
-        2120-1:('RH_PreS_ROI',()),
-        2122-1:('RH_ProS_ROI',()),
-        2123-1:('RH_PeEc_ROI',()),
-        2124-1:('RH_STGa_ROI',()),
-        2125-1:('RH_PBelt_ROI',()),
-        2126-1:('RH_A5_ROI',()),
-        2127-1:('RH_PHA1_ROI',()),
-        2128-1:('RH_PHA3_ROI',()),
-        2129-1:('RH_STSda_ROI',()),
-        2130-1:('RH_STSdp_ROI',()),
-        2131-1:('RH_STSvp_ROI',()),
-        2132-1:('RH_TGd_ROI',()),
-        2133-1:('RH_TE1a_ROI',()),
-        2134-1:('RH_TE1p_ROI',()),
-        2135-1:('RH_TE2a_ROI',()),
-        2136-1:('RH_TF_ROI',()),
-        2137-1:('RH_TE2p_ROI',()),
-        2138-1:('RH_PHT_ROI',()),
-        2139-1:('RH_PH_ROI',()),
-        2140-1:('RH_TPOJ1_ROI',()),
-        2141-1:('RH_TPOJ2_ROI',()),
-        2142-1:('RH_TPOJ3_ROI',()),
-        2143-1:('RH_DVT_ROI',()),
-        2144-1:('RH_PGp_ROI',()),
-        2145-1:('RH_IP2_ROI',()),
-        2146-1:('RH_IP1_ROI',()),
-        2147-1:('RH_IP0_ROI',()),
-        2148-1:('RH_PFop_ROI',()),
-        2149-1:('RH_PF_ROI',()),
-        2150-1:('RH_PFm_ROI',()),
-        2151-1:('RH_PGi_ROI',()),
-        2152-1:('RH_PGs_ROI',()),
-        2153-1:('RH_V6A_ROI',()),
-        2154-1:('RH_VMV1_ROI',()),
-        2155-1:('RH_VMV3_ROI',()),
-        2156-1:('RH_PHA2_ROI',()),
-        2157-1:('RH_V4t_ROI',()),
-        2158-1:('RH_FST_ROI',()),
-        2159-1:('RH_V3CD_ROI',()),
-        2160-1:('RH_LO3_ROI',()),
-        2161-1:('RH_VMV2_ROI',()),
-        2162-1:('RH_31pd_ROI',()),
-        2163-1:('RH_31a_ROI',()),
-        2164-1:('RH_VVC_ROI',()),
-        2165-1:('RH_25_ROI',()),
-        2166-1:('RH_s32_ROI',()),
-        2167-1:('RH_pOFC_ROI',()),
-        2168-1:('RH_PoI1_ROI',()),
-        2169-1:('RH_Ig_ROI',()),
-        2170-1:('RH_FOP5_ROI',()),
-        2171-1:('RH_p10p_ROI',()),
-        2172-1:('RH_p47r_ROI',()),
-        2173-1:('RH_TGv_ROI',()),
-        2174-1:('RH_MBelt_ROI',()),
-        2175-1:('RH_LBelt_ROI',()),
-        2176-1:('RH_A4_ROI',()),
-        2177-1:('RH_STSva_ROI',()),
-        2178-1:('RH_TE1m_ROI',()),
-        2179-1:('RH_PI_ROI',()),
-        2180-1:('RH_a32pr_ROI',()),
-        2181-1:('RH_p24_ROI',())}
-    # load freesurfer LUT file
-    FSLUT_file=Path(f"{HOME_DIR}/GLASSER/FreeSurferColorLUT.txt")
-    with open(str(FSLUT_file), 'r', encoding='utf-8') as fsfile:
-        FSLUT_lines=fsfile.readlines()
-    # find all colors
-    colors=[re.findall(r'\d+', x) for x in FSLUT_lines]
-    # drop non color rows
-    colors=[x for x in colors if len(x)==5]
-    # reformat it to a dictionary
-    colors_dict=dict()
-    for x in colors:
-        y = [int(xx) for xx in x]
-        colors_dict[y[0]]=tuple(y[1:])
-    # fix glasser_mask_ids
-    for key_id in glasser_mask_ids_pre.keys():
-        if key_id in colors_dict:
-            glasser_mask_ids_pre[key_id]=(glasser_mask_ids_pre[key_id][0],colors_dict[key_id])
-    for key_id in lang_mask_ids_pre.keys():
-        if key_id in colors_dict:
-            lang_mask_ids_pre[key_id]=(lang_mask_ids_pre[key_id][0],colors_dict[key_id])
-    # fill remaining rows:
-    hsv=cm.get_cmap('hsv')
-    RGB=hsv(np.arange(10000)/10000)*255
-    RGB=RGB.astype('int')
-    # drop alpha
-    RGB=RGB[:,:3]
-    FLSLUT_COLORS=np.asarray(list(colors_dict.values()))[:,:3]
-    # find color that are not in the FS color map
-    aset = set([tuple(x) for x in RGB])
-    bset = set([tuple(x) for x in FLSLUT_COLORS])
-    new_colors=list(aset-bset)
-    np.random.seed(seed=15)
-    reordering=np.random.randint(0,len(new_colors),size=len(new_colors))
-    new_colors=[new_colors[x] for x in reordering]
-    newFSLUT_dict={**lang_mask_ids_pre, **glasser_mask_ids_pre}
-    newFSLUT_dict.keys()
-    walk_=0
-    # for key_id in newFSLUT_dict.keys():
-    #     if len(newFSLUT_dict[key_id][1])==0:
-    #         newFSLUT_dict[key_id]=(newFSLUT_dict[key_id][0],new_colors[walk_]+(0,))
-    #         walk_+=1
-    # assigns same color to both left and right hemisphere
-    area_names_ids = [[re.subn('RH_|LH_', '', newFSLUT_dict[key_id][0])[0],key_id] for key_id in newFSLUT_dict.keys()]
-    area_names=np.asarray([x[0] for x in area_names_ids])
-    area_ids=np.asarray([x[1] for x in area_names_ids])
-    unique_names=np.unique(area_names)
-    for x in unique_names:
-        assert(len(np.where(area_names==unique_names[0])[0])==2)
-    walk_ = 0
-    for key_id in newFSLUT_dict.keys():
-        if len(newFSLUT_dict[key_id][1]) == 0:
-            area_name = re.subn('RH_|LH_', '',newFSLUT_dict[key_id][0])[0]
-            area_idx=area_ids[np.where(area_names==area_name)[0]]
-            for area_key in area_idx:
-                newFSLUT_dict[area_key] = (newFSLUT_dict[area_key][0], new_colors[walk_] + (0,))
-            walk_ += 1
-    # add a row for zero
-    lh_keys = [k for k in newFSLUT_dict.keys() if re.findall('LH_',newFSLUT_dict[k][0])]
-    rh_keys = [k for k in newFSLUT_dict.keys() if re.findall('RH_', newFSLUT_dict[k][0])]
-    LHFSLUT_lang_glass_dict = {key: newFSLUT_dict[key] for key in lh_keys}
-    RHFSLUT_lang_glass_dict={key: newFSLUT_dict[key] for key in rh_keys}
-    FSLUT_lang={key: newFSLUT_dict[key] for key in lang_mask_ids_pre.keys()}
-    FSLUT_glasser = {key: newFSLUT_dict[key] for key in glasser_mask_ids_pre.keys()}
-    #newFSLUT_dict[0]=('Unknown', (0,0,0,0 ))
-    #LHFSLUT_lang_glass_dict[0] = ('Unknown', (0, 0, 0, 0))
-    #RHFSLUT_lang_glass_dict[0] = ('Unknown', (0, 0, 0, 0))
-    #FSLUT_lang[0] = ('Unknown', (0, 0, 0, 0))
-    #FSLUT_glasser[0] = ('Unknown', (0, 0, 0, 0))
-    # save the new newFLSUT as a text file
-    fmt = '{:<19} ' * 2 + '{: >5} ' * 4
-    txt_lines = ['#$ Id: FreeSurferColorLUT_dti_evlab.txt, Fall 2021 $',
-                 fmt.format('#No.', 'Label Name:', 'R', 'G', 'B', 'A')]
-    lh_txt_lines=copy.deepcopy(txt_lines)
-    rh_txt_lines = copy.deepcopy(txt_lines)
-    lang_txt_lines=copy.deepcopy(txt_lines)
-    glasser_txt_lines=copy.deepcopy(txt_lines)
-
-    txt_lines=fill_lines(txt_lines,newFSLUT_dict)
-    lh_txt_lines = fill_lines(lh_txt_lines, LHFSLUT_lang_glass_dict)
-    rh_txt_lines = fill_lines(rh_txt_lines, RHFSLUT_lang_glass_dict)
-    lang_txt_lines = fill_lines(lang_txt_lines, FSLUT_lang)
-    glasser_txt_lines = fill_lines(glasser_txt_lines, FSLUT_glasser)
+        txt_lines=fill_lines(txt_lines,newFSLUT_dict)
+        lh_txt_lines = fill_lines(lh_txt_lines, LHFSLUT_lang_glass_dict)
+        rh_txt_lines = fill_lines(rh_txt_lines, RHFSLUT_lang_glass_dict)
+        lang_txt_lines = fill_lines(lang_txt_lines, FSLUT_lang)
+        glasser_txt_lines = fill_lines(glasser_txt_lines, FSLUT_glasser)
 
 
-    # save as text files
-    with open(f'{HOME_DIR}/FSLUT_lang_glasser/FSLUT_lang_glasser_ctab.txt', "w") as textfile:
-        for element in txt_lines:
-            textfile.write(element + "\n")
-    textfile.close()
-    with open(f'{HOME_DIR}/FSLUT_lang_glasser/FSLUT_LH_lang_glasser_ctab.txt', "w") as lh_textfile:
-        for element in lh_txt_lines:
-            lh_textfile.write(element + "\n")
-    lh_textfile.close()
-    with open(f'{HOME_DIR}/FSLUT_lang_glasser/FSLUT_RH_lang_glasser_ctab.txt', "w") as rh_textfile:
-        for element in rh_txt_lines:
-            rh_textfile.write(element + "\n")
-    rh_textfile.close()
+        # save as text files
+        with open(f'{HOME_DIR}/FSLUT_lang_glasser/FSLUT_lang_glasser_thr_{thr}_ctab.txt', "w") as textfile:
+            for element in txt_lines:
+                textfile.write(element + "\n")
+        textfile.close()
+        with open(f'{HOME_DIR}/FSLUT_lang_glasser/FSLUT_LH_lang_glasser_thr_{thr}_ctab.txt', "w") as lh_textfile:
+            for element in lh_txt_lines:
+                lh_textfile.write(element + "\n")
+        lh_textfile.close()
+        with open(f'{HOME_DIR}/FSLUT_lang_glasser/FSLUT_RH_lang_glasser_thr_{thr}_ctab.txt', "w") as rh_textfile:
+            for element in rh_txt_lines:
+                rh_textfile.write(element + "\n")
+        rh_textfile.close()
 
-    with open(f'{HOME_DIR}/FSLUT_lang_glasser/FSLUT_glasser_ctab.txt', "w") as glasser_textfile:
-        for element in glasser_txt_lines:
-            glasser_textfile.write(element + "\n")
-    glasser_textfile.close()
+        with open(f'{HOME_DIR}/FSLUT_lang_glasser/FSLUT_glasser_ctab.txt', "w") as glasser_textfile:
+            for element in glasser_txt_lines:
+                glasser_textfile.write(element + "\n")
+        glasser_textfile.close()
 
-    with open(f'{HOME_DIR}/FSLUT_lang_glasser/FSLUT_lang_ctab.txt', "w") as lang_textfile:
-        for element in lang_txt_lines:
-            lang_textfile.write(element + "\n")
-    lang_textfile.close()
-    # make a version with only left parcels:
+        with open(f'{HOME_DIR}/FSLUT_lang_glasser/FSLUT_lang_thr_{thr}_ctab.txt', "w") as lang_textfile:
+            for element in lang_txt_lines:
+                lang_textfile.write(element + "\n")
+        lang_textfile.close()
+        # make a version with only left parcels:
 
-FSLUT_RH_lang_glasser_pd=pd.read_csv(f'{HOME_DIR}/FSLUT_lang_glasser/FSLUT_RH_lang_glasser_ctab.txt',delim_whitespace=True,comment='#',header=None,names=['id','label','R','G','B','A'])
-FSLUT_LH_lang_glasser_pd=pd.read_csv(f'{HOME_DIR}/FSLUT_lang_glasser/FSLUT_LH_lang_glasser_ctab.txt',delim_whitespace=True,comment='#',header=None,names=['id','label','R','G','B','A'])
-FSLUT_lang_glasser_pd=pd.read_csv(f'{HOME_DIR}/FSLUT_lang_glasser/FSLUT_lang_glasser_ctab.txt',delim_whitespace=True,comment='#',header=None,names=['id','label','R','G','B','A'])
-FSLUT_lang_pd=pd.read_csv(f'{HOME_DIR}/FSLUT_lang_glasser/FSLUT_lang_ctab.txt',delim_whitespace=True,comment='#',header=None,names=['id','label','R','G','B','A'])
+FSLUT_RH_lang_glasser_pd_dict={}
+FSLUT_LH_lang_glasser_pd_dict={}
+FSLUT_lang_glasser_pd_dict={}
+FSLUT_lang_pd_dict={}
+for thr in thresholds:
+    FSLUT_RH_lang_glasser_pd_dict[thr]=pd.read_csv(f'{HOME_DIR}/FSLUT_lang_glasser/FSLUT_RH_lang_glasser_thr_{thr}_ctab.txt',delim_whitespace=True,comment='#',header=None,names=['id','label','R','G','B','A'])
+    FSLUT_LH_lang_glasser_pd_dict[thr]=pd.read_csv(f'{HOME_DIR}/FSLUT_lang_glasser/FSLUT_LH_lang_glasser_thr_{thr}_ctab.txt',delim_whitespace=True,comment='#',header=None,names=['id','label','R','G','B','A'])
+    FSLUT_lang_glasser_pd_dict[thr]=pd.read_csv(f'{HOME_DIR}/FSLUT_lang_glasser/FSLUT_lang_glasser_thr_{thr}_ctab.txt',delim_whitespace=True,comment='#',header=None,names=['id','label','R','G','B','A'])
+    FSLUT_lang_pd_dict[thr]=pd.read_csv(f'{HOME_DIR}/FSLUT_lang_glasser/FSLUT_lang_thr_{thr}_ctab.txt',delim_whitespace=True,comment='#',header=None,names=['id','label','R','G','B','A'])
+
 FSLUT_glasser_pd=pd.read_csv(f'{HOME_DIR}/FSLUT_lang_glasser/FSLUT_glasser_ctab.txt',delim_whitespace=True,comment='#',header=None,names=['id','label','R','G','B','A'])
 
 # save a text file for names of left and right hemsphere regions
-targets_lang_glasser_LH_file=Path(f"{HOME_DIR}/targets_lang_glasser_LH.txt")
-if targets_lang_glasser_LH_file.exists():
-    pass
-else :
-    with open(str(targets_lang_glasser_LH_file),'w') as target_lh:
-        for label in list(FSLUT_LH_lang_glasser_pd.drop(0).label):
-            target_lh.write(label + "\n")
-    target_lh.close()
+for thr in thresholds:
+    targets_lang_glasser_LH_file=Path(f"{HOME_DIR}/targets_lang_glasser_thr_{thr}_LH.txt")
+    if targets_lang_glasser_LH_file.exists():
+        pass
+    else:
+        with open(str(targets_lang_glasser_LH_file),'w') as target_lh:
+            for label in list(FSLUT_LH_lang_glasser_pd_dict[thr].label):
+                target_lh.write(label + "\n")
+        target_lh.close()
 
-targets_lang_glasser_RH_file=Path(f"{HOME_DIR}/targets_lang_glasser_RH.txt")
-if targets_lang_glasser_RH_file.exists():
-    pass
-else :
-    with open(str(targets_lang_glasser_RH_file),'w') as target_rh:
-        for label in list(FSLUT_RH_lang_glasser_pd.drop(0).label):
-            target_rh.write(label + "\n")
-    target_rh.close()
+    targets_lang_glasser_RH_file=Path(f"{HOME_DIR}/targets_lang_glasser_thr_{thr}_RH.txt")
+    if targets_lang_glasser_RH_file.exists():
+        pass
+    else:
+        with open(str(targets_lang_glasser_RH_file),'w') as target_rh:
+            for label in list(FSLUT_RH_lang_glasser_pd_dict[thr].label):
+                target_rh.write(label + "\n")
+        target_rh.close()
 
 
 FSLUT = '''

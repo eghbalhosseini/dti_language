@@ -15,12 +15,13 @@ fi
 echo "${GRAND_FILE}"
 echo $JID
 
-while IFS=, read -r line_count subj_name ; do
+while IFS=, read -r line_count subj_name threshold ; do
   #echo "line_count ${model}"
   if [ $JID == $line_count ]
     then
       echo "found the right match ${line_count}"
       SUB=$subj_name
+      THR=$threshold
       do_run=true
       break
     else
@@ -29,6 +30,7 @@ while IFS=, read -r line_count subj_name ; do
 
 done <"${GRAND_FILE}"
 echo "subj:${SUB}"
+echo "Threshold:${THR}"
 
 
 . ~/.bash_profile
@@ -51,12 +53,12 @@ conda activate dti_language
 #matlab -nosplash -nojvm -r "cd('/mindhive/evlab/Shared/diffusionzeynep/scripts/Architract/');\
 #label_all_eh('${SUB}','/mindhive/evlab/Shared/diffusionzeynep/','aparc+aseg');exit"
 #
-link_src="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/indti/lang_glasser_LH_indti.nii.gz"
-link_targ="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/indti/lang_glasser_LH-in-dti.nii.gz"
+link_src="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/indti/lang_glasser_LH_thr_${THR}_indti.nii.gz"
+link_targ="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/indti/lang_glasser_LH_thr_${THR}-in-dti.nii.gz"
 ln -sf "${link_src}" "${link_targ}"
 
-link_src="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/indti/lang_glasser_RH_indti.nii.gz"
-link_targ="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/indti/lang_glasser_RH-in-dti.nii.gz"
+link_src="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/indti/lang_glasser_RH_thr_${THR}_indti.nii.gz"
+link_targ="/mindhive/evlab/Shared/diffusionzeynep/${SUB}/indti/lang_glasser_RH_thr_${THR}-in-dti.nii.gz"
 
 ln -sf "${link_src}" "${link_targ}"
 #
@@ -64,14 +66,14 @@ ln -sf "${link_src}" "${link_targ}"
 ## step 3
 #
 matlab -nosplash -nojvm -r "cd('/mindhive/evlab/Shared/diffusionzeynep/scripts/Architract/');\
-label_all_general('${SUB}','/mindhive/evlab/Shared/diffusionzeynep/','lang_glasser_LH','/mindhive/evlab/Shared/diffusionzeynep/FSLUT_lang_glasser/FSLUT_LH_lang_glasser_ctab.txt');\
-label_all_general('${SUB}','/mindhive/evlab/Shared/diffusionzeynep/','lang_glasser_RH','/mindhive/evlab/Shared/diffusionzeynep/FSLUT_lang_glasser/FSLUT_RH_lang_glasser_ctab.txt');\
+label_all_general('${SUB}','/mindhive/evlab/Shared/diffusionzeynep/','lang_glasser_LH_thr_${THR}','/mindhive/evlab/Shared/diffusionzeynep/FSLUT_lang_glasser/FSLUT_LH_lang_glasser_thr_${THR}_ctab.txt');\
+label_all_general('${SUB}','/mindhive/evlab/Shared/diffusionzeynep/','lang_glasser_RH_thr_${THR}','/mindhive/evlab/Shared/diffusionzeynep/FSLUT_lang_glasser/FSLUT_RH_lang_glasser_thr_${THR}_ctab.txt');\
 ;exit"
 
 # step 4
 
 
-cp  "/mindhive/evlab/Shared/diffusionzeynep/${SUB}/indti/Labels/aparc+aseg/"all* "/mindhive/evlab/Shared/diffusionzeynep/${SUB}//indti/Labels/lang_glasser_LH/."
-cp  "/mindhive/evlab/Shared/diffusionzeynep/${SUB}//indti/Labels/aparc+aseg/"all* "/mindhive/evlab/Shared/diffusionzeynep/${SUB}//indti/Labels/lang_glasser_RH/."
+cp  "/mindhive/evlab/Shared/diffusionzeynep/${SUB}/indti/Labels/aparc+aseg/"all* "/mindhive/evlab/Shared/diffusionzeynep/${SUB}//indti/Labels/lang_glasser_LH_thr_${THR}/."
+cp  "/mindhive/evlab/Shared/diffusionzeynep/${SUB}//indti/Labels/aparc+aseg/"all* "/mindhive/evlab/Shared/diffusionzeynep/${SUB}//indti/Labels/lang_glasser_RH_thr_${THR}/."
 
 echo "${SUB} successfully processed!"

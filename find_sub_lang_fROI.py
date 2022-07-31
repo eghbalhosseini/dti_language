@@ -21,19 +21,17 @@ parser = argparse.ArgumentParser(description='find_subj_actvation_in_language_RO
 parser.add_argument('subj_id', type=str)
 parser.add_argument('network_id', type=str)#, default='lang')
 parser.add_argument('threshold', type=int)#, default=90)
-parser.add_argument('thr_type',type=str,default='top') # top or bottom
 args=parser.parse_args()
 
 
 if __name__ == '__main__':
     subj_id = args.subj_id
-    subj_id='sub114'
+    #subj_id='sub114'
     network_id = args.network_id # 'lang'
-    network_id='lang'
+    #network_id='lang'
     threshold=args.threshold
-    threshold= 20
-    thr_type=args.thr_type
-    thr_type='top'
+    #threshold= 20
+
     ####################
     file_name = 'fsig'
     my_env = os.environ.copy()
