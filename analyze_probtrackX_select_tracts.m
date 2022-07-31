@@ -1,8 +1,8 @@
 % probtrack results folder
 clear all 
 close all 
-%probtrack_folder='/Users/eghbalhosseini/MyData/dti_language/probtrackX_results_IFG_top_90-PostTemp_top_90_TO_IFG_top_90-PostTemp_top_90_EX_IFGorb_top_90';
-probtrack_folder='/Users/eghbalhosseini/MyData/dti_language/probtrackX_results_IFGorb_top_90-AntTemp_top_90_TO_IFGorb_top_90-AntTemp_top_90_EX_MFG_top_90';
+probtrack_folder='/Users/eghbalhosseini/MyData/dti_language/probtrackX_results_IFG_top_90-PostTemp_top_90_TO_IFG_top_90-PostTemp_top_90_EX_IFGorb_top_90';
+%probtrack_folder='/Users/eghbalhosseini/MyData/dti_language/probtrackX_results_IFGorb_top_90-AntTemp_top_90_TO_IFGorb_top_90-AntTemp_top_90_EX_MFG_top_90';
 analysis_path='/Users/eghbalhosseini/MyData/dti_language/analysis';
 % get files both LH and RH 
 fdt_files=dir(fullfile(probtrack_folder,'*fdt_network.mat'));
@@ -15,7 +15,7 @@ unique_subs=unique(sub_ids);
 rng(1)
 % ids=randi(length(unique_subs),1,60);
 % train_subs=unique_subs(ids);
-train_subs=datasample(unique_subs,100,'Replace',false);
+train_subs=datasample(unique_subs,60,'Replace',false);
 
 % rng(1)
 % ids=randi(length(unique_subs),1,60);

@@ -20,9 +20,8 @@ from glob import glob
 parser = argparse.ArgumentParser(description='find_subj_actvation_in_language_ROIs')
 parser.add_argument('subj_id', type=str)
 parser.add_argument('network_id', type=str)#, default='lang')
-parser.add_argument('threshold', type=int)#, default=90)
+parser.add_argument('threshold', type=int)
 args=parser.parse_args()
-
 
 if __name__ == '__main__':
     subj_id = args.subj_id
@@ -272,62 +271,3 @@ if __name__ == '__main__':
                                   black_bg=True,cmap=x)
                 axs[idy].set_title(f'{ROI_names[y]}\n{thr_type} {threshold}% #vox:{np.sum(mask.dataobj)}', color='white')
             fig.savefig(f'{str(Path(sub_dti_native_dir).parent.parent)}/{subj_id}_{hemis_[idx].lower()}._lang_roi_{thr_type}_{threshold}_in_vol.png', edgecolor='k',facecolor='k')
-
-    #####################################################################
-    # part 4
-    # dti_vol_file=f'{HOME_DIR}/{subj_id}/dti/nodif_brain.nii.gz'
-    #
-    # # create a registeration file between functional and dti
-    # unix_pattern = ['bbregister',
-    #                 '--s', subj_id,
-    #                 '--mov', dti_vol_file,
-    #                 '--init-fsl',
-    #                 '--dti',
-    #                 '--reg', f'{str(Path(sub_dti_native_dir).parent.parent)}/reg_FS2nodif.dat']
-    # #output = subprocess.Popen(unix_pattern, env=my_env)
-    # #output.communicate()
-    #
-    # unix_str = ' '.join(unix_pattern)
-    # cmd = f'''
-    #     export SUBJECTS_DIR={subj_FS_path}
-    #     module list
-    #     echo $SUBJECTS_DIR
-    #     {unix_str}
-    #     '''
-    # subprocess.call(cmd, shell=True, executable='/bin/bash')
-    #
-    # # do mri_vol2vol
-    # unix_pattern = ['mri_vol2vol',
-    #                 '--targ', f'{str(Path(sub_dti_native_dir).parent.parent)}/x.fsnative.{network_id}_roi_{thr_type}_{threshold}.nii.gz',
-    #                 '--mov', dti_vol_file,
-    #                 '--inv',
-    #                 '--interp', 'nearest',
-    #                 '--reg', f'{str(Path(sub_dti_native_dir).parent.parent)}/reg_FS2nodif.dat',
-    #                 '--o',f'{str(Path(sub_dti_native_dir).parent.parent)}/x.fsnative.{network_id}_roi_{thr_type}_{threshold}_in_DTI.nii.gz']
-    # #output = subprocess.Popen(unix_pattern, env=my_env)
-    # #output.communicate()
-    # unix_str = ' '.join(unix_pattern)
-    # cmd = f'''
-    #     export SUBJECTS_DIR={subj_FS_path}
-    #     module list
-    #     echo $SUBJECTS_DIR
-    #     {unix_str}
-    #     '''
-    # subprocess.call(cmd, shell=True, executable='/bin/bash')
-    #
-    # test_img = load_img(f'{str(Path(sub_dti_native_dir).parent.parent)}/x.fsnative.{network_id}_roi_{thr_type}_{threshold}_in_DTI.nii.gz')
-    # for idx, hemi in enumerate(hemis):
-    #     fig, axs = plt.subplots(nrows=2, ncols=3, subplot_kw={'projection': '3d'}, figsize=[11, 8])
-    #     plt.rcParams['axes.facecolor'] = 'black'
-    #     axs=axs.flatten()
-    #     hemi_rois_idx = np.where([x.__contains__(hemis_[idx]) for x in ROI_names])[0]
-    #     for idy, y in enumerate(hemi_rois_idx):
-    #         mask = math_img(f'np.logical_and(img>{ offset + 1000 + (1000 * idx)+idy},img<={offset + 1000 + (1000 * idx)+idy+1})', img=test_img)
-    #         x=ListedColormap([[R_col[y]/256, G_col[y]/256, 0]])
-    #
-    #         plotting.plot_roi(mask, bg_img=dti_vol_file, axes=axs[idy], display_mode='ortho',draw_cross=False,alpha=1,annotate=False,
-    #                           black_bg=True,cmap=x)
-    #         axs[idy].set_title(ROI_names[y],color='white')
-    #     fig.savefig(f'{str(Path(sub_dti_native_dir).parent.parent)}/{subj_id}_{hemis_[idx].lower()}._lang_roi_{thr_type}_{threshold}_lang_roi_in_DTI_vol.png', edgecolor='k',facecolor='k')
-    #
-

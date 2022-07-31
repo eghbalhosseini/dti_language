@@ -1,6 +1,7 @@
 #!/bin/bash
 DTI_DIR=/mindhive/evlab/Shared/diffusionzeynep/
-probtrackX_labels_='all_subject_probtrackX_select_tracts'
+threshod=20
+probtrackX_labels_="all_subject_probtrackX_select_tracts_thr_${threshod}"
 LINE_COUNT=0
 #SOURCES=("IFGorb_top_90" "AntTemp_top_90")
 #TARGETS=("IFGorb_top_90" "AntTemp_top_90")
@@ -8,11 +9,11 @@ LINE_COUNT=0
 #EXCLUDES=("MFG_top_90")
 #EXCLUDES=("IFG_top_90")
 
-SOURCES=("IFG_top_90" "PostTemp_top_90")
-TARGETS=("IFG_top_90" "PostTemp_top_90")
+SOURCES=("IFG_top_${threshod}" "PostTemp_top_${threshod}")
+TARGETS=("IFG_top_${threshod}" "PostTemp_top_${threshod}")
 #EXCLUDES=("MFG_top_90" "IFGorb_top_90")
 #EXCLUDES=("IFGorb_top_90")
-EXCLUDES=("MFG_top_90")
+EXCLUDES=("MFG_top_${threshod}")
 
 
 
@@ -29,7 +30,7 @@ EXCLUDEJoin=$(IFS=- ; echo "${EXCLUDES[*]}")
 SUBJECT_PROBX_FILE="${DTI_DIR}/${probtrackX_labels_}.txt"
 rm -f $SUBJECT_PROBX_FILE
 touch $SUBJECT_PROBX_FILE
-printf "%s,%s,%s,%s,%s,%s,%s\n" "row" "subject_name" "segment_name" "source_name" "target_name" "exclude_name" "hemi"   >> $SUBJECT_PROBX_FILE
+printf "%s,%s,%s,%s,%s,%s,%s,%s\n" "row" "subject_name" "segment_name" "source_name" "target_name" "exclude_name" "hemi" "threshold"   >> $SUBJECT_PROBX_FILE
 
 echo "looking at ${DTI_DIR} "
 while read x; do
@@ -45,13 +46,13 @@ while read x; do
       if [ true ]
       then
         LINE_COUNT=$(expr ${LINE_COUNT} + 1)
-        printf "%d,%s,%s,%s,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "lang_glasser_LH" "$SOURCEJoin" "$TARGETSJoin" "$EXCLUDEJoin" "LH" >> $SUBJECT_PROBX_FILE
+        printf "%d,%s,%s,%s,%s,%s,%s,%d\n" "$LINE_COUNT" "$subject_name" "lang_glasser_LH_thr_${threshod}" "$SOURCEJoin" "$TARGETSJoin" "$EXCLUDEJoin" "LH" "$threshold" >> $SUBJECT_PROBX_FILE
       fi
       #if [ ! -f "$rh_folder" ]
       if [ true ]
       then
         LINE_COUNT=$(expr ${LINE_COUNT} + 1)
-        printf "%d,%s,%s,%s,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "lang_glasser_RH" "$SOURCEJoin" "$TARGETSJoin" "$EXCLUDEJoin" "RH">> $SUBJECT_PROBX_FILE
+        printf "%d,%s,%s,%s,%s,%s,%s,%d\n" "$LINE_COUNT" "$subject_name" "lang_glasser_RH_thr_${threshod}" "$SOURCEJoin" "$TARGETSJoin" "$EXCLUDEJoin" "RH" "$threshold" >> $SUBJECT_PROBX_FILE
       fi
 done < <(find $DTI_DIR -maxdepth 1 -type d -name "sub*")
 

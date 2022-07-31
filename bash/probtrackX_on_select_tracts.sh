@@ -15,7 +15,7 @@ fi
 echo "${GRAND_FILE}"
 echo $JID
 
-while IFS=, read -r line_count subj_name segment_name sourceJoin targetJoin excludeJoin hemi ; do
+while IFS=, read -r line_count subj_name segment_name sourceJoin targetJoin excludeJoin hemi threshold ; do
   #echo "line_count ${model}"
   if [ $JID == $line_count ]
     then
@@ -26,6 +26,7 @@ while IFS=, read -r line_count subj_name segment_name sourceJoin targetJoin excl
       SOURCES=$sourceJoin
       TARGETS=$targetJoin
       EXCLUDES=$excludeJoin
+      THR=$threshold
       do_run=true
       break
     else
@@ -39,6 +40,7 @@ echo "sources : ${SOURCES}"
 echo "targets : ${TARGETS}"
 echo "excludes : ${EXCLUDES}"
 echo "hemi :${HEMI}"
+echo "threshold :${THR}"
 
 source_array=(`echo $SOURCES | sed 's/-/\n/g'`)
 target_array=(`echo $TARGETS | sed 's/-/\n/g'`)
@@ -71,7 +73,6 @@ for x in "${target_array[@]}"; do
    then
      printf "%s\n" "${target_file}" >> $SUBJECT_TARGET_FILE
   fi
-
 done
 
 touch $SUBJECT_MASK_FILE
