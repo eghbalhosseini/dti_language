@@ -41,7 +41,7 @@ echo $SUBJECTS_DIR
 . ~/.bash_profile
 conda activate dti_language
 echo $(which python)
-python /om/user/ehoseini/dti_language/find_sub_lang_fROI.py "$run_subj_name" "$run_network_id" "$run_threshold" "$run_thr_type"
+python /om2/user/ehoseini/dti_language/find_sub_lang_fROI.py "$run_subj_name" "$run_network_id" "$run_threshold" "$run_thr_type"
 
 
 

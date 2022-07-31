@@ -22,7 +22,7 @@ parser = argparse.ArgumentParser(description='create_subj_parcellation_from_glas
 parser.add_argument('subj_id', type=str, default='sub190',
                     help='subject ID, e.g. "sub190" to run this script on')
 parser.add_argument('--subjects_dir', type=str,
-                    default='/om/user/ehoseini/dti_language/glasser_to_native/subjects_for_processing')
+                    default='/om2/user/ehoseini/dti_language/glasser_to_native/subjects_for_processing')
 parser.add_argument('--data_source_dir', type=str,
                     default='/mindhive/evlab/u/Shared/SUBJECTS_FS/FS/')
 
