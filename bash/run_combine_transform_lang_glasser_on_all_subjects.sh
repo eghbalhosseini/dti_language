@@ -41,7 +41,11 @@ run_val=0
 if [ "$LINE_COUNT" -gt "$run_val" ]; then
   echo "running  ${LINE_COUNT} jobs"
    #nohup /cm/shared/admin/bin/submit-many-jobs 3 2 3 1 combine_lang_glasser_on_subject.sh  $SUBJECT_COMBINED_FILE
+   if [ "$LINE_COUNT" -lt 100 ]; then
+     nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT "$LINE_COUNT" "$LINE_COUNT" 0 combine_lang_glasser_on_subject.sh  $SUBJECT_COMBINED_FILE
+  else
    nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT 75 100 25 combine_lang_glasser_on_subject.sh  $SUBJECT_COMBINED_FILE
+   fi
   else
     echo $LINE_COUNT
 fi
