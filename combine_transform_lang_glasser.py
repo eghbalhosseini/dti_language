@@ -39,9 +39,9 @@ if __name__ == '__main__':
     network_id = args.network_id  # 'lang'
     thr=args.threshold
     # do a fix on FSLUT based on threshold
-    FSLUT_lang_pd=FSLUT_lang_pd_dict[thr]
-    FSLUT_RH_lang_glasser_pd=FSLUT_RH_lang_glasser_pd_dict[thr]
-    FSLUT_LH_lang_glasser_pd=FSLUT_LH_lang_glasser_pd_dict[thr]
+    FSLUT_lang_pd=FSLUT_lang_pd_dict[int(thr)]
+    FSLUT_RH_lang_glasser_pd=FSLUT_RH_lang_glasser_pd_dict[int(thr)]
+    FSLUT_LH_lang_glasser_pd=FSLUT_LH_lang_glasser_pd_dict[int(thr)]
 
     #
     file_name = 'fsig'

@@ -39,8 +39,8 @@ done < <(find $DTI_DIR -type d -maxdepth 1 -name "sub*")
 run_val=0
 if [ "$LINE_COUNT" -gt "$run_val" ]; then
   echo "running  ${LINE_COUNT} jobs"
-   #nohup /cm/shared/admin/bin/submit-many-jobs 3 2 3 1 lang_froi_on_subject.sh  $SUBJECT_FROI_FILE
-   nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT 150 200 50 lang_froi_on_subject.sh  $SUBJECT_FROI_FILE
+   nohup /cm/shared/admin/bin/submit-many-jobs 3 2 3 1 lang_froi_on_subject.sh  $SUBJECT_FROI_FILE
+   #nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT 150 200 50 lang_froi_on_subject.sh  $SUBJECT_FROI_FILE
   else
     echo $LINE_COUNT
 fi
