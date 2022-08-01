@@ -18,11 +18,12 @@ def fill_lines(textlines,dict_dat):
 # check if FSLUT_lang_glasser_ctab exist
 thresholds=[10,20,30]
 for thr in thresholds:
-    FSLUT_lang_glasser=Path(f"{HOME_DIR}/FSLUT_lang_glasser/FSLUT_lang_glasser_th_{thr}_ctab.txt")
+    FSLUT_lang_glasser=Path(f"{HOME_DIR}/FSLUT_lang_glasser/FSLUT_lang_glasser_thr_{thr}_ctab.txt")
     if FSLUT_lang_glasser.exists():
         pass
     else:
         # create skeleton of the regions
+        print(f"creating {FSLUT_lang_glasser}")
         lang_mask_ids_pre={
             # left hemisphere
             1401:(f'LH_IFGorb_top_{thr}', ()),
@@ -428,6 +429,7 @@ for thr in thresholds:
         # fix glasser_mask_ids
         for key_id in glasser_mask_ids_pre.keys():
             if key_id in colors_dict:
+                print(key_id)
                 glasser_mask_ids_pre[key_id]=(glasser_mask_ids_pre[key_id][0],colors_dict[key_id])
         for key_id in lang_mask_ids_pre.keys():
             if key_id in colors_dict:
@@ -443,8 +445,11 @@ for thr in thresholds:
         aset = set([tuple(x) for x in RGB])
         bset = set([tuple(x) for x in FLSLUT_COLORS])
         new_colors=list(aset-bset)
+        assert len(set([tuple(x) for x in new_colors]))==len(new_colors)
         np.random.seed(seed=15)
-        reordering=np.random.randint(0,len(new_colors),size=len(new_colors))
+        reordering=np.random.choice(np.arange(len(new_colors)),size=len(new_colors),replace=False)
+        #reordering=np.random.randint(0,len(new_colors),size=len(new_colors))
+        assert len(np.unique(reordering))==len(reordering)
         new_colors=[new_colors[x] for x in reordering]
         newFSLUT_dict={**lang_mask_ids_pre, **glasser_mask_ids_pre}
         newFSLUT_dict.keys()
