@@ -18,6 +18,7 @@ printf "%s,%s,%s,%s\n" "row" "subject_name" "network_id" "threshold"    >> $SUBJ
 
 echo "looking at ${DTI_DIR} "
 SUBJ_LINE=0
+overwrite=true
 while read x; do
       # check if file already exist in fmri dir
       original=$DTI_DIR
@@ -25,8 +26,7 @@ while read x; do
       subject_name="${x/$original/$correction}"
       possible_folder="${DTI_DIR}/${subject_name}/indti"
       possible_file="${possible_folder}/lang_glasser_BOTH_thr_${threshold}_indti.nii.gz"
-      #if [ -f "$possible_file" ]
-      if [ true ]
+      if [ -f "$possible_file" ] && [ ! $overwrite ]
       then
         true
       else
