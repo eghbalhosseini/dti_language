@@ -2,7 +2,7 @@
 DTI_DIR=/mindhive/evlab/Shared/diffusionzeynep/
 FS_DIR=/mindhive/evlab/u/Shared/SUBJECTS_FS/FS/
 
-threshod=20
+threshod=10
 aparc_aseg_labels_="all_subject_aparc_aseg_labels_thr_${threshod}"
 i=0
 LINE_COUNT=0
