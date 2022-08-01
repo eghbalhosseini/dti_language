@@ -5,7 +5,7 @@ import subprocess
 import pandas as pd
 import argparse
 from utils.fmri_utils import subj_lang_path, subj_FS_path,HOME_DIR
-from utils.lookuptable import FSLUT_lang_pd, FSLUT_glasser_pd, FSLUT_RH_lang_glasser_pd, FSLUT_LH_lang_glasser_pd
+from utils.lookuptable import FSLUT_lang_pd_dict, FSLUT_glasser_pd, FSLUT_RH_lang_glasser_pd_dict, FSLUT_LH_lang_glasser_pd_dict
 fsaverage = datasets.fetch_surf_fsaverage(mesh='fsaverage')
 from pathlib import Path
 from nilearn.image import load_img
@@ -27,7 +27,7 @@ def mock_get_args():
     new_args = mock_args('sub114', 'lang',20)
     return new_args
 
-debug=True
+debug=False
 vol2vol_method='nearest'
 
 if __name__ == '__main__':
@@ -39,12 +39,9 @@ if __name__ == '__main__':
     network_id = args.network_id  # 'lang'
     thr=args.threshold
     # do a fix on FSLUT based on threshold
-    FSLUT_lang_pd.label = FSLUT_lang_pd.label.str.replace('top_\d+', f'top_{thr}')
-    FSLUT_lang_pd.label = FSLUT_lang_pd.label.str.replace('bottom_\d+', f'bottom_{thr}')
-    FSLUT_RH_lang_glasser_pd.label = FSLUT_RH_lang_glasser_pd.label.str.replace('top_\d+', f'top_{thr}')
-    FSLUT_RH_lang_glasser_pd.label = FSLUT_RH_lang_glasser_pd.label.str.replace('bottom_\d+', f'bottom_{thr}')
-    FSLUT_LH_lang_glasser_pd.label = FSLUT_LH_lang_glasser_pd.label.str.replace('top_\d+', f'top_{thr}')
-    FSLUT_LH_lang_glasser_pd.label = FSLUT_LH_lang_glasser_pd.label.str.replace('bottom_\d+', f'bottom_{thr}')
+    FSLUT_lang_pd=FSLUT_lang_pd_dict[thr]
+    FSLUT_RH_lang_glasser_pd=FSLUT_RH_lang_glasser_pd_dict[thr]
+    FSLUT_LH_lang_glasser_pd=FSLUT_LH_lang_glasser_pd_dict[thr]
 
     #
     file_name = 'fsig'

@@ -15,7 +15,7 @@ fi
 echo "${GRAND_FILE}"
 echo $JID
 
-while IFS=, read -r line_count subj_name network_id threshold thr_type ; do
+while IFS=, read -r line_count subj_name network_id threshold ; do
   #echo "line_count ${model}"
   if [ $JID == $line_count ]
     then
@@ -23,7 +23,6 @@ while IFS=, read -r line_count subj_name network_id threshold thr_type ; do
       run_subj_name=$subj_name
       run_network_id=$network_id
       run_threshold=$threshold
-      run_thr_type=$thr_type
       do_run=true
       break
     else
@@ -35,14 +34,13 @@ if $do_run; then
   echo "subj:${run_subj_name}"
   echo "network:${run_network_id}"
   echo "threshold:${run_threshold}"
-  echo "threshold_type :${run_thr_type}"
   echo $SUBJECTS_DIR
 
 
   . ~/.bash_profile
   conda activate dti_language
   echo $(which python)
-  python /om2/user/ehoseini/dti_language/combine_transform_lang_glasser.py "$run_subj_name" "$run_network_id"
+  python /om2/user/ehoseini/dti_language/combine_transform_lang_glasser.py "$run_subj_name" "$run_network_id" "$run_threshold"
 fi
 
 
