@@ -1,7 +1,7 @@
 #!/bin/bash
 DTI_DIR=/mindhive/evlab/Shared/diffusionzeynep/
 
-
+threshold=20
 probtrackX_labels_='all_subject_collect_probtrackX_select_tracts_results'
 i=0
 LINE_COUNT=0
@@ -10,18 +10,18 @@ rm -f $SUBJECT_PROBX_FILE
 touch $SUBJECT_PROBX_FILE
 
 
-SOURCES=("IFGorb_top_90" "AntTemp_top_90")
-TARGETS=("IFGorb_top_90" "AntTemp_top_90")
-#EXCLUDES=("MFG_top_90" "IFG_top_90")
-EXCLUDES=("MFG_top_90")
-#EXCLUDES=("IFG_top_90")
+#SOURCES=("IFGorb_top_${threshold}" "AntTemp_top_${threshold}")
+#TARGETS=("IFGorb_top_${threshold}" "AntTemp_top_${threshold}")
+#EXCLUDES=("MFG_top_${threshold}" "IFG_top_${threshold}")
+#EXCLUDES=("MFG_top_${threshold}")
+#EXCLUDES=("IFG_top_${threshold}")
 
 
-#SOURCES=("IFG_top_90" "PostTemp_top_90")
-#TARGETS=("IFG_top_90" "PostTemp_top_90")
-#EXCLUDES=("MFG_top_90" "IFGorb_top_90")
-#EXCLUDES=("IFGorb_top_90")
-#EXCLUDES=("IFGorb_top_90")
+SOURCES=("IFG_top_${threshold}" "PostTemp_top_${threshold}")
+TARGETS=("IFG_top_${threshold}" "PostTemp_top_${threshold}")
+#EXCLUDES=("MFG_top_${threshold}" "IFGorb_top_${threshold}")
+#EXCLUDES=("IFGorb_top_${threshold}")
+EXCLUDES=("MFG_top_${threshold}")
 SOURCEJoin=$(IFS=- ; echo "${SOURCES[*]}")
 TARGETSJoin=$(IFS=- ; echo "${TARGETS[*]}")
 EXCLUDEJoin=$(IFS=- ; echo "${EXCLUDES[*]}")
@@ -38,10 +38,6 @@ while read x; do
       subject_name="${x/$original/$correction}"
       lh_file="${DTI_DIR}/probtrackX_results_${SOURCEJoin}_TO_${TARGETSJoin}_EX_${EXCLUDEJoin}/${subject_name}_LH_fdt_network.mat"
       rh_file="${DTI_DIR}/probtrackX_results_${SOURCEJoin}_TO_${TARGETSJoin}_EX_${EXCLUDEJoin}/${subject_name}_RH_fdt_network.mat"
-
-
-
-
 
       #if [ ! -f "$lh_file" ]
       if [ true ]
@@ -66,8 +62,8 @@ done < <(find $DTI_DIR -maxdepth 1 -type d -name "sub*")
 run_val=0
 if [ "$LINE_COUNT" -gt "$run_val" ]; then
   echo "running  ${LINE_COUNT} jobs"
-   #nohup /cm/shared/admin/bin/submit-many-jobs 3 2 3 1 collect_probtrackX_result_on_select_tracts.sh  $SUBJECT_PROBX_FILE &
-   nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT 75 100 25 collect_probtrackX_result_on_select_tracts.sh  $SUBJECT_PROBX_FILE &
+   nohup /cm/shared/admin/bin/submit-many-jobs 3 2 3 1 collect_probtrackX_result_on_select_tracts.sh  $SUBJECT_PROBX_FILE &
+   #nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT 75 100 25 collect_probtrackX_result_on_select_tracts.sh  $SUBJECT_PROBX_FILE &
   else
     echo $LINE_COUNT
 fi
