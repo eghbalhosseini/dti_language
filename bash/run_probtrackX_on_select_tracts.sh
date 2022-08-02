@@ -3,17 +3,17 @@ DTI_DIR=/mindhive/evlab/Shared/diffusionzeynep/
 threshold=10
 probtrackX_labels_="all_subject_probtrackX_select_tracts_thr_${threshold}"
 LINE_COUNT=0
-#SOURCES=("IFGorb_top_${threshold}" "AntTemp_top_${threshold}")
-#TARGETS=("IFGorb_top_${threshold}" "AntTemp_top_${threshold}")
+SOURCES=("IFGorb_top_${threshold}" "AntTemp_top_${threshold}")
+TARGETS=("IFGorb_top_${threshold}" "AntTemp_top_${threshold}")
 #EXCLUDES=("MFG_top_90" "IFG_top_90")
-#EXCLUDES=("MFG_top_${threshold}")
+EXCLUDES=("MFG_top_${threshold}")
 #EXCLUDES=("IFG_top_90")
 
-SOURCES=("IFG_top_${threshold}" "PostTemp_top_${threshold}")
-TARGETS=("IFG_top_${threshold}" "PostTemp_top_${threshold}")
+#SOURCES=("IFG_top_${threshold}" "PostTemp_top_${threshold}")
+#TARGETS=("IFG_top_${threshold}" "PostTemp_top_${threshold}")
 #EXCLUDES=("MFG_top_90" "IFGorb_top_90")
 #EXCLUDES=("IFGorb_top_90")
-EXCLUDES=("MFG_top_${threshold}")
+#EXCLUDES=("MFG_top_${threshold}")
 
 
 
