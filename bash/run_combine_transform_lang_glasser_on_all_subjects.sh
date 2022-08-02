@@ -4,7 +4,7 @@ FS_DIR=/mindhive/evlab/u/Shared/SUBJECTS_FS/FS/
 
 
 network_id="lang"
-threshold="10"
+threshold="20"
 
 #
 
