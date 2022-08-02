@@ -1,3 +1,4 @@
+import os
 import nibabel as nib
 from nilearn import datasets
 import numpy as np
@@ -24,10 +25,10 @@ def get_args():
 
 def mock_get_args():
     mock_args = namedtuple('debug', ['subj_id', 'network_id','threshold'])
-    new_args = mock_args('sub114', 'lang',20)
+    new_args = mock_args('sub297', 'lang',20)
     return new_args
 
-debug=False
+debug=True
 vol2vol_method='nearest'
 
 if __name__ == '__main__':
@@ -109,7 +110,11 @@ if __name__ == '__main__':
     FSLUT_reg=pd.concat([FSLUT_pd[FSLUT_pd.id==x] for x in reg_id])
     FSLUT_reg.insert(2,'num_voxel',reg_count)
     FSLUT_reg=FSLUT_reg.drop(['R','G','B','A'],axis=1)
-    combine_count_pth = Path(f"{HOME_DIR}/{subj_id}/lang_glasser/lang_glasser_BOTH_thr_{thr}_count.csv")
+
+    # delet previous version
+    for prev_file in glob(f"{HOME_DIR}/{subj_id}/lang_glasser/*_count.csv"):
+        os.remove(prev_file)
+    combine_count_pth = Path(f"{HOME_DIR}/{subj_id}/lang_glasser/counts_lang_glasser_BOTH_thr_{thr}.csv")
     FSLUT_reg.to_csv(str(combine_count_pth))
     #   SAVE HEMSPHERIC VERSIONS
     # left
