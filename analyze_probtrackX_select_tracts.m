@@ -2,6 +2,7 @@
 clear all 
 close all 
 probtrack_folder='/Users/eghbalhosseini/MyData/dti_language/probtrackX_results_IFG_top_90-PostTemp_top_90_TO_IFG_top_90-PostTemp_top_90_EX_IFGorb_top_90';
+probtrack_folder='/Users/eghbalhosseini/MyData/dti_language/probtrackX_results_IFG_top_20-PostTemp_top_20_TO_IFG_top_20-PostTemp_top_20_EX_MFG_top_20';
 %probtrack_folder='/Users/eghbalhosseini/MyData/dti_language/probtrackX_results_IFGorb_top_90-AntTemp_top_90_TO_IFGorb_top_90-AntTemp_top_90_EX_MFG_top_90';
 analysis_path='/Users/eghbalhosseini/MyData/dti_language/analysis';
 % get files both LH and RH 

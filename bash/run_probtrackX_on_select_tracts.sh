@@ -1,6 +1,6 @@
 #!/bin/bash
 DTI_DIR=/mindhive/evlab/Shared/diffusionzeynep/
-threshod=20
+threshod=10
 probtrackX_labels_="all_subject_probtrackX_select_tracts_thr_${threshod}"
 LINE_COUNT=0
 #SOURCES=("IFGorb_top_90" "AntTemp_top_90")
