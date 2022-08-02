@@ -113,6 +113,7 @@ if __name__ == '__main__':
 
     # delet previous version
     for prev_file in glob(f"{HOME_DIR}/{subj_id}/lang_glasser/*_count.csv"):
+        print("removing the prior files!")
         os.remove(prev_file)
     combine_count_pth = Path(f"{HOME_DIR}/{subj_id}/lang_glasser/counts_lang_glasser_BOTH_thr_{thr}.csv")
     FSLUT_reg.to_csv(str(combine_count_pth))
