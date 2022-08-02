@@ -27,7 +27,7 @@ while read x; do
       possible_folder="${DTI_DIR}/${subject_name}/indti"
       possible_file="${possible_folder}/lang_glasser_BOTH_thr_${threshold}_indti.nii.gz"
       # find previous files and delete them
-      if [ $overwrite ]
+      if [ "$overwrite" = true ]
       then
           echo "$possible_file exits and overwrite"
           LINE_COUNT=$(expr ${LINE_COUNT} + 1)
