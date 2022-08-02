@@ -44,4 +44,4 @@ echo "hemi: ${HEMI}"
 module load mit/matlab/2020b
 matlab -nosplash -nojvm -r "addpath('/om2/user/ehoseini/dti_language/');\
 cd('/om2/user/ehoseini/dti_language/');\
-transform_probtrackX_output('file_id','${FILE_NAME}','target_mask_file','${SEGMENT_NAME}','save_dir','${SAVE_NAME}','hemi','${HEMI}');exit"
+disp('running transformation');transform_probtrackX_output('file_id','${FILE_NAME}','target_mask_file','${SEGMENT_NAME}','save_dir','${SAVE_NAME}','hemi','${HEMI}');exit"
