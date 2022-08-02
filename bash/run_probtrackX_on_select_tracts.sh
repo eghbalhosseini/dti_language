@@ -79,11 +79,11 @@ if [ "$LINE_COUNT" -gt "$run_val" ]; then
   echo "running  ${LINE_COUNT} jobs"
   if [ "$LINE_COUNT" -lt 100 ] ; then
     echo "less than 100 jobs:  ${LINE_COUNT} jobs"
-      nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT "$LINE_COUNT" "$LINE_COUNT" 0 probtrackX_on_select_tracts.sh  $SUBJECT_PROBX_FILE &
+      nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT "$LINE_COUNT" "$LINE_COUNT" 0 probtrackX_on_select_tracts.sh  $SUBJECT_PROBX_FILE
   else
     echo "more than 100 jobs:  ${LINE_COUNT} jobs"
       #nohup /cm/shared/admin/bin/submit-many-jobs 3 2 3 1 probtrackX_on_select_tracts.sh  $SUBJECT_PROBX_FILE
-      nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT 75 100 25 probtrackX_on_select_tracts.sh  $SUBJECT_PROBX_FILE &
+      nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT 75 100 25 probtrackX_on_select_tracts.sh  $SUBJECT_PROBX_FILE
   fi
   else
     echo $LINE_COUNT
