@@ -1,7 +1,7 @@
 #!/bin/bash
 DTI_DIR=/mindhive/evlab/Shared/diffusionzeynep/
-threshod=10
-probtrackX_labels_="all_subject_probtrackX_select_tracts_thr_${threshod}"
+threshold=10
+probtrackX_labels_="all_subject_probtrackX_select_tracts_thr_${threshold}"
 LINE_COUNT=0
 #SOURCES=("IFGorb_top_${threshold}" "AntTemp_top_${threshold}")
 #TARGETS=("IFGorb_top_${threshold}" "AntTemp_top_${threshold}")
@@ -9,11 +9,11 @@ LINE_COUNT=0
 #EXCLUDES=("MFG_top_${threshold}")
 #EXCLUDES=("IFG_top_90")
 
-SOURCES=("IFG_top_${threshod}" "PostTemp_top_${threshod}")
-TARGETS=("IFG_top_${threshod}" "PostTemp_top_${threshod}")
+SOURCES=("IFG_top_${threshold}" "PostTemp_top_${threshold}")
+TARGETS=("IFG_top_${threshold}" "PostTemp_top_${threshold}")
 #EXCLUDES=("MFG_top_90" "IFGorb_top_90")
 #EXCLUDES=("IFGorb_top_90")
-EXCLUDES=("MFG_top_${threshod}")
+EXCLUDES=("MFG_top_${threshold}")
 
 
 
@@ -30,7 +30,7 @@ EXCLUDEJoin=$(IFS=- ; echo "${EXCLUDES[*]}")
 SUBJECT_PROBX_FILE="${DTI_DIR}/${probtrackX_labels_}.txt"
 rm -f $SUBJECT_PROBX_FILE
 touch $SUBJECT_PROBX_FILE
-printf "%s,%s,%s,%s,%s,%s,%s,%s\n" "row" "subject_name" "segment_name" "source_name" "target_name" "exclude_name" "hemi" "threshold"   >> $SUBJECT_PROBX_FILE
+printf "%s,%s,%s,%s,%s,%s,%s,%s\n" "row" "subject_name" "segment_name" "source_name" "target_name" "exclude_name" "hemi" "thr"   >> $SUBJECT_PROBX_FILE
 
 echo "looking at ${DTI_DIR} "
 overwrite=false
@@ -48,23 +48,23 @@ while read x; do
       then
         echo "overwriting ${lh_folder}"
         LINE_COUNT=$(expr ${LINE_COUNT} + 1)
-        printf "%d,%s,%s,%s,%s,%s,%s,%d\n" "$LINE_COUNT" "$subject_name" "lang_glasser_LH_thr_${threshod}" "$SOURCEJoin" "$TARGETSJoin" "$EXCLUDEJoin" "LH" "$threshold" >> $SUBJECT_PROBX_FILE
+        printf "%d,%s,%s,%s,%s,%s,%s,%d\n" "$LINE_COUNT" "$subject_name" "lang_glasser_LH_thr_${threshold}" "$SOURCEJoin" "$TARGETSJoin" "$EXCLUDEJoin" "LH" "$threshold" >> $SUBJECT_PROBX_FILE
 
         echo "overwriting ${rh_folder}"
         LINE_COUNT=$(expr ${LINE_COUNT} + 1)
-        printf "%d,%s,%s,%s,%s,%s,%s,%d\n" "$LINE_COUNT" "$subject_name" "lang_glasser_RH_thr_${threshod}" "$SOURCEJoin" "$TARGETSJoin" "$EXCLUDEJoin" "RH" "$threshold" >> $SUBJECT_PROBX_FILE
+        printf "%d,%s,%s,%s,%s,%s,%s,%d\n" "$LINE_COUNT" "$subject_name" "lang_glasser_RH_thr_${threshold}" "$SOURCEJoin" "$TARGETSJoin" "$EXCLUDEJoin" "RH" "$threshold" >> $SUBJECT_PROBX_FILE
       else
           if [ ! -f "$lh_folder" ]
           echo "missing ${lh_folder}"
           then
             LINE_COUNT=$(expr ${LINE_COUNT} + 1)
-            printf "%d,%s,%s,%s,%s,%s,%s,%d\n" "$LINE_COUNT" "$subject_name" "lang_glasser_LH_thr_${threshod}" "$SOURCEJoin" "$TARGETSJoin" "$EXCLUDEJoin" "LH" "$threshold" >> $SUBJECT_PROBX_FILE
+            printf "%d,%s,%s,%s,%s,%s,%s,%d\n" "$LINE_COUNT" "$subject_name" "lang_glasser_LH_thr_${threshold}" "$SOURCEJoin" "$TARGETSJoin" "$EXCLUDEJoin" "LH" "$threshold" >> $SUBJECT_PROBX_FILE
           fi
           if [ ! -f "$rh_folder" ]
           then
             echo "missing ${rh_folder}"
             LINE_COUNT=$(expr ${LINE_COUNT} + 1)
-            printf "%d,%s,%s,%s,%s,%s,%s,%d\n" "$LINE_COUNT" "$subject_name" "lang_glasser_RH_thr_${threshod}" "$SOURCEJoin" "$TARGETSJoin" "$EXCLUDEJoin" "RH" "$threshold" >> $SUBJECT_PROBX_FILE
+            printf "%d,%s,%s,%s,%s,%s,%s,%d\n" "$LINE_COUNT" "$subject_name" "lang_glasser_RH_thr_${threshold}" "$SOURCEJoin" "$TARGETSJoin" "$EXCLUDEJoin" "RH" "$threshold" >> $SUBJECT_PROBX_FILE
           fi
       fi
 done < <(find $DTI_DIR -maxdepth 1 -type d -name "sub*")
