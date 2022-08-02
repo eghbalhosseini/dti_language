@@ -28,7 +28,7 @@ def mock_get_args():
     new_args = mock_args('sub297', 'lang',20)
     return new_args
 
-debug=True
+debug=False
 vol2vol_method='nearest'
 
 if __name__ == '__main__':
@@ -111,7 +111,7 @@ if __name__ == '__main__':
     FSLUT_reg.insert(2,'num_voxel',reg_count)
     FSLUT_reg=FSLUT_reg.drop(['R','G','B','A'],axis=1)
 
-    # delet previous version
+    # delete previous version
     for prev_file in glob(f"{HOME_DIR}/{subj_id}/lang_glasser/*_count.csv"):
         print("removing the prior files!")
         os.remove(prev_file)
@@ -135,7 +135,7 @@ if __name__ == '__main__':
     FSLUT_L_reg = pd.concat([FSLUT_LH_lang_glasser_pd[FSLUT_LH_lang_glasser_pd.id == x] for x in reg_id])
     FSLUT_L_reg.insert(2, 'num_voxel', reg_count)
     FSLUT_L_reg = FSLUT_L_reg.drop(['R', 'G', 'B', 'A'], axis=1)
-    lh_count_pth = Path(f"{HOME_DIR}/{subj_id}/lang_glasser/lang_glasser_LH_thr_{thr}_count.csv")
+    lh_count_pth = Path(f"{HOME_DIR}/{subj_id}/lang_glasser/counts_lang_glasser_LH_thr_{thr}.csv")
     FSLUT_L_reg.to_csv(str(lh_count_pth))
 
     # right
@@ -155,7 +155,7 @@ if __name__ == '__main__':
     FSLUT_R_reg = pd.concat([FSLUT_RH_lang_glasser_pd[FSLUT_RH_lang_glasser_pd.id == x] for x in reg_id])
     FSLUT_R_reg.insert(2, 'num_voxel', reg_count)
     FSLUT_R_reg = FSLUT_R_reg.drop(['R', 'G', 'B', 'A'], axis=1)
-    rh_count_pth = Path(f"{HOME_DIR}/{subj_id}/lang_glasser/lang_glasser_RH_thr_{thr}_count.csv")
+    rh_count_pth = Path(f"{HOME_DIR}/{subj_id}/lang_glasser/counts_lang_glasser_RH_thr_{thr}.csv")
     FSLUT_R_reg.to_csv(str(rh_count_pth))
 
     ## 2. tranform the volume to dti space
