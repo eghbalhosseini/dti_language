@@ -29,34 +29,35 @@ while read x; do
       # find previous files and delete them
       if [ $overwrite ]
       then
+          echo "$possible_file exits and overwrite"
+          LINE_COUNT=$(expr ${LINE_COUNT} + 1)
+          mkdir -p $possible_folder
+          printf "%d,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "$network_id" "$threshold"  >> $SUBJECT_COMBINED_FILE
+      else
           if [ -f "$possible_file" ]
-        then
-          true
+          then
+            true
             #echo "$possible_file exits and no overwrite"
-        else
+          else
             echo "$possible_file dosent exists adding it"
             LINE_COUNT=$(expr ${LINE_COUNT} + 1)
             mkdir -p $possible_folder
             printf "%d,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "$network_id" "$threshold"  >> $SUBJECT_COMBINED_FILE
         fi
-      else
-        echo "$possible_file exits and overwrite"
-        LINE_COUNT=$(expr ${LINE_COUNT} + 1)
-          mkdir -p $possible_folder
-          printf "%d,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "$network_id" "$threshold"  >> $SUBJECT_COMBINED_FILE
+
       fi
 done < <(find $DTI_DIR -type d -maxdepth 1 -name "sub*")
 
 echo $LINE_COUNT
-run_val=0
-if [ "$LINE_COUNT" -gt "$run_val" ]; then
-  echo "running  ${LINE_COUNT} jobs"
-   #nohup /cm/shared/admin/bin/submit-many-jobs 3 2 3 1 combine_lang_glasser_on_subject.sh  $SUBJECT_COMBINED_FILE
-   if [ "$LINE_COUNT" -lt 100 ]; then
-     nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT "$LINE_COUNT" "$LINE_COUNT" 0 combine_lang_glasser_on_subject.sh  $SUBJECT_COMBINED_FILE
-  else
-   nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT 75 100 25 combine_lang_glasser_on_subject.sh  $SUBJECT_COMBINED_FILE
-   fi
-  else
-    echo $LINE_COUNT
-fi
+#run_val=0
+#if [ "$LINE_COUNT" -gt "$run_val" ]; then
+#  echo "running  ${LINE_COUNT} jobs"
+#   #nohup /cm/shared/admin/bin/submit-many-jobs 3 2 3 1 combine_lang_glasser_on_subject.sh  $SUBJECT_COMBINED_FILE
+#   if [ "$LINE_COUNT" -lt 100 ]; then
+#     nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT "$LINE_COUNT" "$LINE_COUNT" 0 combine_lang_glasser_on_subject.sh  $SUBJECT_COMBINED_FILE
+#  else
+#   nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT 75 100 25 combine_lang_glasser_on_subject.sh  $SUBJECT_COMBINED_FILE
+#   fi
+#  else
+#    echo $LINE_COUNT
+#fi

@@ -33,6 +33,7 @@ touch $SUBJECT_PROBX_FILE
 printf "%s,%s,%s,%s,%s,%s,%s,%s\n" "row" "subject_name" "segment_name" "source_name" "target_name" "exclude_name" "hemi" "threshold"   >> $SUBJECT_PROBX_FILE
 
 echo "looking at ${DTI_DIR} "
+overwrite=false
 while read x; do
       # check if file already exist in labels dir
       original=$DTI_DIR
@@ -43,6 +44,8 @@ while read x; do
       #rm $lh_folder
       rh_folder="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_RH_${SOURCEJoin}_TO_${TARGETSJoin}_EX_${EXCLUDEJoin}/fdt_paths.nii.gz"
       #rm $rh_folder
+      if [ $overwrite ]
+      then
       if [ ! -f "$lh_folder" ]
       #if [ true ]
       then
