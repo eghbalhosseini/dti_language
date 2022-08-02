@@ -39,10 +39,10 @@ while read x; do
       original=$DTI_DIR
       correction=''
       subject_name="${x/$original/$correction}"
-      lh_folder="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_LH_${threshold}_${SOURCEJoin}_TO_${TARGETSJoin}_EX_${EXCLUDEJoin}/fdt_paths.nii.gz"
+      lh_folder="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_LH_thr_${threshold}_${SOURCEJoin}_TO_${TARGETSJoin}_EX_${EXCLUDEJoin}/fdt_paths.nii.gz"
       find "${DTI_DIR}/${subject_name}/dti.probtrackx/" -name "*90*"  -exec rm -rf {} +
       #rm $lh_folder
-      rh_folder="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_RH_${threshold}_${SOURCEJoin}_TO_${TARGETSJoin}_EX_${EXCLUDEJoin}/fdt_paths.nii.gz"
+      rh_folder="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_RH_thr_${threshold}_${SOURCEJoin}_TO_${TARGETSJoin}_EX_${EXCLUDEJoin}/fdt_paths.nii.gz"
       #rm $rh_folder
       if [ "$overwrite" = true ]
       then
