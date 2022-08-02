@@ -1,6 +1,6 @@
 #!/bin/bash
 DTI_DIR=/mindhive/evlab/Shared/diffusionzeynep/
-threshold=10
+threshold=20
 probtrackX_labels_="all_subject_probtrackX_select_tracts_thr_${threshold}"
 LINE_COUNT=0
 #SOURCES=("IFGorb_top_${threshold}" "AntTemp_top_${threshold}")
