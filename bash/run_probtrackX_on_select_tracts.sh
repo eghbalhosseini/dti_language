@@ -54,14 +54,18 @@ while read x; do
         LINE_COUNT=$(expr ${LINE_COUNT} + 1)
         printf "%d,%s,%s,%s,%s,%s,%s,%d\n" "$LINE_COUNT" "$subject_name" "lang_glasser_RH_thr_${threshold}" "$SOURCEJoin" "$TARGETSJoin" "$EXCLUDEJoin" "RH" "$threshold" >> $SUBJECT_PROBX_FILE
       else
-          if [ ! -f "$lh_folder" ]
-          echo "missing ${lh_folder}"
+          if [ -f "$lh_folder" ]
           then
+            true
+          else
+            echo "missing ${lh_folder}"
             LINE_COUNT=$(expr ${LINE_COUNT} + 1)
             printf "%d,%s,%s,%s,%s,%s,%s,%d\n" "$LINE_COUNT" "$subject_name" "lang_glasser_LH_thr_${threshold}" "$SOURCEJoin" "$TARGETSJoin" "$EXCLUDEJoin" "LH" "$threshold" >> $SUBJECT_PROBX_FILE
           fi
-          if [ ! -f "$rh_folder" ]
+          if [ -f "$rh_folder" ]
           then
+            true
+          else
             echo "missing ${rh_folder}"
             LINE_COUNT=$(expr ${LINE_COUNT} + 1)
             printf "%d,%s,%s,%s,%s,%s,%s,%d\n" "$LINE_COUNT" "$subject_name" "lang_glasser_RH_thr_${threshold}" "$SOURCEJoin" "$TARGETSJoin" "$EXCLUDEJoin" "RH" "$threshold" >> $SUBJECT_PROBX_FILE
