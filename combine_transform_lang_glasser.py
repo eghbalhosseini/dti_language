@@ -187,6 +187,9 @@ if __name__ == '__main__':
     for prev_file in glob(f"{HOME_DIR}/{subj_id}/indti/*H_indti.nii.gz*"):
         print(f"removing the prior files!{prev_file}")
         os.remove(prev_file)
+    for prev_file in glob(f"{HOME_DIR}/{subj_id}/indti/*H-in-dti.nii.gz*"):
+        print(f"removing the prior files!{prev_file}")
+        os.remove(prev_file)
 
     # see : https://surfer.nmr.mgh.harvard.edu/fswiki/FsTutorial/Diffusion/DTIscripts
     #
