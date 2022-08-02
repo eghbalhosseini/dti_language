@@ -46,6 +46,7 @@ while read x; do
       fi
 done < <(find $DTI_DIR -type d -maxdepth 1 -name "sub*")
 
+echo $LINE_COUNT
 #run_val=0
 #if [ "$LINE_COUNT" -gt "$run_val" ]; then
 #  echo "running  ${LINE_COUNT} jobs"
