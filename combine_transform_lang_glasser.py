@@ -115,6 +115,11 @@ if __name__ == '__main__':
     for prev_file in glob(f"{HOME_DIR}/{subj_id}/lang_glasser/*_count.csv"):
         print("removing the prior files!")
         os.remove(prev_file)
+
+    for prev_file in glob(f"{HOME_DIR}/{subj_id}/lang_glasser/*H.nii.gz"):
+        print(f"removing the prior files! {prev_file}")
+        os.remove(prev_file)
+
     combine_count_pth = Path(f"{HOME_DIR}/{subj_id}/lang_glasser/counts_lang_glasser_BOTH_thr_{thr}.csv")
     FSLUT_reg.to_csv(str(combine_count_pth))
     #   SAVE HEMSPHERIC VERSIONS
@@ -178,6 +183,11 @@ if __name__ == '__main__':
         '''
         subprocess.call(cmd, shell=True, executable='/bin/bash')
     # do mri_vol2vol
+    # remove previous files
+    for prev_file in glob(f"{HOME_DIR}/{subj_id}/indti/*H_indti.nii.gz*"):
+        print(f"removing the prior files!{prev_file}")
+        os.remove(prev_file)
+
     # see : https://surfer.nmr.mgh.harvard.edu/fswiki/FsTutorial/Diffusion/DTIscripts
     #
     combine_dti_file_pth=Path(f"{HOME_DIR}/{subj_id}/indti/lang_glasser_BOTH_thr_{thr}_indti.nii.gz")

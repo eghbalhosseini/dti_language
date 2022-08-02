@@ -39,17 +39,18 @@ while read x; do
       correction=''
       subject_name="${x/$original/$correction}"
       lh_folder="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_LH_${SOURCEJoin}_TO_${TARGETSJoin}_EX_${EXCLUDEJoin}/fdt_paths.nii.gz"
+      find "${DTI_DIR}/${subject_name}/dti.probtrackx/" -name "*90*"  -exec rm -rf {} +
       #rm $lh_folder
       rh_folder="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_RH_${SOURCEJoin}_TO_${TARGETSJoin}_EX_${EXCLUDEJoin}/fdt_paths.nii.gz"
       #rm $rh_folder
-      #if [ ! -f "$lh_folder" ]
-      if [ true ]
+      if [ ! -f "$lh_folder" ]
+      #if [ true ]
       then
         LINE_COUNT=$(expr ${LINE_COUNT} + 1)
         printf "%d,%s,%s,%s,%s,%s,%s,%d\n" "$LINE_COUNT" "$subject_name" "lang_glasser_LH_thr_${threshod}" "$SOURCEJoin" "$TARGETSJoin" "$EXCLUDEJoin" "LH" "$threshold" >> $SUBJECT_PROBX_FILE
       fi
-      #if [ ! -f "$rh_folder" ]
-      if [ true ]
+      if [ ! -f "$rh_folder" ]
+      #if [ true ]
       then
         LINE_COUNT=$(expr ${LINE_COUNT} + 1)
         printf "%d,%s,%s,%s,%s,%s,%s,%d\n" "$LINE_COUNT" "$subject_name" "lang_glasser_RH_thr_${threshod}" "$SOURCEJoin" "$TARGETSJoin" "$EXCLUDEJoin" "RH" "$threshold" >> $SUBJECT_PROBX_FILE

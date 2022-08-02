@@ -4,7 +4,7 @@ FS_DIR=/mindhive/evlab/u/Shared/SUBJECTS_FS/FS/
 
 
 network_id="lang"
-threshold="10"
+threshold="20"
 
 #
 
@@ -26,6 +26,8 @@ while read x; do
       subject_name="${x/$original/$correction}"
       possible_folder="${DTI_DIR}/${subject_name}/indti"
       possible_file="${possible_folder}/lang_glasser_BOTH_thr_${threshold}_indti.nii.gz"
+      # find previous files and delete them
+
       if [ -f "$possible_file" ] && [ ! $overwrite ]
       then
         true
