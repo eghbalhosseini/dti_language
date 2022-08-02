@@ -44,27 +44,37 @@ while read x; do
       #rm $lh_folder
       rh_folder="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_RH_${SOURCEJoin}_TO_${TARGETSJoin}_EX_${EXCLUDEJoin}/fdt_paths.nii.gz"
       #rm $rh_folder
-      if [ $overwrite ]
+      if [ "$overwrite" = true ]
       then
-      if [ ! -f "$lh_folder" ]
-      #if [ true ]
-      then
+        echo "overwriting ${lh_folder}"
         LINE_COUNT=$(expr ${LINE_COUNT} + 1)
         printf "%d,%s,%s,%s,%s,%s,%s,%d\n" "$LINE_COUNT" "$subject_name" "lang_glasser_LH_thr_${threshod}" "$SOURCEJoin" "$TARGETSJoin" "$EXCLUDEJoin" "LH" "$threshold" >> $SUBJECT_PROBX_FILE
-      fi
-      if [ ! -f "$rh_folder" ]
-      #if [ true ]
-      then
+
+        echo "overwriting ${rh_folder}"
         LINE_COUNT=$(expr ${LINE_COUNT} + 1)
         printf "%d,%s,%s,%s,%s,%s,%s,%d\n" "$LINE_COUNT" "$subject_name" "lang_glasser_RH_thr_${threshod}" "$SOURCEJoin" "$TARGETSJoin" "$EXCLUDEJoin" "RH" "$threshold" >> $SUBJECT_PROBX_FILE
+      else
+          if [ ! -f "$lh_folder" ]
+          echo "missing ${lh_folder}"
+          then
+            LINE_COUNT=$(expr ${LINE_COUNT} + 1)
+            printf "%d,%s,%s,%s,%s,%s,%s,%d\n" "$LINE_COUNT" "$subject_name" "lang_glasser_LH_thr_${threshod}" "$SOURCEJoin" "$TARGETSJoin" "$EXCLUDEJoin" "LH" "$threshold" >> $SUBJECT_PROBX_FILE
+          fi
+          if [ ! -f "$rh_folder" ]
+          then
+            echo "missing ${rh_folder}"
+            LINE_COUNT=$(expr ${LINE_COUNT} + 1)
+            printf "%d,%s,%s,%s,%s,%s,%s,%d\n" "$LINE_COUNT" "$subject_name" "lang_glasser_RH_thr_${threshod}" "$SOURCEJoin" "$TARGETSJoin" "$EXCLUDEJoin" "RH" "$threshold" >> $SUBJECT_PROBX_FILE
+          fi
       fi
 done < <(find $DTI_DIR -maxdepth 1 -type d -name "sub*")
 
-run_val=0
-if [ "$LINE_COUNT" -gt "$run_val" ]; then
-  echo "running  ${LINE_COUNT} jobs"
-   #nohup /cm/shared/admin/bin/submit-many-jobs 3 2 3 1 probtrackX_on_select_tracts.sh  $SUBJECT_PROBX_FILE
-   nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT 75 100 25 probtrackX_on_select_tracts.sh  $SUBJECT_PROBX_FILE &
-  else
-    echo $LINE_COUNT
-fi
+echo $LINE_COUNT
+#run_val=0
+#if [ "$LINE_COUNT" -gt "$run_val" ]; then
+#  echo "running  ${LINE_COUNT} jobs"
+#   #nohup /cm/shared/admin/bin/submit-many-jobs 3 2 3 1 probtrackX_on_select_tracts.sh  $SUBJECT_PROBX_FILE
+#   nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT 75 100 25 probtrackX_on_select_tracts.sh  $SUBJECT_PROBX_FILE &
+#  else
+#    echo $LINE_COUNT
+#fi
