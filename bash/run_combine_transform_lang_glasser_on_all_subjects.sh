@@ -18,7 +18,7 @@ printf "%s,%s,%s,%s\n" "row" "subject_name" "network_id" "threshold"    >> $SUBJ
 
 echo "looking at ${DTI_DIR} "
 SUBJ_LINE=0
-overwrite=false
+overwrite=true
 while read x; do
       # check if file already exist in fmri dir
       original=$DTI_DIR
