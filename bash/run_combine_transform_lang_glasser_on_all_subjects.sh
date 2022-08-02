@@ -27,9 +27,9 @@ while read x; do
       possible_folder="${DTI_DIR}/${subject_name}/indti"
       possible_file="${possible_folder}/lang_glasser_BOTH_thr_${threshold}_indti.nii.gz"
       # find previous files and delete them
-      if [ ! $overwrite ]
+      if [ $overwrite ]
       then
-        if [ -f "$possible_file" ]
+          if [ -f "$possible_file" ]
         then
             echo "$possible_file exits and no overwrite"
         else
