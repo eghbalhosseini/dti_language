@@ -1,7 +1,7 @@
 #!/bin/bash
 DTI_DIR=/mindhive/evlab/Shared/diffusionzeynep/
 
-threshold=20
+threshold=10
 probtrackX_labels_='all_subject_collect_probtrackX_select_tracts_results'
 i=0
 LINE_COUNT=0
