@@ -60,16 +60,16 @@ done < <(find $DTI_DIR -type d -maxdepth 1 -name "sub*")
 
 echo $LINE_COUNT
 run_val=0
-#if [ "$LINE_COUNT" -gt "$run_val" ]; then
-#  echo "running  ${LINE_COUNT} jobs"
-#  if [ "$LINE_COUNT" -lt 100 ] ; then
-#    echo "less than 100 jobs:  ${LINE_COUNT} jobs"
-#    nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT "$LINE_COUNT" "$LINE_COUNT" 0 glasser_parcellation_on_subject.sh  $SUBJECT_GLASSER_FILE
-#  else
-#     echo "more than 100 jobs:  ${LINE_COUNT} jobs"
-#   #nohup /cm/shared/admin/bin/submit-many-jobs 3 2 3 1 glasser_parcellation_on_subject.sh  $SUBJECT_GLASSER_FILE
-#    nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT 80 100 20 glasser_parcellation_on_subject.sh  $SUBJECT_GLASSER_FILE &
-#  fi
-#  else
-#    echo $LINE_COUNT
-#fi
+if [ "$LINE_COUNT" -gt "$run_val" ]; then
+  echo "running  ${LINE_COUNT} jobs"
+  if [ "$LINE_COUNT" -lt 100 ] ; then
+    echo "less than 100 jobs:  ${LINE_COUNT} jobs"
+    nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT "$LINE_COUNT" "$LINE_COUNT" 0 glasser_parcellation_on_subject.sh  $SUBJECT_GLASSER_FILE
+  else
+     echo "more than 100 jobs:  ${LINE_COUNT} jobs"
+   #nohup /cm/shared/admin/bin/submit-many-jobs 3 2 3 1 glasser_parcellation_on_subject.sh  $SUBJECT_GLASSER_FILE
+    nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT 80 100 20 glasser_parcellation_on_subject.sh  $SUBJECT_GLASSER_FILE &
+  fi
+  else
+    echo $LINE_COUNT
+fi
