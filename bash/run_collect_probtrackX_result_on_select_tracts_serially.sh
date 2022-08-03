@@ -90,7 +90,7 @@ done < <(find $DTI_DIR -maxdepth 1 -type d -name "sub*")
 echo $LINE_COUNT
 
 
-module load mit/matlab/2020b
+#module load mit/matlab/2020b
 matlab -nosplash -nojvm -r "addpath('/om2/user/ehoseini/dti_language/');\
 cd('/om2/user/ehoseini/dti_language/');\
 A=readtable(${SUBJECT_PROBX_FILE},'Headerlines',0);\
