@@ -40,7 +40,7 @@ echo "hemi: ${HEMI}"
 
 # step 1 check if segment text files exist.
 
-module load mit/matlab/2020a
+module load mit/matlab/2021a
 matlab -nosplash -nojvm -r "addpath('/om2/user/ehoseini/dti_language/');\
 cd('/om2/user/ehoseini/dti_language/');\
 disp('running transformation');transform_probtrackX_output('file_id','${FILE_NAME}','target_mask_file','${SEGMENT_NAME}','save_dir','${SAVE_NAME}','hemi','${HEMI}');exit"
