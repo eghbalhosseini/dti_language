@@ -93,7 +93,7 @@ echo $LINE_COUNT
 #module load mit/matlab/2020b
 matlab -nosplash -nojvm -r "addpath('/om2/user/ehoseini/dti_language/');\
 cd('/om2/user/ehoseini/dti_language/');\
-A=readtable('${SUBJECT_PROBX_FILE}','Headerlines',0);\
+A=readtable("${SUBJECT_PROBX_FILE}",'Headerlines',0);\
 for i=1:size(A,1),\
   disp(A(i,:).file_loc{1});\
   transform_probtrackX_output('file_id',A(i,:).file_loc{1},'target_mask_file',A(i,:).segment_file{1},'save_dir',A(i,:).save_loc{1},'hemi',A(i,:).hemi{1});\
