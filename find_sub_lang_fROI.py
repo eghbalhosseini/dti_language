@@ -25,7 +25,7 @@ args=parser.parse_args()
 
 if __name__ == '__main__':
     subj_id = args.subj_id
-    #subj_id='sub114'
+    #subj_id='sub106'
     network_id = args.network_id # 'lang'
     #network_id='lang'
     threshold=args.threshold
