@@ -12,6 +12,7 @@ printf "%s,%s,%s,%s,%s\n" "row" "subject_name" "segment_name" "hemi" "thr"   >> 
 
 echo "looking at ${DTI_DIR} "
 SUBJ_LINE=0
+overwrite= false
 while read x; do
       # check if file already exist in labels dir
       original=$DTI_DIR
@@ -23,29 +24,43 @@ while read x; do
 
       rh_folder="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_RH_thr_${threshold}/fdt_paths.nii.gz"
       #rm $rh_folder
-
-      if [ ! -f "$lh_folder" ]
+      if [ "$overwrite" = true ]
       then
+        echo "overwriting ${lh_folder}"
         LINE_COUNT=$(expr ${LINE_COUNT} + 1)
         printf "%d,%s,%s,%s,%d\n" "$LINE_COUNT" "$subject_name" "lang_glasser_LH_thr_${threshold}" "LH" "$threshold" >> $SUBJECT_PROBX_FILE
-
-      fi
-      if [ ! -f "$rh_folder" ]
-      then
+        echo "overwriting ${rh_folder}"
         LINE_COUNT=$(expr ${LINE_COUNT} + 1)
         printf "%d,%s,%s,%s,%d\n" "$LINE_COUNT" "$subject_name" "lang_glasser_RH_thr_${threshold}" "RH" "$threshold">> $SUBJECT_PROBX_FILE
+      else
+        if [ ! -f "$lh_folder" ]
+        then
+          echo "missing ${lh_folder}"
+          LINE_COUNT=$(expr ${LINE_COUNT} + 1)
+          printf "%d,%s,%s,%s,%d\n" "$LINE_COUNT" "$subject_name" "lang_glasser_LH_thr_${threshold}" "LH" "$threshold" >> $SUBJECT_PROBX_FILE
+
+        fi
+
+        if [ ! -f "$rh_folder" ]
+        then
+          echo "missing ${rh_folder}"
+          LINE_COUNT=$(expr ${LINE_COUNT} + 1)
+          printf "%d,%s,%s,%s,%d\n" "$LINE_COUNT" "$subject_name" "lang_glasser_RH_thr_${threshold}" "RH" "$threshold">> $SUBJECT_PROBX_FILE
+        fi
+
       fi
+
 done < <(find $DTI_DIR -maxdepth 1 -type d -name "sub*")
 
 run_val=0
 if [ "$LINE_COUNT" -gt "$run_val" ]; then
   echo "running  ${LINE_COUNT} jobs"
-  if [ "$LINE_COUNT" -lt 100 ] ; then
-     echo "less than 100 jobs:  ${LINE_COUNT} jobs"
+  if [ "$LINE_COUNT" -lt 200 ] ; then
+     echo "less than 200 jobs:  ${LINE_COUNT} jobs"
      nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT "$LINE_COUNT" "$LINE_COUNT" 0 probtrackX_on_subject.sh  $SUBJECT_PROBX_FILE
      else
-      nohup /cm/shared/admin/bin/submit-many-jobs 3 2 3 1 probtrackX_on_subject.sh  $SUBJECT_PROBX_FILE
-      #nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT 90 100 10 probtrackX_on_subject.sh  $SUBJECT_PROBX_FILE
+      #nohup /cm/shared/admin/bin/submit-many-jobs 3 2 3 1 probtrackX_on_subject.sh  $SUBJECT_PROBX_FILE
+      nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT 175 200 25 probtrackX_on_subject.sh  $SUBJECT_PROBX_FILE
     fi
   else
     echo $LINE_COUNT

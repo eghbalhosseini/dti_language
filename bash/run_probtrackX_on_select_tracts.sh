@@ -72,7 +72,6 @@ while read x; do
           fi
       fi
 done < <(find $DTI_DIR -maxdepth 1 -type d -name "sub*")
-
 echo $LINE_COUNT
 run_val=0
 if [ "$LINE_COUNT" -gt "$run_val" ]; then
