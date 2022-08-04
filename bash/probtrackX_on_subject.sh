@@ -15,7 +15,7 @@ fi
 echo "${GRAND_FILE}"
 echo $JID
 
-while IFS=, read -r line_count subj_name segment_name hemi ; do
+while IFS=, read -r line_count subj_name segment_name hemi thr ; do
   #echo "line_count ${model}"
   if [ $JID == $line_count ]
     then
@@ -23,6 +23,7 @@ while IFS=, read -r line_count subj_name segment_name hemi ; do
       SUB=$subj_name
       SEGNAME=$segment_name
       HEMI=$hemi
+      THR=$thr
       do_run=true
       break
     else
@@ -50,10 +51,10 @@ if [ ! -f "${SUBJECT_SEGMENT_FILE}" ]
           true
 fi
 
-probtrackx2 -x "${SUBJECT_SEGMENT_FILE}" \
-  -l --pd -c  0.2 -S 2000 --steplength=0.5 -P 5000 --forcedir --opd \
-  -s "${DTI_DIR}/${SUB}/dti.bedpostX/merged" \
-  -m "${DTI_DIR}/${SUB}/indti/Labels/${SEGNAME}/all-whitematter+gray.nii.gz" \
-  --dir="${DTI_DIR}/${SUB}/dti.probtrackx/${SEGNAME}/" \
-  --targetmasks="${DTI_DIR}/${SUB}/targets_lang_glasser_${HEMI}.txt" --network
+#probtrackx2 -x "${SUBJECT_SEGMENT_FILE}" \
+#  -l --pd -c  0.2 -S 2000 --steplength=0.5 -P 5000 --forcedir --opd \
+#  -s "${DTI_DIR}/${SUB}/dti.bedpostX/merged" \
+#  -m "${DTI_DIR}/${SUB}/indti/Labels/${SEGNAME}/all-whitematter+gray.nii.gz" \
+#  --dir="${DTI_DIR}/${SUB}/dti.probtrackx/${SEGNAME}/" \
+#  --targetmasks="${DTI_DIR}/${SUB}/targets_lang_glasser_${HEMI}.txt" --network
 
