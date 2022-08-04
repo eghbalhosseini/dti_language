@@ -51,10 +51,10 @@ if [ ! -f "${SUBJECT_SEGMENT_FILE}" ]
           true
 fi
 
-#probtrackx2 -x "${SUBJECT_SEGMENT_FILE}" \
-#  -l --pd -c  0.2 -S 2000 --steplength=0.5 -P 5000 --forcedir --opd \
-#  -s "${DTI_DIR}/${SUB}/dti.bedpostX/merged" \
-#  -m "${DTI_DIR}/${SUB}/indti/Labels/${SEGNAME}/all-whitematter+gray.nii.gz" \
-#  --dir="${DTI_DIR}/${SUB}/dti.probtrackx/${SEGNAME}/" \
-#  --targetmasks="${DTI_DIR}/${SUB}/targets_lang_glasser_${HEMI}.txt" --network
+probtrackx2 -x "${SUBJECT_SEGMENT_FILE}" \
+  -l --pd -c  0.2 -S 2000 --steplength=0.5 -P 5000 --forcedir --opd \
+  -s "${DTI_DIR}/${SUB}/dti.bedpostX/merged" \
+  -m "${DTI_DIR}/${SUB}/indti/Labels/${SEGNAME}/all-whitematter+gray.nii.gz" \
+  --dir="${DTI_DIR}/${SUB}/dti.probtrackx/${SEGNAME}/" \
+  --targetmasks="${DTI_DIR}/${SUB}/targets_${SEGNAME}.txt" --network
 
