@@ -1,7 +1,10 @@
 #!/bin/bash
 DTI_DIR=/mindhive/evlab/Shared/diffusionzeynep/
 
-threshold=10
+threshold=$1
+echo "threshold:${threshold}"
+
+
 probtrackX_labels_='all_subject_collect_probtrackX_select_tracts_results'
 i=0
 LINE_COUNT=0
@@ -13,8 +16,8 @@ touch $SUBJECT_PROBX_FILE
 SOURCES=("IFGorb_top_${threshold}" "AntTemp_top_${threshold}")
 TARGETS=("IFGorb_top_${threshold}" "AntTemp_top_${threshold}")
 #EXCLUDES=("MFG_top_90" "IFG_top_90")
-EXCLUDES=("MFG_top_${threshold}")
-#EXCLUDES=("IFG_top_90")
+#EXCLUDES=("MFG_top_${threshold}")
+EXCLUDES=("IFG_top_${threshold}")
 
 #SOURCES=("IFG_top_${threshold}" "PostTemp_top_${threshold}")
 #TARGETS=("IFG_top_${threshold}" "PostTemp_top_${threshold}")
