@@ -1,7 +1,11 @@
 #!/bin/bash
 DTI_DIR=/mindhive/evlab/Shared/diffusionzeynep/
 FS_DIR=/mindhive/evlab/u/Shared/SUBJECTS_FS/FS/
-threshold=20
+
+threshold=$1
+echo "threshold:${threshold}"
+
+#threshold=20
 probtrackX_labels_="all_subject_probtrackX_thr_${threshold}"
 i=0
 LINE_COUNT=0
