@@ -13,16 +13,16 @@ rm -f $SUBJECT_PROBX_FILE
 touch $SUBJECT_PROBX_FILE
 
 
-SOURCES=("IFGorb_top_${threshold}" "AntTemp_top_${threshold}")
-TARGETS=("IFGorb_top_${threshold}" "AntTemp_top_${threshold}")
+#SOURCES=("IFGorb_top_${threshold}" "AntTemp_top_${threshold}")
+#TARGETS=("IFGorb_top_${threshold}" "AntTemp_top_${threshold}")
 #EXCLUDES=("MFG_top_90" "IFG_top_90")
 #EXCLUDES=("MFG_top_${threshold}")
 EXCLUDES=("IFG_top_${threshold}")
 
-#SOURCES=("IFG_top_${threshold}" "PostTemp_top_${threshold}")
-#TARGETS=("IFG_top_${threshold}" "PostTemp_top_${threshold}")
+SOURCES=("IFG_top_${threshold}" "PostTemp_top_${threshold}")
+TARGETS=("IFG_top_${threshold}" "PostTemp_top_${threshold}")
 #EXCLUDES=("MFG_top_90" "IFGorb_top_90")
-#EXCLUDES=("IFGorb_top_90")
+EXCLUDES=("IFGorb_top_${threshold}")
 #EXCLUDES=("MFG_top_${threshold}")
 
 SOURCEJoin=$(IFS=- ; echo "${SOURCES[*]}")
