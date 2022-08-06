@@ -3,6 +3,7 @@
 #SBATCH --exclude node[017-018,094]
 #SBATCH -t 96:00:00
 #SBATCH --mem=64G
+
 GRAND_FILE=$1
 OVERWRITE='false' # or 'true'
 #
@@ -40,7 +41,7 @@ echo "hemi :${HEMI}"
 # step 1 check if segment text files exist.
 SUBJECT_SEGMENT_FILE="${DTI_DIR}/${SUB}/targets_lang_glasser_${HEMI}_thr_${THR}.txt"
 
-module load mit/matlab/2020b
+module load mit/matlab/2021a
 matlab -nosplash -nojvm -r "addpath('/om2/user/ehoseini/dti_language/');\
 cd('/om2/user/ehoseini/dti_language/');\
 transform_probtrackX_output('file_id','${FILE_NAME}','target_mask_file','${SUBJECT_SEGMENT_FILE}','save_dir','${SAVE_NAME}','hemi','${HEMI}');exit"
