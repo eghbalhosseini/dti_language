@@ -13,6 +13,8 @@ touch $SUBJECT_PROBX_FILE
 printf "%s,%s,%s,%s,%s,%s\n" "row" "subject_name" "hemi" "file_loc" "save_loc" "thr"   >> $SUBJECT_PROBX_FILE
 
 echo "looking at ${DTI_DIR} "
+
+mkdir -p "${DTI_DIR}/probtrackX_results_lang_glasser_thr_${threshold}"
 SUBJ_LINE=0
 overwrite=false
 while read x; do
@@ -20,8 +22,8 @@ while read x; do
       original=$DTI_DIR
       correction=''
       subject_name="${x/$original/$correction}"
-      lh_file="${DTI_DIR}/probtrackX_results_lang_glasser_LH_thr_${threshold}/${subject_name}_LH_fdt_network.mat"
-      rh_file="${DTI_DIR}/probtrackX_results_lang_glasser_RH_thr_${threshold}/${subject_name}_RH_fdt_network.mat"
+      lh_file="${DTI_DIR}/probtrackX_results_lang_glasser_thr_${threshold}/${subject_name}_LH_fdt_network.mat"
+      rh_file="${DTI_DIR}/probtrackX_results_lang_glasser_thr_${threshold}/${subject_name}_RH_fdt_network.mat"
 
       if [ "$overwrite" = true ]
       then
