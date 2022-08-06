@@ -15,7 +15,7 @@ fi
 echo "${GRAND_FILE}"
 echo $JID
 
-while IFS=, read -r line_count subj_name hemi fdt_file save_file ; do
+while IFS=, read -r line_count subj_name hemi fdt_file save_file threshold ; do
   #echo "line_count ${model}"
   if [ $JID == $line_count ]
     then
@@ -24,6 +24,7 @@ while IFS=, read -r line_count subj_name hemi fdt_file save_file ; do
       HEMI=$hemi
       FILE_NAME=$fdt_file
       SAVE_NAME=$save_file
+      THR=$threshold
       do_run=true
       break
     else
@@ -33,10 +34,11 @@ while IFS=, read -r line_count subj_name hemi fdt_file save_file ; do
 done <"${GRAND_FILE}"
 echo "subj:${SUB}"
 echo "segment :${SEGNAME}"
+echo "save file: ${SAVE_NAME}"
 echo "hemi :${HEMI}"
 
 # step 1 check if segment text files exist.
-SUBJECT_SEGMENT_FILE="${DTI_DIR}/${SUB}/targets_lang_glasser_${HEMI}.txt"
+SUBJECT_SEGMENT_FILE="${DTI_DIR}/${SUB}/targets_lang_glasser_${HEMI}_thr_${THR}.txt"
 
 module load mit/matlab/2020b
 matlab -nosplash -nojvm -r "addpath('/om2/user/ehoseini/dti_language/');\
