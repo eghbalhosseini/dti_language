@@ -54,8 +54,14 @@ done < <(find $DTI_DIR -maxdepth 1 -type d -name "sub*")
 run_val=0
 if [ "$LINE_COUNT" -gt "$run_val" ]; then
   echo "running  ${LINE_COUNT} jobs"
-   #nohup /cm/shared/admin/bin/submit-many-jobs 3 2 3 1 collect_probtrackX_result_on_subject.sh  $SUBJECT_PROBX_FILE
-   nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT 75 100 25 collect_probtrackX_result_on_subject.sh  $SUBJECT_PROBX_FILE &
+  if [ "$LINE_COUNT" -lt 100 ] ; then
+    echo "less than 100 jobs:  ${LINE_COUNT} jobs"
+    nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT "$LINE_COUNT" "$LINE_COUNT" 0 collect_probtrackX_result_on_subject.sh  $SUBJECT_PROBX_FILE
+  else
+    echo "more than 100 jobs:  ${LINE_COUNT} jobs"
+    #nohup /cm/shared/admin/bin/submit-many-jobs 3 2 3 1 collect_probtrackX_result_on_subject.sh  $SUBJECT_PROBX_FILE
+    nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT 75 100 25 collect_probtrackX_result_on_subject.sh  $SUBJECT_PROBX_FILE &
+  fi
   else
     echo $LINE_COUNT
 fi
