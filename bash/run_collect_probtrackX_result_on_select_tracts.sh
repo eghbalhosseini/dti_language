@@ -19,13 +19,13 @@ touch $SUBJECT_PROBX_FILE
 #EXCLUDES=("IFG_top_${threshold}" "MFG_top_${threshold}")
 
 
-SOURCES=("IFG_top_${threshold}" "AngG_top_${threshold}")
-TARGETS=("IFG_top_${threshold}" "AngG_top_${threshold}")
-EXCLUDES=("IFGorb_top_${threshold}")
+#SOURCES=("IFG_top_${threshold}" "AngG_top_${threshold}")
+#TARGETS=("IFG_top_${threshold}" "AngG_top_${threshold}")
+#EXCLUDES=("IFGorb_top_${threshold}")
 
-#SOURCES=("MFG_top_${threshold}" "AngG_top_${threshold}")
-#TARGETS=("MFG_top_${threshold}" "AngG_top_${threshold}")
-#EXCLUDES=("IFG_top_${threshold}")
+SOURCES=("MFG_top_${threshold}" "AngG_top_${threshold}")
+TARGETS=("MFG_top_${threshold}" "AngG_top_${threshold}")
+EXCLUDES=("IFG_top_${threshold}")
 
 SOURCEJoin=$(IFS=- ; echo "${SOURCES[*]}")
 TARGETSJoin=$(IFS=- ; echo "${TARGETS[*]}")
