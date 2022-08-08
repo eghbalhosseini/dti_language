@@ -12,7 +12,7 @@ SOURCES=("IFG_top_${threshold}" "AntTemp_top_${threshold}")
 TARGETS=("IFG_top_${threshold}" "AntTemp_top_${threshold}")
 
 #EXCLUDES=("MFG_top_${threshold}" "IFG_top_${threshold}")
-EXCLUDES=("MFG_top_${threshold}","IFGorb_top_${threshold}")
+EXCLUDES=("MFG_top_${threshold}" "IFGorb_top_${threshold}")
 #EXCLUDES=("IFG_top_${threshold}")
 
 #SOURCES=("IFG_top_${threshold}" "PostTemp_top_${threshold}")
