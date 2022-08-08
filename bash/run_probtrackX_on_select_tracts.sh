@@ -8,11 +8,15 @@ echo "threshold:${threshold}"
 probtrackX_labels_="all_subject_probtrackX_select_tracts_thr_${threshold}"
 LINE_COUNT=0
 #SOURCES=("IFGorb_top_${threshold}" "AntTemp_top_${threshold}")
-SOURCES=("IFG_top_${threshold}" "AntTemp_top_${threshold}")
-TARGETS=("IFG_top_${threshold}" "AntTemp_top_${threshold}")
+#SOURCES=("IFG_top_${threshold}" "AntTemp_top_${threshold}")
+#TARGETS=("IFG_top_${threshold}" "AntTemp_top_${threshold}")
+
+SOURCES=("PostTemp_top_${threshold}" "MFG_top_${threshold}")
+TARGETS=("PostTemp_top_${threshold}" "MFG_top_${threshold}")
+EXCLUDES=("IFG_top_${threshold}")
 
 #EXCLUDES=("MFG_top_${threshold}" "IFG_top_${threshold}")
-EXCLUDES=("MFG_top_${threshold}" "IFGorb_top_${threshold}")
+#EXCLUDES=("MFG_top_${threshold}" "IFGorb_top_${threshold}")
 #EXCLUDES=("IFG_top_${threshold}")
 
 #SOURCES=("IFG_top_${threshold}" "PostTemp_top_${threshold}")
@@ -21,7 +25,7 @@ EXCLUDES=("MFG_top_${threshold}" "IFGorb_top_${threshold}")
 #EXCLUDES=("IFGorb_top_${threshold}")
 #EXCLUDES=("MFG_top_${threshold}")
 
-
+#bad_sub=(sub072 sub124 sub126 sub135 sub136 sub138 sub148 sub159 sub163 sub171 sub172 sub190 sub195 sub199 sub202 sub210 sub234 sub254 sub311 sub540 sub541)
 
 SOURCEJoin=$(IFS=- ; echo "${SOURCES[*]}")
 #echo $SOURCEJoin
