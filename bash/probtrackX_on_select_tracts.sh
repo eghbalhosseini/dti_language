@@ -1,8 +1,7 @@
 #!/bin/bash
-#SBATCH -c 8
 #SBATCH --exclude node[017-018,094]
 #SBATCH -t 96:00:00
-#SBATCH --mem=64G
+#SBATCH --mem=20G
 
 GRAND_FILE=$1
 OVERWRITE='false' # or 'true'
