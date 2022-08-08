@@ -7,13 +7,75 @@ echo "threshold:${threshold}"
 #threshold=20
 probtrackX_labels_="all_subject_probtrackX_select_tracts_thr_${threshold}"
 LINE_COUNT=0
-#SOURCES=("IFGorb_top_${threshold}" "AntTemp_top_${threshold}")
+# AntTemp Targets
+SOURCES=("IFGorb_top_${threshold}" "AntTemp_top_${threshold}")
+TARGETS=("IFGorb_top_${threshold}" "AntTemp_top_${threshold}")
+EXCLUDES=("IFG_top_${threshold}" "MFG_top_${threshold}")
+#EXCLUDES=("IFG_top_${threshold}")
+#EXCLUDES=("MFG_top_${threshold}")
+
 #SOURCES=("IFG_top_${threshold}" "AntTemp_top_${threshold}")
 #TARGETS=("IFG_top_${threshold}" "AntTemp_top_${threshold}")
+#EXCLUDES=("IFGorb_top_${threshold}" "MFG_top_${threshold}")
+#EXCLUDES=("IFGorb_top_${threshold}")
+#EXCLUDES=("MFG_top_${threshold}")
 
-SOURCES=("PostTemp_top_${threshold}" "MFG_top_${threshold}")
-TARGETS=("PostTemp_top_${threshold}" "MFG_top_${threshold}")
-EXCLUDES=("IFG_top_${threshold}")
+
+#SOURCES=("MFG_top_${threshold}" "AntTemp_top_${threshold}")
+#TARGETS=("MFG_top_${threshold}" "AntTemp_top_${threshold}")
+#EXCLUDES=("IFGorb_top_${threshold}" "IFG_top_${threshold}")
+#EXCLUDES=("IFGorb_top_${threshold}")
+#EXCLUDES=("IFG_top_${threshold}")
+
+# PostTemp Targets
+#SOURCES=("IFGorb_top_${threshold}" "PostTemp_top_${threshold}")
+#TARGETS=("IFGorb_top_${threshold}" "PostTemp_top_${threshold}")
+#EXCLUDES=("IFG_top_${threshold}" "MFG_top_${threshold}")
+#EXCLUDES=("IFG_top_${threshold}")
+#EXCLUDES=("MFG_top_${threshold}")
+
+#SOURCES=("IFG_top_${threshold}" "PostTemp_top_${threshold}")
+#TARGETS=("IFG_top_${threshold}" "PostTemp_top_${threshold}")
+#EXCLUDES=("IFGorb_top_${threshold}" "MFG_top_${threshold}")
+#EXCLUDES=("IFGorb_top_${threshold}")
+#EXCLUDES=("MFG_top_${threshold}")
+
+#SOURCES=("MFG_top_${threshold}" "PostTemp_top_${threshold}")
+#TARGETS=("MFG_top_${threshold}" "PostTemp_top_${threshold}")
+#EXCLUDES=("IFGorb_top_${threshold}" "IFG_top_${threshold}")
+#EXCLUDES=("IFGorb_top_${threshold}")
+#EXCLUDES=("IFG_top_${threshold}")
+
+# AngG Targets
+#SOURCES=("IFGorb_top_${threshold}" "LH_AngG_top_${threshold}")
+#TARGETS=("IFGorb_top_${threshold}" "LH_AngG_top_${threshold}")
+#EXCLUDES=("IFG_top_${threshold}" "MFG_top_${threshold}")
+#EXCLUDES=("IFG_top_${threshold}")
+#EXCLUDES=("MFG_top_${threshold}")
+
+#SOURCES=("IFG_top_${threshold}" "LH_AngG_top_${threshold}")
+#TARGETS=("IFG_top_${threshold}" "LH_AngG_top_${threshold}")
+#EXCLUDES=("IFGorb_top_${threshold}" "MFG_top_${threshold}")
+#EXCLUDES=("IFGorb_top_${threshold}")
+#EXCLUDES=("MFG_top_${threshold}")
+
+#SOURCES=("MFG_top_${threshold}" "LH_AngG_top_${threshold}")
+#TARGETS=("MFG_top_${threshold}" "LH_AngG_top_${threshold}")
+#EXCLUDES=("IFGorb_top_${threshold}" "IFG_top_${threshold}")
+#EXCLUDES=("IFGorb_top_${threshold}")
+#EXCLUDES=("IFG_top_${threshold}")
+
+#SOURCES=("IFG_top_${threshold}" "AntTemp_top_${threshold}")
+
+
+#SOURCES=("PostTemp_top_${threshold}" "MFG_top_${threshold}")
+#TARGETS=("PostTemp_top_${threshold}" "MFG_top_${threshold}")
+#EXCLUDES=("IFG_top_${threshold}")
+
+#SOURCES=("PostTemp_top_${threshold}" "MFG_top_${threshold}")
+#TARGETS=("PostTemp_top_${threshold}" "MFG_top_${threshold}")
+#EXCLUDES=("IFG_top_${threshold}" "IFGorb_top_${threshold}")
+
 
 #EXCLUDES=("MFG_top_${threshold}" "IFG_top_${threshold}")
 #EXCLUDES=("MFG_top_${threshold}" "IFGorb_top_${threshold}")
