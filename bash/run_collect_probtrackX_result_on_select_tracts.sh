@@ -14,9 +14,9 @@ touch $SUBJECT_PROBX_FILE
 
 ####################################
 # PostTemp Targets
-#SOURCES=("IFGorb_top_${threshold}" "PostTemp_top_${threshold}")
-#TARGETS=("IFGorb_top_${threshold}" "PostTemp_top_${threshold}")
-#EXCLUDES=("IFG_top_${threshold}" "MFG_top_${threshold}")
+SOURCES=("IFGorb_top_${threshold}" "PostTemp_top_${threshold}")
+TARGETS=("IFGorb_top_${threshold}" "PostTemp_top_${threshold}")
+EXCLUDES=("IFG_top_${threshold}" "MFG_top_${threshold}")
 
 #SOURCES=("IFG_top_${threshold}" "PostTemp_top_${threshold}")
 #TARGETS=("IFG_top_${threshold}" "PostTemp_top_${threshold}")
