@@ -53,7 +53,7 @@ correction='fdt_paths.nii.gz'
 nii_src_file="${x/$original/$correction}"
 
 x=$save_file
-original='fdt_network'
+original='fdt_network.mat'
 correction='fdt_paths.nii.gz'
 nii_targ_file="${x/$original/$correction}"
 
