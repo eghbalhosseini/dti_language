@@ -14,35 +14,18 @@ touch $SUBJECT_PROBX_FILE
 
 
 # AngG Targets
-SOURCES=("IFGorb_top_${threshold}" "AngG_top_${threshold}")
-TARGETS=("IFGorb_top_${threshold}" "AngG_top_${threshold}")
-EXCLUDES=("IFG_top_${threshold}" "MFG_top_${threshold}")
-#EXCLUDES=("IFG_top_${threshold}")
-#EXCLUDES=("MFG_top_${threshold}")
+#SOURCES=("IFGorb_top_${threshold}" "AngG_top_${threshold}")
+#TARGETS=("IFGorb_top_${threshold}" "AngG_top_${threshold}")
+#EXCLUDES=("IFG_top_${threshold}" "MFG_top_${threshold}")
 
-#SOURCES=("IFG_top_${threshold}" "AngG_top_${threshold}")
-#TARGETS=("IFG_top_${threshold}" "AngG_top_${threshold}")
-#EXCLUDES=("IFGorb_top_${threshold}" "MFG_top_${threshold}")
-#EXCLUDES=("IFGorb_top_${threshold}")
-#EXCLUDES=("MFG_top_${threshold}")
+
+SOURCES=("IFG_top_${threshold}" "AngG_top_${threshold}")
+TARGETS=("IFG_top_${threshold}" "AngG_top_${threshold}")
+EXCLUDES=("IFGorb_top_${threshold}")
 
 #SOURCES=("MFG_top_${threshold}" "AngG_top_${threshold}")
 #TARGETS=("MFG_top_${threshold}" "AngG_top_${threshold}")
-#EXCLUDES=("IFGorb_top_${threshold}" "IFG_top_${threshold}")
-#EXCLUDES=("IFGorb_top_${threshold}")
 #EXCLUDES=("IFG_top_${threshold}")
-
-#SOURCES=("IFGorb_top_${threshold}" "AntTemp_top_${threshold}")
-#TARGETS=("IFGorb_top_${threshold}" "AntTemp_top_${threshold}")
-#EXCLUDES=("MFG_top_90" "IFG_top_90")
-#EXCLUDES=("MFG_top_${threshold}")
-#EXCLUDES=("IFG_top_${threshold}")
-
-#SOURCES=("IFG_top_${threshold}" "PostTemp_top_${threshold}")
-#TARGETS=("IFG_top_${threshold}" "PostTemp_top_${threshold}")
-#EXCLUDES=("MFG_top_90" "IFGorb_top_90")
-#EXCLUDES=("IFGorb_top_${threshold}")
-#EXCLUDES=("MFG_top_${threshold}")
 
 SOURCEJoin=$(IFS=- ; echo "${SOURCES[*]}")
 TARGETSJoin=$(IFS=- ; echo "${TARGETS[*]}")
