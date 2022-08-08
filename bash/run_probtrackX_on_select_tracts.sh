@@ -56,8 +56,8 @@ LINE_COUNT=0
 SOURCES=("IFG_top_${threshold}" "LH_AngG_top_${threshold}")
 TARGETS=("IFG_top_${threshold}" "LH_AngG_top_${threshold}")
 #EXCLUDES=("IFGorb_top_${threshold}" "MFG_top_${threshold}")
-EXCLUDES=("IFGorb_top_${threshold}")
-#EXCLUDES=("MFG_top_${threshold}")
+#EXCLUDES=("IFGorb_top_${threshold}")
+EXCLUDES=("MFG_top_${threshold}")
 
 #SOURCES=("MFG_top_${threshold}" "LH_AngG_top_${threshold}")
 #TARGETS=("MFG_top_${threshold}" "LH_AngG_top_${threshold}")
