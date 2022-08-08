@@ -44,3 +44,17 @@ module load mit/matlab/2021a
 matlab -nosplash -nojvm -r "addpath('/om2/user/ehoseini/dti_language/');\
 cd('/om2/user/ehoseini/dti_language/');\
 disp('running transformation');transform_probtrackX_output('file_id','${FILE_NAME}','target_mask_file','${SEGMENT_NAME}','save_dir','${SAVE_NAME}','hemi','${HEMI}');exit"
+
+
+# copy nii files
+x=$fdt_file
+original='fdt_network_matrix'
+correction='fdt_paths.nii.gz'
+nii_src_file="${x/$original/$correction}"
+
+x=$save_file
+original='fdt_network'
+correction='fdt_paths.nii.gz'
+nii_targ_file="${x/$original/$correction}"
+
+cp $nii_src_file $nii_targ_file
