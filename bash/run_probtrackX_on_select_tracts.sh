@@ -43,8 +43,8 @@ LINE_COUNT=0
 SOURCES=("MFG_top_${threshold}" "PostTemp_top_${threshold}")
 TARGETS=("MFG_top_${threshold}" "PostTemp_top_${threshold}")
 #EXCLUDES=("IFGorb_top_${threshold}" "IFG_top_${threshold}")
-EXCLUDES=("IFGorb_top_${threshold}")
-#EXCLUDES=("IFG_top_${threshold}")
+#EXCLUDES=("IFGorb_top_${threshold}")
+EXCLUDES=("IFG_top_${threshold}")
 
 # AngG Targets
 #SOURCES=("IFGorb_top_${threshold}" "LH_AngG_top_${threshold}")
