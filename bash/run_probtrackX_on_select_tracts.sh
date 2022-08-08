@@ -21,16 +21,16 @@ LINE_COUNT=0
 #EXCLUDES=("MFG_top_${threshold}")
 
 
-SOURCES=("MFG_top_${threshold}" "AntTemp_top_${threshold}")
-TARGETS=("MFG_top_${threshold}" "AntTemp_top_${threshold}")
+#SOURCES=("MFG_top_${threshold}" "AntTemp_top_${threshold}")
+#TARGETS=("MFG_top_${threshold}" "AntTemp_top_${threshold}")
 #EXCLUDES=("IFGorb_top_${threshold}" "IFG_top_${threshold}")
 #EXCLUDES=("IFGorb_top_${threshold}")
-EXCLUDES=("IFG_top_${threshold}")
+#EXCLUDES=("IFG_top_${threshold}")
 
 # PostTemp Targets
-#SOURCES=("IFGorb_top_${threshold}" "PostTemp_top_${threshold}")
-#TARGETS=("IFGorb_top_${threshold}" "PostTemp_top_${threshold}")
-#EXCLUDES=("IFG_top_${threshold}" "MFG_top_${threshold}")
+SOURCES=("IFGorb_top_${threshold}" "PostTemp_top_${threshold}")
+TARGETS=("IFGorb_top_${threshold}" "PostTemp_top_${threshold}")
+EXCLUDES=("IFG_top_${threshold}" "MFG_top_${threshold}")
 #EXCLUDES=("IFG_top_${threshold}")
 #EXCLUDES=("MFG_top_${threshold}")
 
