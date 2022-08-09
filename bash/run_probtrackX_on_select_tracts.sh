@@ -70,7 +70,7 @@ touch $SUBJECT_PROBX_FILE
 printf "%s,%s,%s,%s,%s,%s,%s,%s\n" "row" "subject_name" "segment_name" "source_name" "target_name" "exclude_name" "hemi" "thr"   >> $SUBJECT_PROBX_FILE
 
 echo "looking at ${DTI_DIR} "
-overwrite=true
+overwrite=false
 while read x; do
       # check if file already exist in labels dir
       original=$DTI_DIR
