@@ -9,18 +9,18 @@ probtrackX_labels_="all_subject_probtrackX_select_tracts_thr_${threshold}"
 LINE_COUNT=0
 #####################################
 # AntTemp Targets
-SOURCES=("IFGorb_top_${threshold}" "AntTemp_top_${threshold}")
-TARGETS=("IFGorb_top_${threshold}" "AntTemp_top_${threshold}")
-EXCLUDES=("IFG_top_${threshold}" "MFG_top_${threshold}")
+#SOURCES=("IFGorb_top_${threshold}" "AntTemp_top_${threshold}")
+#TARGETS=("IFGorb_top_${threshold}" "AntTemp_top_${threshold}")
+#EXCLUDES=("IFG_top_${threshold}" "MFG_top_${threshold}")
 
-#SOURCES=("IFG_top_${threshold}" "AntTemp_top_${threshold}")
-#TARGETS=("IFG_top_${threshold}" "AntTemp_top_${threshold}")
-#EXCLUDES=("IFGorb_top_${threshold}")
+SOURCES=("IFG_top_${threshold}" "AntTemp_top_${threshold}")
+TARGETS=("IFG_top_${threshold}" "AntTemp_top_${threshold}")
+EXCLUDES=("IFGorb_top_${threshold}" "MFG_top_${threshold}")
 
 
 #SOURCES=("MFG_top_${threshold}" "AntTemp_top_${threshold}")
 #TARGETS=("MFG_top_${threshold}" "AntTemp_top_${threshold}")
-#EXCLUDES=("IFG_top_${threshold}")
+#EXCLUDES=("IFG_top_${threshold}" "IFGorb_top_${threshold}")
 
 ####################################
 # PostTemp Targets
