@@ -12,13 +12,13 @@ SUBJECT_PROBX_FILE="${DTI_DIR}/${probtrackX_labels_}.txt"
 rm -f $SUBJECT_PROBX_FILE
 touch $SUBJECT_PROBX_FILE
 
-SOURCES=("IFGorb_top_${threshold}" "AntTemp_top_${threshold}")
-TARGETS=("IFGorb_top_${threshold}" "AntTemp_top_${threshold}")
-EXCLUDES=("IFG_top_${threshold}" "MFG_top_${threshold}")
+#SOURCES=("IFGorb_top_${threshold}" "AntTemp_top_${threshold}")
+#TARGETS=("IFGorb_top_${threshold}" "AntTemp_top_${threshold}")
+#EXCLUDES=("IFG_top_${threshold}" "MFG_top_${threshold}")
 
-#SOURCES=("IFG_top_${threshold}" "AntTemp_top_${threshold}")
-#TARGETS=("IFG_top_${threshold}" "AntTemp_top_${threshold}")
-#EXCLUDES=("IFGorb_top_${threshold}" "MFG_top_${threshold}")
+SOURCES=("IFG_top_${threshold}" "AntTemp_top_${threshold}")
+TARGETS=("IFG_top_${threshold}" "AntTemp_top_${threshold}")
+EXCLUDES=("IFGorb_top_${threshold}" "MFG_top_${threshold}")
 
 
 #SOURCES=("MFG_top_${threshold}" "AntTemp_top_${threshold}")
