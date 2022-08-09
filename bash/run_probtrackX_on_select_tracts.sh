@@ -43,13 +43,13 @@ LINE_COUNT=0
 #TARGETS=("IFGorb_top_${threshold}" "AngG_top_${threshold}")
 #EXCLUDES=("IFG_top_${threshold}" "MFG_top_${threshold}")
 
-SOURCES=("IFG_top_${threshold}" "AngG_top_${threshold}")
-TARGETS=("IFG_top_${threshold}" "AngG_top_${threshold}")
-EXCLUDES=("IFGorb_top_${threshold}" "MFG_top_${threshold}")
+#SOURCES=("IFG_top_${threshold}" "AngG_top_${threshold}")
+#TARGETS=("IFG_top_${threshold}" "AngG_top_${threshold}")
+#EXCLUDES=("IFGorb_top_${threshold}" "MFG_top_${threshold}")
 
-#SOURCES=("MFG_top_${threshold}" "AngG_top_${threshold}")
-#TARGETS=("MFG_top_${threshold}" "AngG_top_${threshold}")
-#EXCLUDES=("IFG_top_${threshold}" "IFGorb_top_${threshold}")
+SOURCES=("MFG_top_${threshold}" "AngG_top_${threshold}")
+TARGETS=("MFG_top_${threshold}" "AngG_top_${threshold}")
+EXCLUDES=("IFG_top_${threshold}" "IFGorb_top_${threshold}")
 
 
 #bad_sub=(sub072 sub124 sub126 sub135 sub136 sub138 sub148 sub159 sub163 sub171 sub172 sub190 sub195 sub199 sub202 sub210 sub234 sub254 sub311 sub540 sub541)
