@@ -30,12 +30,12 @@ EXCLUDES=("IFGorb_top_${threshold}" "MFG_top_${threshold}")
 
 #SOURCES=("IFG_top_${threshold}" "PostTemp_top_${threshold}")
 #TARGETS=("IFG_top_${threshold}" "PostTemp_top_${threshold}")
-#EXCLUDES=("IFGorb_top_${threshold}")
+#EXCLUDES=("IFGorb_top_${threshold}" "MFG_top_${threshold}")
 
 
 #SOURCES=("MFG_top_${threshold}" "PostTemp_top_${threshold}")
 #TARGETS=("MFG_top_${threshold}" "PostTemp_top_${threshold}")
-#EXCLUDES=("IFG_top_${threshold}")
+#EXCLUDES=("IFG_top_${threshold}" "IFGorb_top_${threshold}")
 
 ######################################
 # AngG Targets
@@ -46,33 +46,12 @@ EXCLUDES=("IFGorb_top_${threshold}" "MFG_top_${threshold}")
 
 #SOURCES=("IFG_top_${threshold}" "AngG_top_${threshold}")
 #TARGETS=("IFG_top_${threshold}" "AngG_top_${threshold}")
-#EXCLUDES=("IFGorb_top_${threshold}")
+#EXCLUDES=("IFGorb_top_${threshold}" "MFG_top_${threshold}")
 
 #SOURCES=("MFG_top_${threshold}" "AngG_top_${threshold}")
 #TARGETS=("MFG_top_${threshold}" "AngG_top_${threshold}")
-#EXCLUDES=("IFG_top_${threshold}")
-
-#SOURCES=("IFG_top_${threshold}" "AntTemp_top_${threshold}")
-
-
-#SOURCES=("PostTemp_top_${threshold}" "MFG_top_${threshold}")
-#TARGETS=("PostTemp_top_${threshold}" "MFG_top_${threshold}")
-#EXCLUDES=("IFG_top_${threshold}")
-
-#SOURCES=("PostTemp_top_${threshold}" "MFG_top_${threshold}")
-#TARGETS=("PostTemp_top_${threshold}" "MFG_top_${threshold}")
 #EXCLUDES=("IFG_top_${threshold}" "IFGorb_top_${threshold}")
 
-
-#EXCLUDES=("MFG_top_${threshold}" "IFG_top_${threshold}")
-#EXCLUDES=("MFG_top_${threshold}" "IFGorb_top_${threshold}")
-#EXCLUDES=("IFG_top_${threshold}")
-
-#SOURCES=("IFG_top_${threshold}" "PostTemp_top_${threshold}")
-#TARGETS=("IFG_top_${threshold}" "PostTemp_top_${threshold}")
-#EXCLUDES=("MFG_top_90" "IFGorb_top_90")
-#EXCLUDES=("IFGorb_top_${threshold}")
-#EXCLUDES=("MFG_top_${threshold}")
 
 #bad_sub=(sub072 sub124 sub126 sub135 sub136 sub138 sub148 sub159 sub163 sub171 sub172 sub190 sub195 sub199 sub202 sub210 sub234 sub254 sub311 sub540 sub541)
 
@@ -92,7 +71,7 @@ touch $SUBJECT_PROBX_FILE
 printf "%s,%s,%s,%s,%s,%s,%s,%s\n" "row" "subject_name" "segment_name" "source_name" "target_name" "exclude_name" "hemi" "thr"   >> $SUBJECT_PROBX_FILE
 
 echo "looking at ${DTI_DIR} "
-overwrite=true
+overwrite=false
 while read x; do
       # check if file already exist in labels dir
       original=$DTI_DIR
@@ -106,10 +85,12 @@ while read x; do
       if [ "$overwrite" = true ]
       then
         echo "overwriting ${lh_folder}"
+        rm -r $lh_folder
         LINE_COUNT=$(expr ${LINE_COUNT} + 1)
         printf "%d,%s,%s,%s,%s,%s,%s,%d\n" "$LINE_COUNT" "$subject_name" "lang_glasser_LH_thr_${threshold}" "$SOURCEJoin" "$TARGETSJoin" "$EXCLUDEJoin" "LH" "$threshold" >> $SUBJECT_PROBX_FILE
 
         echo "overwriting ${rh_folder}"
+        rm -r $rh_folder
         LINE_COUNT=$(expr ${LINE_COUNT} + 1)
         printf "%d,%s,%s,%s,%s,%s,%s,%d\n" "$LINE_COUNT" "$subject_name" "lang_glasser_RH_thr_${threshold}" "$SOURCEJoin" "$TARGETSJoin" "$EXCLUDEJoin" "RH" "$threshold" >> $SUBJECT_PROBX_FILE
       else

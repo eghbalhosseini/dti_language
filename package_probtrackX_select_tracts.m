@@ -4,15 +4,17 @@ close all
 probtrack_folder='/Users/eghbalhosseini/MyData/dti_language/';
 analysis_path='/Users/eghbalhosseini/MyData/dti_language/analysis';
 
-folders={'probtrackX_results_IFG_top_20-PostTemp_top_20_TO_IFG_top_20-PostTemp_top_20_EX_MFG_top_20';
-    'probtrackX_results_IFG_top_10-PostTemp_top_10_TO_IFG_top_10-PostTemp_top_10_EX_MFG_top_10';
-    'probtrackX_results_IFGorb_top_10-AntTemp_top_10_TO_IFGorb_top_10-AntTemp_top_10_EX_MFG_top_10';
-    'probtrackX_results_IFGorb_top_20-AntTemp_top_20_TO_IFGorb_top_20-AntTemp_top_20_EX_MFG_top_20';
-    'probtrackX_results_IFG_top_20-PostTemp_top_20_TO_IFG_top_20-PostTemp_top_20_EX_IFGorb_top_20';
-    'probtrackX_results_IFGorb_top_20-AntTemp_top_20_TO_IFGorb_top_20-AntTemp_top_20_EX_IFG_top_20';
-    'probtrackX_results_IFGorb_top_20-AngG_top_20_TO_IFGorb_top_20-AngG_top_20_EX_IFG_top_20-MFG_top_20';
-    'probtrackX_results_MFG_top_20-AngG_top_20_TO_MFG_top_20-AngG_top_20_EX_IFG_top_20';
-    'probtrackX_results_IFG_top_20-AngG_top_20_TO_IFG_top_20-AngG_top_20_EX_IFGorb_top_20';
+folders={   'probtrackX_results_MFG_top_20-AntTemp_top_20_TO_MFG_top_20-AntTemp_top_20_EX_IFG_top_20';
+            'probtrackX_results_MFG_top_20-AngG_top_20_TO_MFG_top_20-AngG_top_20_EX_IFG_top_20';
+            'probtrackX_results_IFGorb_top_20-AntTemp_top_20_TO_IFGorb_top_20-AntTemp_top_20_EX_MFG_top_20';
+            'probtrackX_results_IFGorb_top_20-AntTemp_top_20_TO_IFGorb_top_20-AntTemp_top_20_EX_IFG_top_20-MFG_top_20';
+            'probtrackX_results_IFGorb_top_20-AntTemp_top_20_TO_IFGorb_top_20-AntTemp_top_20_EX_IFG_top_20';
+            'probtrackX_results_IFGorb_top_20-AngG_top_20_TO_IFGorb_top_20-AngG_top_20_EX_IFG_top_20-MFG_top_20';
+            'probtrackX_results_IFG_top_20-PostTemp_top_20_TO_IFG_top_20-PostTemp_top_20_EX_MFG_top_20';
+            'probtrackX_results_IFG_top_20-PostTemp_top_20_TO_IFG_top_20-PostTemp_top_20_EX_IFGorb_top_20';
+            'probtrackX_results_IFG_top_20-AntTemp_top_20_TO_IFG_top_20-AntTemp_top_20_EX_IFGorb_top_20';
+            'probtrackX_results_IFG_top_20-AngG_top_20_TO_IFG_top_20-AngG_top_20_EX_IFGorb_top_20';
+            'probtrackX_results_IFG_top_10-PostTemp_top_10_TO_IFG_top_10-PostTemp_top_10_EX_MFG_top_10'
     }
 
 
