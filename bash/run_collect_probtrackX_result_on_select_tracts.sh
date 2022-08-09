@@ -64,7 +64,7 @@ printf "%s,%s,%s,%s,%s,%s\n" "row" "subject_name" "hemi" "file_loc" "segment_fil
 echo "looking at ${DTI_DIR} "
 SUBJ_LINE=0
 mkdir -p "${DTI_DIR}/probtrackX_results_${SOURCEJoin}_TO_${TARGETSJoin}_EX_${EXCLUDEJoin}"
-overwrite=true
+overwrite=false
 while read x; do
       # check if file already exist in labels dir
       original=$DTI_DIR
