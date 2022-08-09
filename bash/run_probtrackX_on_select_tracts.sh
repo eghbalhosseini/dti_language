@@ -24,9 +24,9 @@ EXCLUDES=("IFG_top_${threshold}")
 
 ####################################
 # PostTemp Targets
-#SOURCES=("IFGorb_top_${threshold}" "PostTemp_top_${threshold}")
-#TARGETS=("IFGorb_top_${threshold}" "PostTemp_top_${threshold}")
-#EXCLUDES=("IFG_top_${threshold}" "MFG_top_${threshold}")
+SOURCES=("IFGorb_top_${threshold}" "PostTemp_top_${threshold}")
+TARGETS=("IFGorb_top_${threshold}" "PostTemp_top_${threshold}")
+EXCLUDES=("IFG_top_${threshold}" "MFG_top_${threshold}")
 
 #SOURCES=("IFG_top_${threshold}" "PostTemp_top_${threshold}")
 #TARGETS=("IFG_top_${threshold}" "PostTemp_top_${threshold}")
@@ -92,7 +92,7 @@ touch $SUBJECT_PROBX_FILE
 printf "%s,%s,%s,%s,%s,%s,%s,%s\n" "row" "subject_name" "segment_name" "source_name" "target_name" "exclude_name" "hemi" "thr"   >> $SUBJECT_PROBX_FILE
 
 echo "looking at ${DTI_DIR} "
-overwrite=false
+overwrite=true
 while read x; do
       # check if file already exist in labels dir
       original=$DTI_DIR
