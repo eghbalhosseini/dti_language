@@ -42,13 +42,13 @@ touch $SUBJECT_PROBX_FILE
 
 ######################################
 # AngG Targets
-SOURCES=("IFGorb_top_${threshold}" "AngG_top_${threshold}")
-TARGETS=("IFGorb_top_${threshold}" "AngG_top_${threshold}")
-EXCLUDES=("IFG_top_${threshold}" "MFG_top_${threshold}")
+#SOURCES=("IFGorb_top_${threshold}" "AngG_top_${threshold}")
+#TARGETS=("IFGorb_top_${threshold}" "AngG_top_${threshold}")
+#EXCLUDES=("IFG_top_${threshold}" "MFG_top_${threshold}")
 #
-#SOURCES=("IFG_top_${threshold}" "AngG_top_${threshold}")
-#TARGETS=("IFG_top_${threshold}" "AngG_top_${threshold}")
-#EXCLUDES=("IFGorb_top_${threshold}" "MFG_top_${threshold}")
+SOURCES=("IFG_top_${threshold}" "AngG_top_${threshold}")
+TARGETS=("IFG_top_${threshold}" "AngG_top_${threshold}")
+EXCLUDES=("IFGorb_top_${threshold}" "MFG_top_${threshold}")
 
 #SOURCES=("MFG_top_${threshold}" "AngG_top_${threshold}")
 #TARGETS=("MFG_top_${threshold}" "AngG_top_${threshold}")
