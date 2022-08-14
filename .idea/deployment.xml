@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" remoteFilesAllowedToDisappearOnAutoupload="false">
+  <component name="PublishConfigData" autoUpload="Always" serverName="ehoseini@evnode_X11:22 agent" remoteFilesAllowedToDisappearOnAutoupload="false">
     <serverData>
       <paths name="ehoseini@evnode_X11:22 agent">
         <serverdata>
           <mappings>
-            <mapping deploy="/om/user/ehoseini/dti_language" local="$PROJECT_DIR$" />
+            <mapping deploy="/om2/user/ehoseini/dti_language" local="$PROJECT_DIR$" />
           </mappings>
         </serverdata>
       </paths>
@@ -80,5 +80,6 @@
         </serverdata>
       </paths>
     </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
   </component>
 </project>
