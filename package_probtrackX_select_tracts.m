@@ -8,11 +8,11 @@ folders={   'probtrackX_results_IFG_top_20-AngG_top_20_TO_IFG_top_20-AngG_top_20
             'probtrackX_results_IFG_top_20-AntTemp_top_20_TO_IFG_top_20-AntTemp_top_20_EX_IFGorb_top_20-MFG_top_20';
             'probtrackX_results_IFG_top_20-PostTemp_top_20_TO_IFG_top_20-PostTemp_top_20_EX_IFGorb_top_20-MFG_top_20';
             'probtrackX_results_IFGorb_top_20-AntTemp_top_20_TO_IFGorb_top_20-AntTemp_top_20_EX_IFG_top_20-MFG_top_20';
-
+            % 
             'probtrackX_results_IFGorb_top_20-AngG_top_20_TO_IFGorb_top_20-AngG_top_20_EX_IFG_top_20-MFG_top_20';
             'probtrackX_results_IFGorb_top_20-AntTemp_top_20_TO_IFGorb_top_20-AntTemp_top_20_EX_IFG_top_20-MFG_top_20';
             'probtrackX_results_IFGorb_top_20-PostTemp_top_20_TO_IFGorb_top_20-PostTemp_top_20_EX_IFG_top_20-MFG_top_20';
-            
+            %
             'probtrackX_results_MFG_top_20-AngG_top_20_TO_MFG_top_20-AngG_top_20_EX_IFG_top_20-IFGorb_top_20';
             'probtrackX_results_MFG_top_20-AntTemp_top_20_TO_MFG_top_20-AntTemp_top_20_EX_IFG_top_20-IFGorb_top_20';
             'probtrackX_results_MFG_top_20-PostTemp_top_20_TO_MFG_top_20-PostTemp_top_20_EX_IFG_top_20-IFGorb_top_20'
@@ -84,7 +84,6 @@ for folder =folders'
     %    if sum(t)~=0, t=t./(.5*sum(sum(t)));else t=t;end ;
     %    temp_fdt_sum{kk,1}=t;
     %end 
-    cellfun(@(x) assert(issymmetric(x)),temp_fdt)
     cellfun(@(x) assert(issymmetric(x)),temp_fdt_sum)
     RH_fdt_raw=RH_fdt;
     RH_fdt_sum=temp_fdt_sum;
@@ -113,6 +112,7 @@ end
 
 
 %% hypothesis 1. 
+% Left hemisphere, post temp to IFG , vs AntTemp to IFGorb
 threshold=20;
 w_type='sum';
 titles={'n.s.';'-->';'<--'};
@@ -151,10 +151,10 @@ ff.Units='Inches';
 ff.Position=[55.5139 10.6250 11 8]
 ff.PaperOrientation='landscape';
 
-ax=subplot(1,1,1)
+ax=axes('position',[.1,.1,.5,.5*11/8])
 x=cellfun(@(x) x(1,2), IFGorb_Ant_w);
 y=cellfun(@(x) x(1,2), IFG_post_w);
-[hscatter,hbar,ax,ahist]=scatterDiagHist(x,y);
+[hscatter,hbar,ax,ahist]=scatterDiagHist(x,y,50);
 hscatter.Marker='o'
 hscatter.MarkerFaceColor='r'
 hscatter.MarkerEdgeColor='k'
@@ -185,7 +185,86 @@ ax.FontSize=12;
 %ylim([min([x;y]),max([x;y])])
 %xlim([min([x;y]),max([x;y])])
 print(ff,'-fillpage','-dpdf','-painters', strcat(analysis_path,'/','LH_select_tracts_temporal_to_frontal_',num2str(threshold),'_',w_type,'_subs_',num2str(num_subs),'.pdf'));
-%% 
+print(ff,'-dpng','-painters', strcat(analysis_path,'/','LH_select_tracts_temporal_to_frontal_',num2str(threshold),'_',w_type,'_subs_',num2str(num_subs),'.png'));
+%% hypothesis 1. 
+% Right hemisphere, post temp to IFG , vs AntTemp to IFGorbthreshold=20;
+w_type='sum';
+titles={'n.s.';'-->';'<--'};
+%folders={sprintf('probtrackX_results_IFG_top_%d-PostTemp_top_%d_TO_IFG_top_%d-PostTemp_top_%d_EX_MFG_top_%d',threshold,threshold,threshold,threshold,threshold);
+%    sprintf('probtrackX_results_IFGorb_top_%d-AntTemp_top_%d_TO_IFGorb_top_%d-AntTemp_top_%d_EX_MFG_top_%d',threshold,threshold,threshold,threshold,threshold)}; 
+
+folders={'probtrackX_results_IFG_top_20-PostTemp_top_20_TO_IFG_top_20-PostTemp_top_20_EX_IFGorb_top_20-MFG_top_20';
+         'probtrackX_results_IFGorb_top_20-AntTemp_top_20_TO_IFGorb_top_20-AntTemp_top_20_EX_IFG_top_20-MFG_top_20'}
+
+results={};
+for idx=1:size(folders,1)
+   results{idx}=load(fullfile(probtrack_folder,folders{idx},'unique_subjects_pkg'),'unique_dti').unique_dti;
+end 
+assert(all(cell2mat(cellfun(@(x,y) strcmp(x,y),results{1}.unique_subs,results{2}.unique_subs,'uni',false))))
+unique_subs=results{1}.unique_subs;
+% pick a random set of 60 subject 
+rng(1)
+% ids=randi(length(unique_subs),1,60);
+% train_subs=unique_subs(ids);
+num_subs=70;
+[train_subs,ids]=datasample(unique_subs,70,'Replace',false);
+
+IFG_Post=results{1}.unique_RH_targets(:,1);
+IFGorb_Ant=results{2}.unique_RH_targets(:,1);
+if strcmp(w_type,'sum')
+    IFG_post_w=results{1}.unique_RH_fdt_sum(ids);
+    IFGorb_Ant_w=results{2}.unique_RH_fdt_sum(ids);
+else
+    IFG_post_w=results{1}.unique_RH_fdt_raw(ids);
+    IFGorb_Ant_w=results{2}.unique_RH_fdt_raw(ids);
+end 
+% 
+ff=figure();
+ff.Units='Inches';
+ff.Position=[55.5139 10.6250 11 8]
+ff.PaperOrientation='landscape';
+
+ax=axes('position',[.1,.1,.5,.5*11/8])
+x=cellfun(@(x) x(1,2), IFGorb_Ant_w);
+y=cellfun(@(x) x(1,2), IFG_post_w);
+[hscatter,hbar,ax,ahist]=scatterDiagHist(x,y,50);
+hscatter.Marker='o'
+hscatter.MarkerFaceColor=[51,153,255]/256;
+hscatter.MarkerEdgeColor='k'
+hbar.FaceColor=[51,153,255]/256;
+ax.YLim=[0,1.1*max([x;y])]
+ax.XLim=[0,1.1*max([x;y])]
+hbar.LineWidth=2;
+%[h,p]=ttest(x,y);
+%ahist.Title.String=titles{h+1}
+    [h1,p1]=ttest(x,y,'Tail','right');
+    [h2,p2]=ttest(x,y,'Tail','left');
+    if h1
+        ahist.Title.String=titles{2};
+    elseif h2
+        ahist.Title.String=titles{3};
+    else
+        ahist.Title.String=titles{1};
+    end
+    
+
+ahist.Title.Rotation=-45;
+ahist.Title.FontSize=15
+
+ahist.Title.Position=[0,max(ahist.YLim),0]
+ax.YLabel.String=sprintf('%s --> \n %s',strrep(IFG_Post{1},'_',' '),strrep(IFG_Post{2},'_',' '));
+ax.XLabel.String=sprintf('%s --> \n %s',strrep(IFGorb_Ant{1},'_',' '),strrep(IFGorb_Ant{2},'_',' '));
+ax.FontSize=12;
+%ylim([min([x;y]),max([x;y])])
+%xlim([min([x;y]),max([x;y])])
+print(ff,'-fillpage','-dpdf','-painters', strcat(analysis_path,'/','RH_select_tracts_temporal_to_frontal_',num2str(threshold),'_',w_type,'_subs_',num2str(num_subs),'.pdf'));
+print(ff,'-dpng','-painters', strcat(analysis_path,'/','RH_select_tracts_temporal_to_frontal_',num2str(threshold),'_',w_type,'_subs_',num2str(num_subs),'.png'));
+
+
+
+%% hypothesis 2. 
+% Left hemisphere, post temp to IFG , vs postTemp to IFGorb
+
 threshold=20;
 w_type='sum';
 titles={'n.s.';'-->';'<--'};
@@ -260,9 +339,88 @@ ax.FontSize=12;
 print(ff,'-fillpage','-dpdf','-painters', strcat(analysis_path,'/','LH_select_tracts_temporal_to_frontal_',IFG_Post{1},'_',num2str(threshold),'_',w_type,'_subs_',num2str(num_subs),'.pdf'));
 print(ff,'-painters','-dpng', strcat(analysis_path,'/','LH_select_tracts_temporal_to_frontal_',IFG_Post{1},'_',num2str(threshold),'_',w_type,'_subs_',num2str(num_subs),'.png'));
 
+%% hypothesis 2. 
+% Right hemisphere, post temp to IFG , vs postTemp to IFGorb
+
+threshold=20;
+w_type='sum';
+titles={'n.s.';'-->';'<--'};
+%folders={sprintf('probtrackX_results_IFG_top_%d-PostTemp_top_%d_TO_IFG_top_%d-PostTemp_top_%d_EX_MFG_top_%d',threshold,threshold,threshold,threshold,threshold);
+%    sprintf('probtrackX_results_IFGorb_top_%d-AntTemp_top_%d_TO_IFGorb_top_%d-AntTemp_top_%d_EX_MFG_top_%d',threshold,threshold,threshold,threshold,threshold)}; 
+
+folders={'probtrackX_results_IFG_top_20-PostTemp_top_20_TO_IFG_top_20-PostTemp_top_20_EX_IFGorb_top_20-MFG_top_20';
+        'probtrackX_results_IFG_top_20-AntTemp_top_20_TO_IFG_top_20-AntTemp_top_20_EX_IFGorb_top_20-MFG_top_20'}
+
+results={};
+for idx=1:size(folders,1)
+   results{idx}=load(fullfile(probtrack_folder,folders{idx},'unique_subjects_pkg'),'unique_dti').unique_dti;
+end 
+assert(all(cell2mat(cellfun(@(x,y) strcmp(x,y),results{1}.unique_subs,results{2}.unique_subs,'uni',false))))
+unique_subs=results{1}.unique_subs;
+% pick a random set of 60 subject 
+rng(1)
+% ids=randi(length(unique_subs),1,60);
+% train_subs=unique_subs(ids);
+num_subs=70;
+[train_subs,ids]=datasample(unique_subs,70,'Replace',false);
+
+IFG_Post=results{1}.unique_RH_targets(:,1);
+IFG_Ant=results{2}.unique_RH_targets(:,1);
+if strcmp(w_type,'sum')
+    IFG_post_w=results{1}.unique_RH_fdt_sum(ids);
+    IFG_Ant_w=results{2}.unique_RH_fdt_sum(ids);
+else
+    IFG_post_w=results{1}.unique_RH_fdt_raw(ids);
+    IFG_Ant_w=results{2}.unique_RH_fdt_raw(ids);
+end 
+% 
+ff=figure();
+ff.Units='Inches';
+ff.Position=[55.5139 10.6250 11 8]
+ff.PaperOrientation='landscape';
+
+ax=axes('position',[.1,.1,.5,.5*11/8])
+x=cellfun(@(x) x(1,2), IFG_Ant_w);
+y=cellfun(@(x) x(1,2), IFG_post_w);
+[hscatter,hbar,ax,ahist]=scatterDiagHist(x,y,50);
+hscatter.Marker='o'
+hscatter.MarkerFaceColor=[51,153,255]/256;
+hscatter.MarkerEdgeColor='k'
+hbar.FaceColor=[51,153,255]/256;
+ax.YLim=[0,1.1*max([x;y])]
+ax.XLim=[0,1.1*max([x;y])]
+hbar.LineWidth=2;
+%[h,p]=ttest(x,y);
+%ahist.Title.String=titles{h+1}
+    [h1,p1]=ttest(x,y,'Tail','right');
+    [h2,p2]=ttest(x,y,'Tail','left');
+    if h1
+        ahist.Title.String=titles{2};
+    elseif h2
+        ahist.Title.String=titles{3};
+    else
+        ahist.Title.String=titles{1};
+    end
+    
+
+ahist.Title.Rotation=-45;
+ahist.Title.FontSize=15
+
+ahist.Title.Position=[0,max(ahist.YLim),0]
+ax.YLabel.String=sprintf('%s --> \n %s',strrep(IFG_Post{1},'_',' '),strrep(IFG_Post{2},'_',' '));
+ax.XLabel.String=sprintf('%s --> \n %s',strrep(IFG_Ant{1},'_',' '),strrep(IFG_Ant{2},'_',' '));
+ax.FontSize=12;
+%ylim([min([x;y]),max([x;y])])
+%xlim([min([x;y]),max([x;y])])
+print(ff,'-fillpage','-dpdf','-painters', strcat(analysis_path,'/','RH_select_tracts_temporal_to_frontal_',IFG_Post{1},'_',num2str(threshold),'_',w_type,'_subs_',num2str(num_subs),'.pdf'));
+print(ff,'-painters','-dpng', strcat(analysis_path,'/','RH_select_tracts_temporal_to_frontal_',IFG_Post{1},'_',num2str(threshold),'_',w_type,'_subs_',num2str(num_subs),'.png'));
 
 
-%% 
+
+
+%% hypothesis 3. 
+% Left hemisphere, AntTemp to IFG , vs AntTemp to IFGorb
+
 threshold=20;
 w_type='sum';
 titles={'n.s.';'-->';'<--'};
@@ -279,10 +437,8 @@ for idx=1:size(folders,1)
 end 
 assert(all(cell2mat(cellfun(@(x,y) strcmp(x,y),results{1}.unique_subs,results{2}.unique_subs,'uni',false))))
 unique_subs=results{1}.unique_subs;
-% pick a random set of 60 subject 
+
 rng(1)
-% ids=randi(length(unique_subs),1,60);
-% train_subs=unique_subs(ids);
 num_subs=70;
 [train_subs,ids]=datasample(unique_subs,70,'Replace',false);
 
@@ -350,8 +506,97 @@ ax.FontSize=12;
 print(ff,'-fillpage','-dpdf','-painters', strcat(analysis_path,'/','LH_select_tracts_temporal_to_frontal_',IFGorb_Post{1},'_',num2str(threshold),'_',w_type,'_subs_',num2str(num_subs),'.pdf'));
 print(ff,'-painters','-dpng', strcat(analysis_path,'/','LH_select_tracts_temporal_to_frontal_',IFGorb_Post{1},'_',num2str(threshold),'_',w_type,'_subs_',num2str(num_subs),'.png'));
 
-%% 
-%% 
+%% hypothesis 3. 
+% Right hemisphere, AntTemp to IFG , vs AntTemp to IFGorb
+
+threshold=20;
+w_type='sum';
+titles={'n.s.';'-->';'<--'};
+%folders={sprintf('probtrackX_results_IFG_top_%d-PostTemp_top_%d_TO_IFG_top_%d-PostTemp_top_%d_EX_MFG_top_%d',threshold,threshold,threshold,threshold,threshold);
+%    sprintf('probtrackX_results_IFGorb_top_%d-AntTemp_top_%d_TO_IFGorb_top_%d-AntTemp_top_%d_EX_MFG_top_%d',threshold,threshold,threshold,threshold,threshold)}; 
+
+folders={'probtrackX_results_IFGorb_top_20-PostTemp_top_20_TO_IFGorb_top_20-PostTemp_top_20_EX_IFG_top_20-MFG_top_20';
+            'probtrackX_results_IFGorb_top_20-AntTemp_top_20_TO_IFGorb_top_20-AntTemp_top_20_EX_IFG_top_20-MFG_top_20'
+            };
+        
+results={};
+for idx=1:size(folders,1)
+   results{idx}=load(fullfile(probtrack_folder,folders{idx},'unique_subjects_pkg'),'unique_dti').unique_dti;
+end 
+assert(all(cell2mat(cellfun(@(x,y) strcmp(x,y),results{1}.unique_subs,results{2}.unique_subs,'uni',false))))
+unique_subs=results{1}.unique_subs;
+
+rng(1)
+num_subs=70;
+[train_subs,ids]=datasample(unique_subs,70,'Replace',false);
+
+IFGorb_Post=results{1}.unique_RH_targets(:,1);
+IFGorb_Ant=results{2}.unique_RH_targets(:,1);
+if strcmp(w_type,'sum')
+    IFGorb_post_w=results{1}.unique_RH_fdt_sum(ids);
+    IFGorb_Ant_w=results{2}.unique_RH_fdt_sum(ids);
+else
+    IFGorb_post_w=results{1}.unique_RH_fdt_raw(ids);
+    IFGorb_Ant_w=results{2}.unique_RH_fdt_raw(ids);
+end 
+% 
+ff=figure();
+ff.Units='Inches';
+ff.Position=[55.5139 10.6250 11 8]
+ff.PaperOrientation='landscape';
+
+ax=axes('position',[.1,.1,.5,.5*11/8])
+x=cellfun(@(x) x(1,2), IFGorb_Ant_w);
+y=cellfun(@(x) x(1,2), IFGorb_post_w);
+
+%test=[x,y];
+%non_zero=sum(test,2)~=0;
+%test=test(non_zero,:);
+%x=test(:,1);
+%y=test(:,2);
+
+[hscatter,hbar,ax,ahist]=scatterDiagHist(x,y,50);
+hscatter.Marker='o'
+hscatter.MarkerFaceColor=[51,153,255]/256;
+hscatter.MarkerEdgeColor='k';
+hbar.FaceColor=[51,153,255]/256;
+ax.YLim=[0,1.1*max([x;y])]
+ax.XLim=[0,1.1*max([x;y])]
+hbar.LineWidth=2;
+%[h,p]=ttest(x,y);
+%ahist.Title.String=titles{h+1}
+    [h1,p1]=ttest(x,y,'Tail','right');
+    [h2,p2]=ttest(x,y,'Tail','left');
+    if h1
+        ahist.Title.String=titles{2};
+    elseif h2
+        ahist.Title.String=titles{3};
+    else
+        ahist.Title.String=titles{1};
+    end
+    
+
+ahist.Title.Rotation=-45;
+ahist.Title.FontSize=15
+
+ahist.Title.Position=[0,max(ahist.YLim),0]
+ax.YLabel.String=sprintf('%s --> \n %s',strrep(IFGorb_Post{1},'_',' '),strrep(IFGorb_Post{2},'_',' '));
+ax.XLabel.String=sprintf('%s -->  \n %s',strrep(IFGorb_Ant{1},'_',' '),strrep(IFGorb_Ant{2},'_',' '));
+ax.FontSize=12;
+
+% dim = [.55 .1 .4 .2];
+%     str = sprintf('Connectivity from two temporal region \n %s (SUM , dropped subjects with zero: %d)',strrep(LH_frontal_target{tmp_targ},'_',' '),sum(non_zero==0));
+%     a=annotation(ff,'textbox',dim,'String',str,'fontsize',14,'fontweight','bold');
+%     a.LineStyle='none'
+% 
+%ylim([min([x;y]),max([x;y])])
+%xlim([min([x;y]),max([x;y])])
+print(ff,'-fillpage','-dpdf','-painters', strcat(analysis_path,'/','RH_select_tracts_temporal_to_frontal_',IFGorb_Post{1},'_',num2str(threshold),'_',w_type,'_subs_',num2str(num_subs),'.pdf'));
+print(ff,'-painters','-dpng', strcat(analysis_path,'/','RH_select_tracts_temporal_to_frontal_',IFGorb_Post{1},'_',num2str(threshold),'_',w_type,'_subs_',num2str(num_subs),'.png'));
+
+
+%% Hpyothesis 4
+% Left hemisphere, PostTemp to MFG , vs AntTemp to MFG
 threshold=20;
 w_type='sum';
 titles={'n.s.';'-->';'<--'};
@@ -425,6 +670,82 @@ ax.FontSize=12;
 %xlim([min([x;y]),max([x;y])])
 print(ff,'-fillpage','-dpdf','-painters', strcat(analysis_path,'/','LH_select_tracts_temporal_to_frontal_',IFG_Post{1},'_',num2str(threshold),'_',w_type,'_subs_',num2str(num_subs),'.pdf'));
 print(ff,'-painters','-dpng', strcat(analysis_path,'/','LH_select_tracts_temporal_to_frontal_',IFG_Post{1},'_',num2str(threshold),'_',w_type,'_subs_',num2str(num_subs),'.png'));
+
+%% Hpyothesis 4
+% Right hemisphere, PostTemp to MFG , vs AntTemp to MFG
+threshold=20;
+w_type='sum';
+titles={'n.s.';'-->';'<--'};
+%folders={sprintf('probtrackX_results_IFG_top_%d-PostTemp_top_%d_TO_IFG_top_%d-PostTemp_top_%d_EX_MFG_top_%d',threshold,threshold,threshold,threshold,threshold);
+%    sprintf('probtrackX_results_IFGorb_top_%d-AntTemp_top_%d_TO_IFGorb_top_%d-AntTemp_top_%d_EX_MFG_top_%d',threshold,threshold,threshold,threshold,threshold)}; 
+
+folders={'probtrackX_results_MFG_top_20-PostTemp_top_20_TO_MFG_top_20-PostTemp_top_20_EX_IFG_top_20-IFGorb_top_20';
+            'probtrackX_results_MFG_top_20-AntTemp_top_20_TO_MFG_top_20-AntTemp_top_20_EX_IFG_top_20-IFGorb_top_20'
+         };
+
+results={};
+for idx=1:size(folders,1)
+   results{idx}=load(fullfile(probtrack_folder,folders{idx},'unique_subjects_pkg'),'unique_dti').unique_dti;
+end 
+assert(all(cell2mat(cellfun(@(x,y) strcmp(x,y),results{1}.unique_subs,results{2}.unique_subs,'uni',false))))
+unique_subs=results{1}.unique_subs;
+% pick a random set of 60 subject 
+rng(1)
+% ids=randi(length(unique_subs),1,60);
+% train_subs=unique_subs(ids);
+num_subs=70;
+[train_subs,ids]=datasample(unique_subs,70,'Replace',false);
+
+IFG_Post=results{1}.unique_RH_targets(:,1);
+IFG_Ant=results{2}.unique_RH_targets(:,1);
+if strcmp(w_type,'sum')
+    IFG_post_w=results{1}.unique_RH_fdt_sum(ids);
+    IFG_Ant_w=results{2}.unique_RH_fdt_sum(ids);
+else
+    IFG_post_w=results{1}.unique_RH_fdt_raw(ids);
+    IFG_Ant_w=results{2}.unique_RH_fdt_raw(ids);
+end 
+% 
+ff=figure();
+ff.Units='Inches';
+ff.Position=[55.5139 10.6250 11 8]
+ff.PaperOrientation='landscape';
+
+ax=axes('position',[.1,.1,.5,.5*11/8])
+x=cellfun(@(x) x(1,2), IFG_Ant_w);
+y=cellfun(@(x) x(1,2), IFG_post_w);
+[hscatter,hbar,ax,ahist]=scatterDiagHist(x,y,50);
+hscatter.Marker='o'
+hscatter.MarkerFaceColor=[51,153,255]/256;
+hscatter.MarkerEdgeColor='k';
+hbar.FaceColor=[51,153,255]/256;
+ax.YLim=[0,1.1*max([x;y])]
+ax.XLim=[0,1.1*max([x;y])]
+hbar.LineWidth=2;
+%[h,p]=ttest(x,y);
+%ahist.Title.String=titles{h+1}
+    [h1,p1]=ttest(x,y,'Tail','right');
+    [h2,p2]=ttest(x,y,'Tail','left');
+    if h1
+        ahist.Title.String=titles{2};
+    elseif h2
+        ahist.Title.String=titles{3};
+    else
+        ahist.Title.String=titles{1};
+    end
+    
+
+ahist.Title.Rotation=-45;
+ahist.Title.FontSize=15
+
+ahist.Title.Position=[0,max(ahist.YLim),0]
+ax.YLabel.String=sprintf('%s --> \n %s',strrep(IFG_Post{1},'_',' '),strrep(IFG_Post{2},'_',' '));
+ax.XLabel.String=sprintf('%s --> \n %s',strrep(IFG_Ant{1},'_',' '),strrep(IFG_Ant{2},'_',' '));
+ax.FontSize=12;
+
+print(ff,'-fillpage','-dpdf','-painters', strcat(analysis_path,'/','RH_select_tracts_temporal_to_frontal_',IFG_Post{1},'_',num2str(threshold),'_',w_type,'_subs_',num2str(num_subs),'.pdf'));
+print(ff,'-painters','-dpng', strcat(analysis_path,'/','RH_select_tracts_temporal_to_frontal_',IFG_Post{1},'_',num2str(threshold),'_',w_type,'_subs_',num2str(num_subs),'.png'));
+
 
 %% compare LH vs RH parcels 
 
@@ -529,6 +850,7 @@ print(ff,'-fillpage','-dpdf','-painters', strcat(analysis_path,'/','LH_vs_RH_sel
 %xlim([min([x;y]),max([x;y])])
 
 %% Calculate temporal to frontal pairs 
+% Left parcels 
 threshold=20;
 w_type='sum';
 titles={'n.s.';'-->';'<--'};
@@ -551,7 +873,7 @@ end
 subject_list=(cellfun(@(x) x.unique_subs,results,'uni',false));
 subject_list=vertcat(subject_list{:});
 
-arrayfun(@(x) assert(length(unique(subject_list(:,xx)))==1), 1:size(subject_list,2))
+arrayfun(@(x) assert(length(unique(subject_list(:,x)))==1), 1:size(subject_list,2))
 unique_subs=results{1}.unique_subs;
 % pick a random set of 60 subject 
 rng(1)
@@ -582,6 +904,7 @@ for k=1:length(seeds)
     end 
     b=barh(1:length(seeds),mean(s_t_weights,1))
     hold on
+    b.FaceColor='r'
     errorbar(mean(s_t_weights,1),1:length(seeds),std(s_t_weights,[],1)/sqrt(length(s_t_weights)),'horizontal','linestyle','none','color','k','linewidth',4)
     ax.Title.String=strrep(seeds{k},'_',' ');
     ax.Title.FontSize=12;
@@ -604,4 +927,85 @@ linkaxes(ax_,'xy');
 
 print(ff,'-fillpage','-dpdf','-painters', strcat(analysis_path,'/','LH_all_targeted_connectivity_subs_',num2str(num_subs),'_thr_',num2str(threshold),'.pdf'));
 print(ff,'-painters','-dpng', strcat(analysis_path,'/','LH_all_targeted_connectivity_subs_',num2str(num_subs),'_thr_',num2str(threshold),'.png'));
-   
+
+%% 
+
+%% Calculate temporal to frontal pairs 
+% RIght parcels 
+threshold=20;
+w_type='sum';
+titles={'n.s.';'-->';'<--'};
+folders={   'probtrackX_results_IFG_top_20-AngG_top_20_TO_IFG_top_20-AngG_top_20_EX_IFGorb_top_20-MFG_top_20';
+            'probtrackX_results_IFG_top_20-AntTemp_top_20_TO_IFG_top_20-AntTemp_top_20_EX_IFGorb_top_20-MFG_top_20';
+            'probtrackX_results_IFG_top_20-PostTemp_top_20_TO_IFG_top_20-PostTemp_top_20_EX_IFGorb_top_20-MFG_top_20';
+
+            'probtrackX_results_IFGorb_top_20-AngG_top_20_TO_IFGorb_top_20-AngG_top_20_EX_IFG_top_20-MFG_top_20';
+            'probtrackX_results_IFGorb_top_20-AntTemp_top_20_TO_IFGorb_top_20-AntTemp_top_20_EX_IFG_top_20-MFG_top_20';
+            'probtrackX_results_IFGorb_top_20-PostTemp_top_20_TO_IFGorb_top_20-PostTemp_top_20_EX_IFG_top_20-MFG_top_20';
+            
+            'probtrackX_results_MFG_top_20-AngG_top_20_TO_MFG_top_20-AngG_top_20_EX_IFG_top_20-IFGorb_top_20';
+            'probtrackX_results_MFG_top_20-AntTemp_top_20_TO_MFG_top_20-AntTemp_top_20_EX_IFG_top_20-IFGorb_top_20';
+            'probtrackX_results_MFG_top_20-PostTemp_top_20_TO_MFG_top_20-PostTemp_top_20_EX_IFG_top_20-IFGorb_top_20'
+    }
+results={};
+for idx=1:size(folders,1)
+   results{idx}=load(fullfile(probtrack_folder,folders{idx},'unique_subjects_pkg'),'unique_dti').unique_dti;
+end 
+subject_list=(cellfun(@(x) x.unique_subs,results,'uni',false));
+subject_list=vertcat(subject_list{:});
+
+arrayfun(@(x) assert(length(unique(subject_list(:,x)))==1), 1:size(subject_list,2))
+unique_subs=results{1}.unique_subs;
+% pick a random set of 60 subject 
+rng(1)
+% ids=randi(length(unique_subs),1,60);
+% train_subs=unique_subs(ids);
+num_subs=70;
+[train_subs,ids]=datasample(unique_subs,70,'Replace',false);
+
+seeds={'AntTemp_top_20','PostTemp_top_20','AngG_top_20'};
+targets={'IFG_top_20';'IFGorb_top_20';'MFG_top_20'};
+
+ff=figure();
+ff.Units='Inches';
+ff.Position=[55.5139 10.6250 8 11]
+ff.PaperOrientation='portrait';
+edges=[.15,.45,.75]
+ax_=[];
+for k=1:length(seeds)
+    ax=subplot('position',[edges(k),.5,.2,.3])
+    s_t_weights=[];
+    for kk=1:length(targets)
+        t_idx=contains(folders,[targets{kk},'-',seeds{k}]);
+        s_t_con=cat(3,results{t_idx}.unique_RH_fdt_sum{:});
+        assert(sum(sum(contains(results{t_idx}.unique_RH_targets,targets{kk})))==size(s_t_con,3));
+        assert(sum(sum(contains(results{t_idx}.unique_RH_targets,seeds{k})))==size(s_t_con,3));
+        s_t_weights=[s_t_weights,squeeze([s_t_con(1,2,:)])]
+        
+    end 
+    b=barh(1:length(seeds),mean(s_t_weights,1))
+    hold on
+    b.FaceColor=[51,153,255]/256;
+    errorbar(mean(s_t_weights,1),1:length(seeds),std(s_t_weights,[],1)/sqrt(length(s_t_weights)),'horizontal','linestyle','none','color','k','linewidth',4)
+    ax.Title.String=strrep(seeds{k},'_',' ');
+    ax.Title.FontSize=12;
+    ax.Title.FontWeight='bold';
+    ax.XAxis.FontSize=12;
+    ax.XAxis.FontWeight='bold';
+    if k==1
+        ax.YTickLabel=strrep(targets,'_',' ')
+        ax.YAxis.FontSize=12;
+        ax.YAxis.FontWeight='bold';
+        ax.XLabel.String=["average weight" , "(mean / standard error)"]
+
+    else
+        ax.YTickLabel=[];
+    end 
+    ax_=[ax_,ax];
+    ax.Box='off';
+end 
+%linkaxes(ax_,'xy');
+
+print(ff,'-fillpage','-dpdf','-painters', strcat(analysis_path,'/','RH_all_targeted_connectivity_subs_',num2str(num_subs),'_thr_',num2str(threshold),'.pdf'));
+print(ff,'-painters','-dpng', strcat(analysis_path,'/','RH_all_targeted_connectivity_subs_',num2str(num_subs),'_thr_',num2str(threshold),'.png'));
+

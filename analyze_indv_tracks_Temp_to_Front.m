@@ -91,7 +91,7 @@ for tmp_src=1:length(L_T_Lang)
     str = sprintf('Connectivity between %s and \n frontal regions (SUM)',strrep(LH_temp_ctrl_target{tmp_src},'_',' '));
     a=annotation(ff,'textbox',dim,'String',str,'fontsize',14,'fontweight','bold');
     a.LineStyle='none'
-    print(ff,'-dpdf','-painters', strcat(analysis_path,'/',sprintf('%s_to_front_indv_sum.pdf',LH_temp_ctrl_target{tmp_src})));
+    %print(ff,'-dpdf','-painters', strcat(analysis_path,'/',sprintf('%s_to_front_indv_sum.pdf',LH_temp_ctrl_target{tmp_src})));
     
 end
 
