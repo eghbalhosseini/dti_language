@@ -273,7 +273,7 @@ if __name__ == '__main__':
             hemi_dti_file_pth = Path(f"{HOME_DIR}/{subj_id}/indti/lang_act_{hemis_[idx]}_{thr_type}_{threshold}_indti.nii.gz")
             hemi_dti_file_pth.parent.mkdir(parents=True, exist_ok=True)
             hemi_lang_act = Path(f"{HOME_DIR}/{subj_id}/fmri/x.fsnative.{hemis_[idx]}_{network_id}_roi_act_{thr_type}_{threshold}.nii.gz")
-            assert lang_act.exists()
+            assert hemi_lang_act.exists()
 
             unix_pattern = ['mri_vol2vol',
                             '--targ', hemi_lang_act.__str__(),
