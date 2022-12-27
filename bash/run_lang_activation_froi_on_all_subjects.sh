@@ -22,14 +22,15 @@ while read x; do
       original=$DTI_DIR
       correction=''
       subject_name="${x/$original/$correction}"
-      possible_folder="${DTI_DIR}/${subject_name}/fmri"
-      possible_top_file="${possible_folder}/x.fsnative.${network_id}_roi_act_top_${threshold}.nii.gz"
-      possible_bottom_file="${possible_folder}/x.fsnative.${network_id}_roi_act_bottom_${threshold}.nii.gz"
+      possible_folder="${DTI_DIR}/${subject_name}/indti"
+
+      possible_top_file="${possible_folder}/${network_id}_act_BOTH_top_${threshold}_indti.nii.gz"
+      possible_bottom_file="${possible_folder}/${network_id}_act_BOTH_bottom_${threshold}_indti.nii.gz"
       if [ -f "$possible_top_file" ] && [ -f "$possible_bottom_file" ]
       then
         true
       else
-        echo "fmri activation files dont exist, adding them"
+        echo "indti activation files dont exist, adding them"
         LINE_COUNT=$(expr ${LINE_COUNT} + 1)
         mkdir -p $possible_folder
         printf "%d,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "$network_id" "$threshold"  >> $SUBJECT_FROI_FILE
@@ -39,8 +40,8 @@ done < <(find $DTI_DIR -type d -maxdepth 1 -name "sub*")
 run_val=0
 if [ "$LINE_COUNT" -gt "$run_val" ]; then
   echo "running  ${LINE_COUNT} jobs"
-   nohup /cm/shared/admin/bin/submit-many-jobs 3 2 3 1 lang_froi_act_on_subject.sh  $SUBJECT_FROI_FILE
-   #nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT 150 200 50 lang_froi_act_on_subject.sh  $SUBJECT_FROI_FILE
+   #nohup /cm/shared/admin/bin/submit-many-jobs 3 2 3 1 lang_froi_act_on_subject.sh  $SUBJECT_FROI_FILE
+   nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT 150 200 50 lang_froi_act_on_subject.sh  $SUBJECT_FROI_FILE
   else
     echo $LINE_COUNT
 fi
