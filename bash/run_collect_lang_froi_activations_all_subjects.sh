@@ -22,12 +22,22 @@ while read x; do
       original=$DTI_DIR
       correction=''
       subject_name="${x/$original/$correction}"
-      src_file="${DTI_DIR}/${subject_name}/indti/lang_act_LH_top_${threshold}_indti.nii.gz"
-      target_file="${DTI_DIR}/${DTI_DIR}/lang_froi_activations_thr_${threshold}/${subject_name}_lang_act_LH_top_${threshold}_indti.nii.gz"
+
+      src_file="${DTI_DIR}/${subject_name}/indti/lang_act_BOTH_top_${threshold}_indti.nii.gz"
+      target_file="${DTI_DIR}/lang_froi_activations_thr_${threshold}/${subject_name}_lang_act_BOTH_top_${threshold}_indti.nii.gz"
       cp ${src_file} ${target_file}
 
+            src_file="${DTI_DIR}/${subject_name}/indti/lang_act_BOTH_bottom_${threshold}_indti.nii.gz"
+      target_file="${DTI_DIR}/lang_froi_activations_thr_${threshold}/${subject_name}_lang_act_BOTH_bottom_${threshold}_indti.nii.gz"
+      cp ${src_file} ${target_file}
+
+      src_file="${DTI_DIR}/${subject_name}/indti/lang_act_LH_top_${threshold}_indti.nii.gz"
+      target_file="${DTI_DIR}/lang_froi_activations_thr_${threshold}/${subject_name}_lang_act_LH_top_${threshold}_indti.nii.gz"
+      cp ${src_file} ${target_file}
+
+
       src_file="${DTI_DIR}/${subject_name}/indti/lang_act_LH_bottom_${threshold}_indti.nii.gz"
-      target_file="${DTI_DIR}/${DTI_DIR}/lang_froi_activations_thr_${threshold}/${subject_name}_lang_act_LH_bottom_${threshold}_indti.nii.gz"
+      target_file="${DTI_DIR}/lang_froi_activations_thr_${threshold}/${subject_name}_lang_act_LH_bottom_${threshold}_indti.nii.gz"
       cp ${src_file} ${target_file}
 
       src_file="${DTI_DIR}/${subject_name}/indti/lang_act_RH_top_${threshold}_indti.nii.gz"
