@@ -4,53 +4,67 @@ DTI_DIR=/mindhive/evlab/Shared/diffusionzeynep/
 threshold=$1
 echo "threshold:${threshold}"
 
+SRC_TRG_INDEX=$2
+echo "source target index:${SRC_TRG_INDEX}"
+
 #threshold=20
 probtrackX_labels_="all_subject_probtrackX_select_tracts_thr_${threshold}"
 LINE_COUNT=0
 #####################################
-# AntTemp Targets
-SOURCES=("IFGorb_top_${threshold}" "AntTemp_top_${threshold}")
-TARGETS=("IFGorb_top_${threshold}" "AntTemp_top_${threshold}")
-EXCLUDES=("IFG_top_${threshold}" "MFG_top_${threshold}")
+if [ "$SRC_TRG_INDEX" -eq 1 ] ; then
 
-#SOURCES=("IFG_top_${threshold}" "AntTemp_top_${threshold}")
-#TARGETS=("IFG_top_${threshold}" "AntTemp_top_${threshold}")
-#EXCLUDES=("IFGorb_top_${threshold}" "MFG_top_${threshold}")
+  # AntTemp Targets
+  SOURCES=("IFGorb_top_${threshold}" "AntTemp_top_${threshold}")
+  TARGETS=("IFGorb_top_${threshold}" "AntTemp_top_${threshold}")
+  EXCLUDES=("IFG_top_${threshold}" "MFG_top_${threshold}")
+elif [ "$SRC_TRG_INDEX" -eq 2 ] ; then
 
+  SOURCES=("IFG_top_${threshold}" "AntTemp_top_${threshold}")
+  TARGETS=("IFG_top_${threshold}" "AntTemp_top_${threshold}")
+  EXCLUDES=("IFGorb_top_${threshold}" "MFG_top_${threshold}")
 
-#SOURCES=("MFG_top_${threshold}" "AntTemp_top_${threshold}")
-#TARGETS=("MFG_top_${threshold}" "AntTemp_top_${threshold}")
-#EXCLUDES=("IFG_top_${threshold}" "IFGorb_top_${threshold}")
+elif [ "$SRC_TRG_INDEX" -eq 3 ] ; then
+
+  SOURCES=("MFG_top_${threshold}" "AntTemp_top_${threshold}")
+  TARGETS=("MFG_top_${threshold}" "AntTemp_top_${threshold}")
+  EXCLUDES=("IFG_top_${threshold}" "IFGorb_top_${threshold}")
 
 ####################################
+elif [ "$SRC_TRG_INDEX" -eq 4 ] ; then
 # PostTemp Targets
-#SOURCES=("IFGorb_top_${threshold}" "PostTemp_top_${threshold}")
-#TARGETS=("IFGorb_top_${threshold}" "PostTemp_top_${threshold}")
-#EXCLUDES=("IFG_top_${threshold}" "MFG_top_${threshold}")
+  SOURCES=("IFGorb_top_${threshold}" "PostTemp_top_${threshold}")
+  TARGETS=("IFGorb_top_${threshold}" "PostTemp_top_${threshold}")
+  EXCLUDES=("IFG_top_${threshold}" "MFG_top_${threshold}")
+elif [ "$SRC_TRG_INDEX" -eq 5 ] ; then
+  SOURCES=("IFG_top_${threshold}" "PostTemp_top_${threshold}")
+  TARGETS=("IFG_top_${threshold}" "PostTemp_top_${threshold}")
+  EXCLUDES=("IFGorb_top_${threshold}" "MFG_top_${threshold}")
 
-#SOURCES=("IFG_top_${threshold}" "PostTemp_top_${threshold}")
-#TARGETS=("IFG_top_${threshold}" "PostTemp_top_${threshold}")
-#EXCLUDES=("IFGorb_top_${threshold}" "MFG_top_${threshold}")
+elif [ "$SRC_TRG_INDEX" -eq 6 ] ; then
+  SOURCES=("MFG_top_${threshold}" "PostTemp_top_${threshold}")
+  TARGETS=("MFG_top_${threshold}" "PostTemp_top_${threshold}")
+  EXCLUDES=("IFG_top_${threshold}" "IFGorb_top_${threshold}")
 
-
-#SOURCES=("MFG_top_${threshold}" "PostTemp_top_${threshold}")
-#TARGETS=("MFG_top_${threshold}" "PostTemp_top_${threshold}")
-#EXCLUDES=("IFG_top_${threshold}" "IFGorb_top_${threshold}")
-
+elif [ "$SRC_TRG_INDEX" -eq 7 ] ; then
 ######################################
 # AngG Targets
-#SOURCES=("IFGorb_top_${threshold}" "AngG_top_${threshold}")
-#TARGETS=("IFGorb_top_${threshold}" "AngG_top_${threshold}")
-#EXCLUDES=("IFG_top_${threshold}" "MFG_top_${threshold}")
+  SOURCES=("IFGorb_top_${threshold}" "AngG_top_${threshold}")
+  TARGETS=("IFGorb_top_${threshold}" "AngG_top_${threshold}")
+  EXCLUDES=("IFG_top_${threshold}" "MFG_top_${threshold}")
+elif [ "$SRC_TRG_INDEX" -eq 8 ] ; then
+  SOURCES=("IFG_top_${threshold}" "AngG_top_${threshold}")
+  TARGETS=("IFG_top_${threshold}" "AngG_top_${threshold}")
+  EXCLUDES=("IFGorb_top_${threshold}" "MFG_top_${threshold}")
 
-#SOURCES=("IFG_top_${threshold}" "AngG_top_${threshold}")
-#TARGETS=("IFG_top_${threshold}" "AngG_top_${threshold}")
-#EXCLUDES=("IFGorb_top_${threshold}" "MFG_top_${threshold}")
+elif [ "$SRC_TRG_INDEX" -eq 9 ] ; then
+  SOURCES=("MFG_top_${threshold}" "AngG_top_${threshold}")
+  TARGETS=("MFG_top_${threshold}" "AngG_top_${threshold}")
+  EXCLUDES=("IFG_top_${threshold}" "IFGorb_top_${threshold}")
 
-#SOURCES=("MFG_top_${threshold}" "AngG_top_${threshold}")
-#TARGETS=("MFG_top_${threshold}" "AngG_top_${threshold}")
-#EXCLUDES=("IFG_top_${threshold}" "IFGorb_top_${threshold}")
-
+else
+  printf '%s\n' "no source target pair is defined" >&2  # write error message to stderr
+  exit 1
+fi
 
 #bad_sub=(sub072 sub124 sub126 sub135 sub136 sub138 sub148 sub159 sub163 sub171 sub172 sub190 sub195 sub199 sub202 sub210 sub234 sub254 sub311 sub540 sub541)
 
