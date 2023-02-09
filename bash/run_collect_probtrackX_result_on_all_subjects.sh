@@ -23,8 +23,9 @@ while read x; do
       correction=''
       subject_name="${x/$original/$correction}"
       lh_file="${DTI_DIR}/probtrackX_results_lang_glasser_thr_${threshold}/${subject_name}_LH_fdt_network.mat"
+      lh_path_file="${DTI_DIR}/probtrackX_results_lang_glasser_thr_${threshold}/${subject_name}_LH_fdt_paths.nii.gz"
       rh_file="${DTI_DIR}/probtrackX_results_lang_glasser_thr_${threshold}/${subject_name}_RH_fdt_network.mat"
-
+      rh_path_file="${DTI_DIR}/probtrackX_results_lang_glasser_thr_${threshold}/${subject_name}_RH_fdt_paths.nii.gz"
       if [ "$overwrite" = true ]
       then
         echo "overwriting ${lh_file}"
