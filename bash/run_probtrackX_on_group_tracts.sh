@@ -64,7 +64,7 @@ else
   exit 1
 fi
 
-bad_sub=(sub072 sub124 sub126 sub135 sub136 sub138 sub148 sub159 sub163 sub171 sub172 sub190 sub195 sub199 sub202 sub210 sub234 sub254 sub311 sub540 sub541)
+bad_sub=(sub072 sub106 sub124 sub126 sub135 sub136 sub138 sub148 sub159 sub163 sub171 sub172 sub190 sub195 sub199 sub202 sub210 sub234 sub254 sub311 sub540 sub541)
 
 SOURCEJoin=$(IFS=- ; echo "${SOURCES[*]}")
 #echo $SOURCEJoin
@@ -132,17 +132,17 @@ while read x; do
 
 done < <(find $DTI_DIR -maxdepth 1 -type d -name "sub*")
 echo $LINE_COUNT
-#run_val=0
-#if [ "$LINE_COUNT" -gt "$run_val" ]; then
-#  echo "running  ${LINE_COUNT} jobs"
-#  if [ "$LINE_COUNT" -lt 300 ] ; then
-#    echo "less than 300 jobs:  ${LINE_COUNT} jobs"
-#      nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT "$LINE_COUNT" "$LINE_COUNT" 0 probtrackX_on_group_tracts.sh  $SUBJECT_PROBX_FILE
-#  else
-#    echo "more than 300 jobs:  ${LINE_COUNT} jobs"
-#      #nohup /cm/shared/admin/bin/submit-many-jobs 3 2 3 1 probtrackX_on_select_tracts.sh  $SUBJECT_PROBX_FILE
-#      nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT 275 300 25 probtrackX_on_group_tracts.sh  $SUBJECT_PROBX_FILE
-#  fi
-#  else
-#    echo $LINE_COUNT
-#fi
+run_val=0
+if [ "$LINE_COUNT" -gt "$run_val" ]; then
+  echo "running  ${LINE_COUNT} jobs"
+  if [ "$LINE_COUNT" -lt 300 ] ; then
+    echo "less than 300 jobs:  ${LINE_COUNT} jobs"
+      nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT "$LINE_COUNT" "$LINE_COUNT" 0 probtrackX_on_group_tracts.sh  $SUBJECT_PROBX_FILE
+  else
+    echo "more than 300 jobs:  ${LINE_COUNT} jobs"
+      #nohup /cm/shared/admin/bin/submit-many-jobs 3 2 3 1 probtrackX_on_select_tracts.sh  $SUBJECT_PROBX_FILE
+      nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT 275 300 25 probtrackX_on_group_tracts.sh  $SUBJECT_PROBX_FILE
+  fi
+  else
+    echo $LINE_COUNT
+fi
