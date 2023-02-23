@@ -74,6 +74,8 @@ EXCLUDEJoin=$(IFS=- ; echo "${EXCLUDES[*]}")
 
 printf "%s,%s,%s,%s,%s,%s\n" "row" "subject_name" "hemi" "file_loc" "segment_file" "save_loc"   >> $SUBJECT_PROBX_FILE
 
+bad_sub=(sub072 sub106 sub124 sub126 sub135 sub136 sub138 sub148 sub159 sub163 sub171 sub172 sub190 sub195 sub199 sub202 sub210 sub234 sub254 sub311 sub540 sub541)
+
 echo "looking at ${DTI_DIR} "
 SUBJ_LINE=0
 mkdir -p "${DTI_DIR}/probtrackX_group_results_${SOURCEJoin}_TO_${TARGETSJoin}"
@@ -83,44 +85,49 @@ while read x; do
       original=$DTI_DIR
       correction=''
       subject_name="${x/$original/$correction}"
-      lh_file="${DTI_DIR}/probtrackX_group_results_${SOURCEJoin}_TO_${TARGETSJoin}/${subject_name}_LH_fdt_network.mat"
-      rh_file="${DTI_DIR}/probtrackX_group_results_${SOURCEJoin}_TO_${TARGETSJoin}/${subject_name}_RH_fdt_network.mat"
-
-      if [ "$overwrite" = true ]
-      then
-        echo "overwriting ${lh_file}"
-        LINE_COUNT=$(expr ${LINE_COUNT} + 1)
-        # folder to find the file
-        lh_tr_file="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_LH_thr_${threshold}_${SOURCEJoin}_TO_${TARGETSJoin}/fdt_network_matrix"
-        SUBJECT_SOURCE_FILE="${DTI_DIR}/${subject_name}/sources_lang_glasser_LH_thr_${threshold}_${SOURCEJoin}.txt"
-        printf "%d,%s,%s,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "LH" "$lh_tr_file" "$SUBJECT_SOURCE_FILE" "$lh_file" >> $SUBJECT_PROBX_FILE
+      if [[ " ${bad_sub[@]} " =~ " ${subject_name} " ]]; then
+        echo "skipping ${subject_name}"
+        continue
       else
-        if [ ! -f "$lh_file" ]
-          then
-            echo "missing ${lh_file}"
-            LINE_COUNT=$(expr ${LINE_COUNT} + 1)
-            # folder to find the file
-            lh_tr_file="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_LH_thr_${threshold}_${SOURCEJoin}_TO_${TARGETSJoin}/fdt_network_matrix"
-            SUBJECT_SOURCE_FILE="${DTI_DIR}/${subject_name}/sources_lang_glasser_LH_thr_${threshold}_${SOURCEJoin}.txt"
-            printf "%d,%s,%s,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "LH" "$lh_tr_file" "$SUBJECT_SOURCE_FILE" "$lh_file" >> $SUBJECT_PROBX_FILE
-        fi
-      fi
+        lh_file="${DTI_DIR}/probtrackX_group_results_${SOURCEJoin}_TO_${TARGETSJoin}/${subject_name}_LH_fdt_network.mat"
+        rh_file="${DTI_DIR}/probtrackX_group_results_${SOURCEJoin}_TO_${TARGETSJoin}/${subject_name}_RH_fdt_network.mat"
 
-      if [ "$overwrite" = true ]
-      then
-        echo "overwriting ${rh_file}"
-        LINE_COUNT=$(expr ${LINE_COUNT} + 1)
-        rh_tr_file="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_RH_thr_${threshold}_${SOURCEJoin}_TO_${TARGETSJoin}/fdt_network_matrix"
-        SUBJECT_SOURCE_FILE="${DTI_DIR}/${subject_name}/sources_lang_glasser_RH_thr_${threshold}_${SOURCEJoin}.txt"
-        printf "%d,%s,%s,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "RH" "$rh_tr_file" "$SUBJECT_SOURCE_FILE" "$rh_file" >> $SUBJECT_PROBX_FILE
-      else
-        if [ ! -f "$rh_file" ]
+        if [ "$overwrite" = true ]
         then
-          echo "missing ${rh_file}"
+          echo "overwriting ${lh_file}"
+          LINE_COUNT=$(expr ${LINE_COUNT} + 1)
+          # folder to find the file
+          lh_tr_file="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_LH_thr_${threshold}_${SOURCEJoin}_TO_${TARGETSJoin}/fdt_network_matrix"
+          SUBJECT_SOURCE_FILE="${DTI_DIR}/${subject_name}/sources_lang_glasser_LH_thr_${threshold}_${SOURCEJoin}.txt"
+          printf "%d,%s,%s,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "LH" "$lh_tr_file" "$SUBJECT_SOURCE_FILE" "$lh_file" >> $SUBJECT_PROBX_FILE
+        else
+          if [ ! -f "$lh_file" ]
+            then
+              echo "missing ${lh_file}"
+              LINE_COUNT=$(expr ${LINE_COUNT} + 1)
+              # folder to find the file
+              lh_tr_file="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_LH_thr_${threshold}_${SOURCEJoin}_TO_${TARGETSJoin}/fdt_network_matrix"
+              SUBJECT_SOURCE_FILE="${DTI_DIR}/${subject_name}/sources_lang_glasser_LH_thr_${threshold}_${SOURCEJoin}.txt"
+              printf "%d,%s,%s,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "LH" "$lh_tr_file" "$SUBJECT_SOURCE_FILE" "$lh_file" >> $SUBJECT_PROBX_FILE
+          fi
+        fi
+
+        if [ "$overwrite" = true ]
+        then
+          echo "overwriting ${rh_file}"
           LINE_COUNT=$(expr ${LINE_COUNT} + 1)
           rh_tr_file="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_RH_thr_${threshold}_${SOURCEJoin}_TO_${TARGETSJoin}/fdt_network_matrix"
-          SUBJECT_SOURCE_FILE="${DTI_DIR}/${subject_name}/sources_lang_glasser_RH_thr_${threshold}_${SOURCEJoin}_EX_${EXCLUDEJoin}.txt"
+          SUBJECT_SOURCE_FILE="${DTI_DIR}/${subject_name}/sources_lang_glasser_RH_thr_${threshold}_${SOURCEJoin}.txt"
           printf "%d,%s,%s,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "RH" "$rh_tr_file" "$SUBJECT_SOURCE_FILE" "$rh_file" >> $SUBJECT_PROBX_FILE
+        else
+          if [ ! -f "$rh_file" ]
+          then
+            echo "missing ${rh_file}"
+            LINE_COUNT=$(expr ${LINE_COUNT} + 1)
+            rh_tr_file="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_RH_thr_${threshold}_${SOURCEJoin}_TO_${TARGETSJoin}/fdt_network_matrix"
+            SUBJECT_SOURCE_FILE="${DTI_DIR}/${subject_name}/sources_lang_glasser_RH_thr_${threshold}_${SOURCEJoin}_EX_${EXCLUDEJoin}.txt"
+            printf "%d,%s,%s,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "RH" "$rh_tr_file" "$SUBJECT_SOURCE_FILE" "$rh_file" >> $SUBJECT_PROBX_FILE
+          fi
         fi
       fi
 done < <(find $DTI_DIR -maxdepth 1 -type d -name "sub*")
