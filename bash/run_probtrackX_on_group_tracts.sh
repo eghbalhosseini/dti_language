@@ -27,15 +27,15 @@ elif [ "$SRC_TRG_INDEX" -eq 2 ] ; then
 elif [ "$SRC_TRG_INDEX" -eq 3 ] ; then
 ######################################
   # AngG Targets
-  SOURCES=("IFGorb_top_${threshold}" "IFG_top_${threshold}" "ANG_top_${threshold}" "MFG_top_${threshold}")
-  TARGETS=("ANG_top_${threshold}" "IFGorb_top_${threshold}" "IFG_top_${threshold}" "MFG_top_${threshold}")
+  SOURCES=("IFGorb_top_${threshold}" "IFG_top_${threshold}" "AngG_top_${threshold}" "MFG_top_${threshold}")
+  TARGETS=("AngG_top_${threshold}" "IFGorb_top_${threshold}" "IFG_top_${threshold}" "MFG_top_${threshold}")
   EXCLUDES=("AntTemp_top_${threshold}" "PostTemp_top_${threshold}" "AntTemp_bottom_${threshold}" "AngG_bottom_${threshold}" "IFGorb_bottom_${threshold}" "PostTemp_bottom_${threshold}" "IFG_bottom_${threshold}" "MFG_bottom_${threshold}")
 
 
 elif [ "$SRC_TRG_INDEX" -eq 4 ] ; then
   # IFG targets
-  SOURCES=("PostTemp_top_${threshold}" "AntTemp_top_${threshold}" "ANG_top_${threshold}" "IFG_top_${threshold}")
-  TARGETS=("PostTemp_top_${threshold}" "AntTemp_top_${threshold}" "ANG_top_${threshold}" "IFG_top_${threshold}")
+  SOURCES=("PostTemp_top_${threshold}" "AntTemp_top_${threshold}" "AngG_top_${threshold}" "IFG_top_${threshold}")
+  TARGETS=("PostTemp_top_${threshold}" "AntTemp_top_${threshold}" "AngG_top_${threshold}" "IFG_top_${threshold}")
 
   EXCLUDES=("IFGorb_top_${threshold}" "MFG_top_${threshold}"
             "PostTemp_bottom_${threshold}" "AntTemp_bottom_${threshold}" "IFG_bottom_${threshold}"
@@ -44,8 +44,8 @@ elif [ "$SRC_TRG_INDEX" -eq 4 ] ; then
 ####################################
 elif [ "$SRC_TRG_INDEX" -eq 5 ] ; then
   # IFGorb Targets
-  SOURCES=("PostTemp_top_${threshold}" "AntTemp_top_${threshold}" "ANG_top_${threshold}" "IFGorb_top_${threshold}")
-  TARGETS=("PostTemp_top_${threshold}" "AntTemp_top_${threshold}"  "ANG_top_${threshold}" "IFGorb_top_${threshold}")
+  SOURCES=("PostTemp_top_${threshold}" "AntTemp_top_${threshold}" "AngG_top_${threshold}" "IFGorb_top_${threshold}")
+  TARGETS=("PostTemp_top_${threshold}" "AntTemp_top_${threshold}"  "AngG_top_${threshold}" "IFGorb_top_${threshold}")
 
   EXCLUDES=("IFG_top_${threshold}" "MFG_top_${threshold}"
             "PostTemp_bottom_${threshold}" "AntTemp_bottom_${threshold}" "IFG_bottom_${threshold}"
@@ -82,7 +82,7 @@ touch $SUBJECT_PROBX_FILE
 printf "%s,%s,%s,%s,%s,%s,%s,%s\n" "row" "subject_name" "segment_name" "source_name" "target_name" "exclude_name" "hemi" "thr"   >> $SUBJECT_PROBX_FILE
 
 echo "looking at ${DTI_DIR} "
-overwrite=false
+overwrite=true
 while read x; do
       # check if file already exist in labels dir
       original=$DTI_DIR
