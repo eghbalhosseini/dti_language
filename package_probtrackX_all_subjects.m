@@ -3,7 +3,7 @@ clear all
 close all
 probtrack_folder='/Users/eghbalhosseini/MyData/dti_language/';
 analysis_path='/Users/eghbalhosseini/MyData/dti_language/analysis';
-threshold=10;
+threshold=20;
 folders={['probtrackX_results_lang_glasser_thr_',num2str(threshold)]}
 
 
