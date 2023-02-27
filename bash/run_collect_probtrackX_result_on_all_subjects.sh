@@ -17,37 +17,43 @@ echo "looking at ${DTI_DIR} "
 mkdir -p "${DTI_DIR}/probtrackX_results_lang_glasser_thr_${threshold}"
 SUBJ_LINE=0
 overwrite=false
+bad_sub=(sub072 sub106 sub124 sub126 sub135 sub136 sub138 sub148 sub159 sub163 sub171 sub172 sub190 sub195 sub199 sub202 sub210 sub234 sub254 sub311 sub540 sub541)
 while read x; do
       # check if file already exist in labels dir
       original=$DTI_DIR
       correction=''
       subject_name="${x/$original/$correction}"
-      lh_file="${DTI_DIR}/probtrackX_results_lang_glasser_thr_${threshold}/${subject_name}_LH_fdt_network.mat"
-      lh_path_file="${DTI_DIR}/probtrackX_results_lang_glasser_thr_${threshold}/${subject_name}_LH_fdt_paths.nii.gz"
-      rh_file="${DTI_DIR}/probtrackX_results_lang_glasser_thr_${threshold}/${subject_name}_RH_fdt_network.mat"
-      rh_path_file="${DTI_DIR}/probtrackX_results_lang_glasser_thr_${threshold}/${subject_name}_RH_fdt_paths.nii.gz"
-      if [ "$overwrite" = true ]
-      then
-        echo "overwriting ${lh_file}"
-        LINE_COUNT=$(expr ${LINE_COUNT} + 1)
-        lh_tr_file="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_LH_thr_${threshold}/fdt_network_matrix"
-        printf "%d,%s,%s,%s,%s,%d\n" "$LINE_COUNT" "$subject_name" "LH" "$lh_tr_file" "$lh_file" "$threshold" >> $SUBJECT_PROBX_FILE
-        LINE_COUNT=$(expr ${LINE_COUNT} + 1)
-        rh_tr_file="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_RH_thr_${threshold}/fdt_network_matrix"
-        printf "%d,%s,%s,%s,%s,%d\n" "$LINE_COUNT" "$subject_name" "RH" "$rh_tr_file" "$rh_file" "$threshold" >> $SUBJECT_PROBX_FILE
+      if [[ " ${bad_sub[@]} " =~ " ${subject_name} " ]]; then
+        echo "skipping ${subject_name}"
+        continue
       else
-        if [ ! -f "$lh_file" ]
+        lh_file="${DTI_DIR}/probtrackX_results_lang_glasser_thr_${threshold}/${subject_name}_LH_fdt_network.mat"
+        lh_path_file="${DTI_DIR}/probtrackX_results_lang_glasser_thr_${threshold}/${subject_name}_LH_fdt_paths.nii.gz"
+        rh_file="${DTI_DIR}/probtrackX_results_lang_glasser_thr_${threshold}/${subject_name}_RH_fdt_network.mat"
+        rh_path_file="${DTI_DIR}/probtrackX_results_lang_glasser_thr_${threshold}/${subject_name}_RH_fdt_paths.nii.gz"
+        if [ "$overwrite" = true ]
         then
+          echo "overwriting ${lh_file}"
           LINE_COUNT=$(expr ${LINE_COUNT} + 1)
-          # folder to find the file
           lh_tr_file="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_LH_thr_${threshold}/fdt_network_matrix"
           printf "%d,%s,%s,%s,%s,%d\n" "$LINE_COUNT" "$subject_name" "LH" "$lh_tr_file" "$lh_file" "$threshold" >> $SUBJECT_PROBX_FILE
-        fi
-        if [ ! -f "$rh_file" ]
-        then
           LINE_COUNT=$(expr ${LINE_COUNT} + 1)
           rh_tr_file="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_RH_thr_${threshold}/fdt_network_matrix"
           printf "%d,%s,%s,%s,%s,%d\n" "$LINE_COUNT" "$subject_name" "RH" "$rh_tr_file" "$rh_file" "$threshold" >> $SUBJECT_PROBX_FILE
+        else
+          if [ ! -f "$lh_file" ]
+          then
+            LINE_COUNT=$(expr ${LINE_COUNT} + 1)
+            # folder to find the file
+            lh_tr_file="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_LH_thr_${threshold}/fdt_network_matrix"
+            printf "%d,%s,%s,%s,%s,%d\n" "$LINE_COUNT" "$subject_name" "LH" "$lh_tr_file" "$lh_file" "$threshold" >> $SUBJECT_PROBX_FILE
+          fi
+          if [ ! -f "$rh_file" ]
+          then
+            LINE_COUNT=$(expr ${LINE_COUNT} + 1)
+            rh_tr_file="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_RH_thr_${threshold}/fdt_network_matrix"
+            printf "%d,%s,%s,%s,%s,%d\n" "$LINE_COUNT" "$subject_name" "RH" "$rh_tr_file" "$rh_file" "$threshold" >> $SUBJECT_PROBX_FILE
+          fi
         fi
       fi
 done < <(find $DTI_DIR -maxdepth 1 -type d -name "sub*")
