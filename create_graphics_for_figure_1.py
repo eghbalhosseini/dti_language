@@ -71,6 +71,7 @@ if __name__=='__main__':
 
     network_fsaverage_postTemp_ROI = np.zeros(network_fsavg.shape)
     network_fsaverage_AntTemp_ROI = np.zeros(network_fsavg.shape)
+    network_fsaverage_Lang_ROI = np.zeros(network_fsavg.shape)
 
     # in LH_glasser[2] find the location of elemnt that is equalt to 'L_MST_ROI'
 
@@ -86,6 +87,13 @@ if __name__=='__main__':
     network_fsaverage_postTemp_ROI[target_roi_2] = 4
     network_fsaverage_postTemp_ROI[target_roi_3] = 5
     network_fsaverage_postTemp_ROI[source_2_roi] = 6
+
+    network_fsaverage_Lang_ROI[target_roi_1] =1
+    network_fsaverage_Lang_ROI[target_roi_2] =2
+    network_fsaverage_Lang_ROI[target_roi_3] =3
+    network_fsaverage_Lang_ROI[source_1_roi] =4
+    network_fsaverage_Lang_ROI[source_2_roi] =5
+    #network_fsaverage_Lang_ROI[source_3_roi] =6
 
     LH_neighbor_1 = LH_glasser[2].index(b'L_STSva_ROI')
     LH_neighbor_2 = LH_glasser[2].index(b'L_STSda_ROI')
@@ -132,6 +140,28 @@ if __name__=='__main__':
     plotting.plot_surf_contours(fsaverage['infl_' + hemi], network_fsaverage_AntTemp_ROI, levels=[1,2,3,4,5,6 ], axes=ax,
                                 legend=False, colors=['k','k','k','k','k','k' ])
 
+
+
+
+    target_1_col= np.array([36 / 256, 68 / 256, 120 / 256, 1])
+    target_2_col = np.array([77 / 256, 145 / 256, 240 / 256, 1])
+    target_3_col = np.array([60 / 256, 114 / 256, 189 / 256, 1])
+    source_1_roi = np.array([198 / 256, 52 / 256, 255 / 256, 1])
+    source_2_roi = np.array([250 / 256, 50 / 256, 15 / 256, 1])
+
+    newcolors= np.vstack((target_1_col,target_2_col,target_3_col,
+                          source_1_roi,source_2_roi))
+    newcmp = ListedColormap(newcolors)
+
+    ax = fig.add_axes([0.1, 0.7, 0.25, 0.25*pa_ratio], projection='3d')
+    plotting.plot_surf_roi(surf_mesh=fsaverage['infl_' + hemi], roi_map=network_fsaverage_Lang_ROI, hemi=hemi,
+                            view='lateral', cmap=newcmp, bg_on_data=True,bg_map=fsaverage['sulc_left'],
+                            darkness=.3, axes=ax,alpha=1)
+    #plotting.plot_surf_contours(fsaverage['infl_' + hemi], network_fsaverage_Lang_ROI, levels=[1,2,3,4,5,6 ], axes=ax,
+    #                            legend=False, colors=['k','k','k','k','k','k' ])
+
+
+
     # save plot as pdf file
     plt.savefig(f'{sub_dti_dir}/{network_id}_fsaverage_for_figure_1_v2.pdf', dpi=150)
     plt.savefig(f'{sub_dti_dir}/{network_id}_fsaverage_for_figure_1_v2.png', dpi=300)
@@ -139,3 +169,5 @@ if __name__=='__main__':
     fig.show()
 
     source_name = list(d_parcel_name_map[network_id].values())[4]
+
+    #

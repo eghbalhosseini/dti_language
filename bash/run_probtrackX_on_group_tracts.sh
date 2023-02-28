@@ -16,20 +16,20 @@ if [ "$SRC_TRG_INDEX" -eq 1 ] ; then
   # AntTemp Targets
   SOURCES=("AntTemp_top_${threshold}" "IFGorb_top_${threshold}" "IFG_top_${threshold}" "MFG_top_${threshold}")
   TARGETS=("AntTemp_top_${threshold}" "IFGorb_top_${threshold}" "IFG_top_${threshold}" "MFG_top_${threshold}")
-  EXCLUDES=("PostTemp_top_${threshold}" "AngG_top_${threshold}" "PostTemp_bottom_${threshold}" "AngG_bottom_${threshold}" "IFGorb_bottom_${threshold}" "AntTemp_bottom_${threshold}" "IFG_bottom_${threshold}" "MFG_bottom_${threshold}")
+  EXCLUDES=("PostTemp_top_${threshold}" "AngG_top_${threshold}" )
 
 elif [ "$SRC_TRG_INDEX" -eq 2 ] ; then
   # postTemp Targets
   SOURCES=("PostTemp_top_${threshold}" "IFGorb_top_${threshold}" "IFG_top_${threshold}" "MFG_top_${threshold}")
   TARGETS=("PostTemp_top_${threshold}" "IFGorb_top_${threshold}" "IFG_top_${threshold}" "MFG_top_${threshold}")
-  EXCLUDES=("AntTemp_top_${threshold}" "AngG_top_${threshold}" "AntTemp_bottom_${threshold}" "AngG_bottom_${threshold}" "IFGorb_bottom_${threshold}" "PostTemp_bottom_${threshold}" "IFG_bottom_${threshold}" "MFG_bottom_${threshold}")
+  EXCLUDES=("AntTemp_top_${threshold}" "AngG_top_${threshold}" )
 
 elif [ "$SRC_TRG_INDEX" -eq 3 ] ; then
 ######################################
   # AngG Targets
   SOURCES=("IFGorb_top_${threshold}" "IFG_top_${threshold}" "AngG_top_${threshold}" "MFG_top_${threshold}")
   TARGETS=("AngG_top_${threshold}" "IFGorb_top_${threshold}" "IFG_top_${threshold}" "MFG_top_${threshold}")
-  EXCLUDES=("AntTemp_top_${threshold}" "PostTemp_top_${threshold}" "AntTemp_bottom_${threshold}" "AngG_bottom_${threshold}" "IFGorb_bottom_${threshold}" "PostTemp_bottom_${threshold}" "IFG_bottom_${threshold}" "MFG_bottom_${threshold}")
+  EXCLUDES=("AntTemp_top_${threshold}" "PostTemp_top_${threshold}" )
 
 
 elif [ "$SRC_TRG_INDEX" -eq 4 ] ; then
@@ -37,9 +37,7 @@ elif [ "$SRC_TRG_INDEX" -eq 4 ] ; then
   SOURCES=("PostTemp_top_${threshold}" "AntTemp_top_${threshold}" "AngG_top_${threshold}" "IFG_top_${threshold}")
   TARGETS=("PostTemp_top_${threshold}" "AntTemp_top_${threshold}" "AngG_top_${threshold}" "IFG_top_${threshold}")
 
-  EXCLUDES=("IFGorb_top_${threshold}" "MFG_top_${threshold}"
-            "PostTemp_bottom_${threshold}" "AntTemp_bottom_${threshold}" "IFG_bottom_${threshold}"
-            "AngG_bottom_${threshold}" "IFGorb_bottom_${threshold}" "MFG_bottom_${threshold}")
+  EXCLUDES=("IFGorb_top_${threshold}" "MFG_top_${threshold}")
 
 ####################################
 elif [ "$SRC_TRG_INDEX" -eq 5 ] ; then
@@ -47,18 +45,14 @@ elif [ "$SRC_TRG_INDEX" -eq 5 ] ; then
   SOURCES=("PostTemp_top_${threshold}" "AntTemp_top_${threshold}" "AngG_top_${threshold}" "IFGorb_top_${threshold}")
   TARGETS=("PostTemp_top_${threshold}" "AntTemp_top_${threshold}"  "AngG_top_${threshold}" "IFGorb_top_${threshold}")
 
-  EXCLUDES=("IFG_top_${threshold}" "MFG_top_${threshold}"
-            "PostTemp_bottom_${threshold}" "AntTemp_bottom_${threshold}" "IFG_bottom_${threshold}"
-            "AngG_bottom_${threshold}" "IFGorb_bottom_${threshold}" "MFG_bottom_${threshold}")
+  EXCLUDES=("IFG_top_${threshold}" "MFG_top_${threshold}")
 
 elif [ "$SRC_TRG_INDEX" -eq 6 ] ; then
   # MFG Targets
   SOURCES=("PostTemp_top_${threshold}" "AntTemp_top_${threshold}" "AngG_top_${threshold}" "MFG_top_${threshold}")
   TARGETS=("PostTemp_top_${threshold}" "AntTemp_top_${threshold}" "AngG_top_${threshold}" "MFG_top_${threshold}")
 
-  EXCLUDES=("IFG_top_${threshold}" "IFGorb_top_${threshold}"
-            "PostTemp_bottom_${threshold}" "AntTemp_bottom_${threshold}" "IFG_bottom_${threshold}"
-            "AngG_bottom_${threshold}" "IFGorb_bottom_${threshold}" "MFG_bottom_${threshold}")
+  EXCLUDES=("IFG_top_${threshold}" "IFGorb_top_${threshold}")
 else
   printf '%s\n' "no source target pair is defined" >&2  # write error message to stderr
   exit 1
@@ -94,10 +88,10 @@ while read x; do
         continue
       else
         echo "processing ${subject_name}"
-        lh_folder="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_LH_thr_${threshold}_${SOURCEJoin}_TO_${TARGETSJoin}/fdt_paths.nii.gz"
+        lh_folder="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_LH_thr_${threshold}_${SOURCEJoin}_TO_${TARGETSJoin}_EX_${EXCLUDEJoin}/fdt_paths.nii.gz"
         find "${DTI_DIR}/${subject_name}/dti.probtrackx/" -name "*90*"  -exec rm -rf {} +
         #rm $lh_folder
-        rh_folder="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_RH_thr_${threshold}_${SOURCEJoin}_TO_${TARGETSJoin}/fdt_paths.nii.gz"
+        rh_folder="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_RH_thr_${threshold}_${SOURCEJoin}_TO_${TARGETSJoin}_EX_${EXCLUDEJoin}/fdt_paths.nii.gz"
         #rm $rh_folder
         if [ "$overwrite" = true ]
         then

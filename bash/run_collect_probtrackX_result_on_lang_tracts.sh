@@ -53,6 +53,7 @@ while read x; do
       else
         lh_file="${DTI_DIR}/probtrackX_lang_results_${SOURCEJoin}/${subject_name}_LH_fdt_network.mat"
         rh_file="${DTI_DIR}/probtrackX_lang_results_${SOURCEJoin}/${subject_name}_RH_fdt_network.mat"
+        # lh path file
 
         if [ "$overwrite" = true ]
         then

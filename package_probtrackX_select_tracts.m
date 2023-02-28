@@ -63,6 +63,8 @@ for folder =folders'
     RH_subs=[RH_cell(:,3)];
     assert(all(cellfun(@(x,y) strcmp(x,y), RH_subs,LH_subs)));
     
+    
+    
     % LH
     % make symmetric by summing up upper and lower halves
     temp_fdt=cellfun(@(t) (triu(t)+transpose(tril(t)))/2, LH_fdt,'uni',false);
@@ -134,7 +136,7 @@ unique_subs=results{1}.unique_subs;
 rng(1)
 % ids=randi(length(unique_subs),1,60);
 % train_subs=unique_subs(ids);
-num_subs=70;
+num_subs=125;
 [train_subs,ids]=datasample(unique_subs,70,'Replace',false);
 
 IFG_Post=results{1}.unique_LH_targets(:,1);

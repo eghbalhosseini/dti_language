@@ -14,7 +14,8 @@ for folder =folders'
     sub_ids=regexp({fdt_files(:).name},'sub\d+','match');
     sub_ids=cellfun(@(x) x(1) , sub_ids);
     unique_subs=unique(sub_ids);
-    
+    new_ids=find(~cellfun(@(x) contains(x,'sub197'),unique_subs));
+    unique_subs=unique_subs(new_ids);
     LH_cell={};
     RH_cell={};
     for id_sub=1:length(unique_subs)
