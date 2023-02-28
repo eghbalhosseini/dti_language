@@ -40,32 +40,26 @@ elif [ "$SRC_TRG_INDEX" -eq 4 ] ; then
   SOURCES=("PostTemp_top_${threshold}" "AntTemp_top_${threshold}" "AngG_top_${threshold}" "IFG_top_${threshold}")
   TARGETS=("PostTemp_top_${threshold}" "AntTemp_top_${threshold}" "AngG_top_${threshold}" "IFG_top_${threshold}")
 
-  EXCLUDES=("IFGorb_top_${threshold}" "MFG_top_${threshold}"
-            )
-
+  EXCLUDES=("IFGorb_top_${threshold}" "MFG_top_${threshold}")
 
 ####################################
 elif [ "$SRC_TRG_INDEX" -eq 5 ] ; then
   # IFGorb Targets
-    SOURCES=("PostTemp_top_${threshold}" "AntTemp_top_${threshold}" "AngG_top_${threshold}" "IFGorb_top_${threshold}")
+  SOURCES=("PostTemp_top_${threshold}" "AntTemp_top_${threshold}" "AngG_top_${threshold}" "IFGorb_top_${threshold}")
   TARGETS=("PostTemp_top_${threshold}" "AntTemp_top_${threshold}"  "AngG_top_${threshold}" "IFGorb_top_${threshold}")
 
-  EXCLUDES=("IFG_top_${threshold}" "MFG_top_${threshold}"
-            )
+  EXCLUDES=("IFG_top_${threshold}" "MFG_top_${threshold}")
 
 elif [ "$SRC_TRG_INDEX" -eq 6 ] ; then
   # MFG Targets
   SOURCES=("PostTemp_top_${threshold}" "AntTemp_top_${threshold}" "AngG_top_${threshold}" "MFG_top_${threshold}")
   TARGETS=("PostTemp_top_${threshold}" "AntTemp_top_${threshold}" "AngG_top_${threshold}" "MFG_top_${threshold}")
 
-  EXCLUDES=("IFG_top_${threshold}" "IFGorb_top_${threshold}"
-            )
+  EXCLUDES=("IFG_top_${threshold}" "IFGorb_top_${threshold}")
 else
   printf '%s\n' "no source target pair is defined" >&2  # write error message to stderr
   exit 1
 fi
-
-
 SOURCEJoin=$(IFS=- ; echo "${SOURCES[*]}")
 TARGETSJoin=$(IFS=- ; echo "${TARGETS[*]}")
 EXCLUDEJoin=$(IFS=- ; echo "${EXCLUDES[*]}")
