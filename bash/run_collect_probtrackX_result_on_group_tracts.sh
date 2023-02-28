@@ -19,20 +19,20 @@ if [ "$SRC_TRG_INDEX" -eq 1 ] ; then
   # AntTemp Targets
   SOURCES=("AntTemp_top_${threshold}" "IFGorb_top_${threshold}" "IFG_top_${threshold}" "MFG_top_${threshold}")
   TARGETS=("AntTemp_top_${threshold}" "IFGorb_top_${threshold}" "IFG_top_${threshold}" "MFG_top_${threshold}")
-  EXCLUDES=("PostTemp_top_${threshold}" "AngG_top_${threshold}" "PostTemp_bottom_${threshold}" "AngG_bottom_${threshold}" "IFGorb_bottom_${threshold}" "AntTemp_bottom_${threshold}" "IFG_bottom_${threshold}" "MFG_bottom_${threshold}")
+  EXCLUDES=("PostTemp_top_${threshold}" "AngG_top_${threshold}" )
 
 elif [ "$SRC_TRG_INDEX" -eq 2 ] ; then
   # postTemp Targets
   SOURCES=("PostTemp_top_${threshold}" "IFGorb_top_${threshold}" "IFG_top_${threshold}" "MFG_top_${threshold}")
   TARGETS=("PostTemp_top_${threshold}" "IFGorb_top_${threshold}" "IFG_top_${threshold}" "MFG_top_${threshold}")
-  EXCLUDES=("AntTemp_top_${threshold}" "AngG_top_${threshold}" "AntTemp_bottom_${threshold}" "AngG_bottom_${threshold}" "IFGorb_bottom_${threshold}" "PostTemp_bottom_${threshold}" "IFG_bottom_${threshold}" "MFG_bottom_${threshold}")
+  EXCLUDES=("AntTemp_top_${threshold}" "AngG_top_${threshold}" )
 
 elif [ "$SRC_TRG_INDEX" -eq 3 ] ; then
 ######################################
   # AngG Targets
   SOURCES=("IFGorb_top_${threshold}" "IFG_top_${threshold}" "AngG_top_${threshold}" "MFG_top_${threshold}")
   TARGETS=("AngG_top_${threshold}" "IFGorb_top_${threshold}" "IFG_top_${threshold}" "MFG_top_${threshold}")
-  EXCLUDES=("AntTemp_top_${threshold}" "PostTemp_top_${threshold}" "AntTemp_bottom_${threshold}" "AngG_bottom_${threshold}" "IFGorb_bottom_${threshold}" "PostTemp_bottom_${threshold}" "IFG_bottom_${threshold}" "MFG_bottom_${threshold}")
+  EXCLUDES=("AntTemp_top_${threshold}" "PostTemp_top_${threshold}" )
 
 
 elif [ "$SRC_TRG_INDEX" -eq 4 ] ; then
@@ -41,8 +41,7 @@ elif [ "$SRC_TRG_INDEX" -eq 4 ] ; then
   TARGETS=("PostTemp_top_${threshold}" "AntTemp_top_${threshold}" "AngG_top_${threshold}" "IFG_top_${threshold}")
 
   EXCLUDES=("IFGorb_top_${threshold}" "MFG_top_${threshold}"
-            "PostTemp_bottom_${threshold}" "AntTemp_bottom_${threshold}" "IFG_bottom_${threshold}"
-            "AngG_bottom_${threshold}" "IFGorb_bottom_${threshold}" "MFG_bottom_${threshold}")
+            )
 
 
 ####################################
@@ -52,8 +51,7 @@ elif [ "$SRC_TRG_INDEX" -eq 5 ] ; then
   TARGETS=("PostTemp_top_${threshold}" "AntTemp_top_${threshold}"  "AngG_top_${threshold}" "IFGorb_top_${threshold}")
 
   EXCLUDES=("IFG_top_${threshold}" "MFG_top_${threshold}"
-            "PostTemp_bottom_${threshold}" "AntTemp_bottom_${threshold}" "IFG_bottom_${threshold}"
-            "AngG_bottom_${threshold}" "IFGorb_bottom_${threshold}" "MFG_bottom_${threshold}")
+            )
 
 elif [ "$SRC_TRG_INDEX" -eq 6 ] ; then
   # MFG Targets
@@ -61,8 +59,7 @@ elif [ "$SRC_TRG_INDEX" -eq 6 ] ; then
   TARGETS=("PostTemp_top_${threshold}" "AntTemp_top_${threshold}" "AngG_top_${threshold}" "MFG_top_${threshold}")
 
   EXCLUDES=("IFG_top_${threshold}" "IFGorb_top_${threshold}"
-            "PostTemp_bottom_${threshold}" "AntTemp_bottom_${threshold}" "IFG_bottom_${threshold}"
-            "AngG_bottom_${threshold}" "IFGorb_bottom_${threshold}" "MFG_bottom_${threshold}")
+            )
 else
   printf '%s\n' "no source target pair is defined" >&2  # write error message to stderr
   exit 1
@@ -79,7 +76,7 @@ bad_sub=(sub072 sub106 sub124 sub126 sub135 sub136 sub138 sub148 sub159 sub163 s
 
 echo "looking at ${DTI_DIR} "
 SUBJ_LINE=0
-mkdir -p "${DTI_DIR}/probtrackX_group_results_${SOURCEJoin}_TO_${TARGETSJoin}"
+mkdir -p "${DTI_DIR}/probtrackX_group_results_${SOURCEJoin}_TO_${TARGETSJoin}_TO_${EXCLUDEJoin}"
 overwrite=false
 while read x; do
       # check if file already exist in labels dir
@@ -90,15 +87,15 @@ while read x; do
         echo "skipping ${subject_name}"
         continue
       else
-        lh_file="${DTI_DIR}/probtrackX_group_results_${SOURCEJoin}_TO_${TARGETSJoin}/${subject_name}_LH_fdt_network.mat"
-        rh_file="${DTI_DIR}/probtrackX_group_results_${SOURCEJoin}_TO_${TARGETSJoin}/${subject_name}_RH_fdt_network.mat"
+        lh_file="${DTI_DIR}/probtrackX_group_results_${SOURCEJoin}_TO_${TARGETSJoin}_EX_${EXCLUDEJoin}/${subject_name}_LH_fdt_network.mat"
+        rh_file="${DTI_DIR}/probtrackX_group_results_${SOURCEJoin}_TO_${TARGETSJoin}_EX_${EXCLUDEJoin}/${subject_name}_RH_fdt_network.mat"
 
         if [ "$overwrite" = true ]
         then
           echo "overwriting ${lh_file}"
           LINE_COUNT=$(expr ${LINE_COUNT} + 1)
           # folder to find the file
-          lh_tr_file="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_LH_thr_${threshold}_${SOURCEJoin}_TO_${TARGETSJoin}/fdt_network_matrix"
+          lh_tr_file="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_LH_thr_${threshold}_${SOURCEJoin}_TO_${TARGETSJoin}_EX_${EXCLUDEJoin}/fdt_network_matrix"
           SUBJECT_SOURCE_FILE="${DTI_DIR}/${subject_name}/sources_lang_glasser_LH_thr_${threshold}_${SOURCEJoin}_EX_${EXCLUDEJoin}.txt"
           printf "%d,%s,%s,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "LH" "$lh_tr_file" "$SUBJECT_SOURCE_FILE" "$lh_file" >> $SUBJECT_PROBX_FILE
         else
@@ -107,7 +104,7 @@ while read x; do
               echo "missing ${lh_file}"
               LINE_COUNT=$(expr ${LINE_COUNT} + 1)
               # folder to find the file
-              lh_tr_file="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_LH_thr_${threshold}_${SOURCEJoin}_TO_${TARGETSJoin}/fdt_network_matrix"
+              lh_tr_file="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_LH_thr_${threshold}_${SOURCEJoin}_TO_${TARGETSJoin}_EX_${EXCLUDEJoin}/fdt_network_matrix"
               SUBJECT_SOURCE_FILE="${DTI_DIR}/${subject_name}/sources_lang_glasser_LH_thr_${threshold}_${SOURCEJoin}_EX_${EXCLUDEJoin}.txt"
               printf "%d,%s,%s,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "LH" "$lh_tr_file" "$SUBJECT_SOURCE_FILE" "$lh_file" >> $SUBJECT_PROBX_FILE
           fi
@@ -117,7 +114,7 @@ while read x; do
         then
           echo "overwriting ${rh_file}"
           LINE_COUNT=$(expr ${LINE_COUNT} + 1)
-          rh_tr_file="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_RH_thr_${threshold}_${SOURCEJoin}_TO_${TARGETSJoin}/fdt_network_matrix"
+          rh_tr_file="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_RH_thr_${threshold}_${SOURCEJoin}_TO_${TARGETSJoin}_EX_${EXCLUDEJoin}/fdt_network_matrix"
           SUBJECT_SOURCE_FILE="${DTI_DIR}/${subject_name}/sources_lang_glasser_RH_thr_${threshold}_${SOURCEJoin}_EX_${EXCLUDEJoin}.txt"
           printf "%d,%s,%s,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "RH" "$rh_tr_file" "$SUBJECT_SOURCE_FILE" "$rh_file" >> $SUBJECT_PROBX_FILE
         else
@@ -125,7 +122,7 @@ while read x; do
           then
             echo "missing ${rh_file}"
             LINE_COUNT=$(expr ${LINE_COUNT} + 1)
-            rh_tr_file="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_RH_thr_${threshold}_${SOURCEJoin}_TO_${TARGETSJoin}/fdt_network_matrix"
+            rh_tr_file="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_RH_thr_${threshold}_${SOURCEJoin}_TO_${TARGETSJoin}_EX_${EXCLUDEJoin}/fdt_network_matrix"
             SUBJECT_SOURCE_FILE="${DTI_DIR}/${subject_name}/sources_lang_glasser_RH_thr_${threshold}_${SOURCEJoin}_EX_${EXCLUDEJoin}.txt"
             printf "%d,%s,%s,%s,%s,%s\n" "$LINE_COUNT" "$subject_name" "RH" "$rh_tr_file" "$SUBJECT_SOURCE_FILE" "$rh_file" >> $SUBJECT_PROBX_FILE
           fi
