@@ -70,7 +70,7 @@ bad_sub=(sub072 sub106 sub124 sub126 sub135 sub136 sub138 sub148 sub159 sub163 s
 
 echo "looking at ${DTI_DIR} "
 SUBJ_LINE=0
-mkdir -p "${DTI_DIR}/probtrackX_group_results_${SOURCEJoin}_TO_${TARGETSJoin}_TO_${EXCLUDEJoin}"
+mkdir -p "${DTI_DIR}/probtrackX_group_results_${SOURCEJoin}_TO_${TARGETSJoin}_EX_${EXCLUDEJoin}"
 overwrite=false
 while read x; do
       # check if file already exist in labels dir
