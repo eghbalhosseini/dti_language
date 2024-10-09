@@ -11,5 +11,5 @@ module add openmind/miniconda/3.18.3-python2
 
 cd ${HOMEDIR}/${SUBJ}/
 #trac-all -prep -c tracula_config_sub007.csh
-trac-all -bedp -c tracula_config_sub007.csh
-#trac-all -path -c tracula_config_sub007.csh
+#trac-all -bedp -c tracula_config_sub007.csh
+trac-all -path -c tracula_config_sub007.csh
