@@ -29,6 +29,7 @@ set bvallist = (/mindhive/evlab/Shared/diffusionzeynep/{subj}/dti/bvals)
 #set bvallist = ({subj}/dti/bvals)
 '
 
+
 # Find all directories matching the pattern "sub###"
 SUBJECTS=$(find "$BASE_DIR" -maxdepth 1 -type d -name 'sub[0-9][0-9][0-9]' -printf '%f\n')
 
