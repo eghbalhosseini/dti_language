@@ -36,7 +36,7 @@ SUBJECTS=$(find "$BASE_DIR" -maxdepth 1 -type d -name 'sub[0-9][0-9][0-9]' -prin
 for subj in $SUBJECTS; do
     # Define the subject's directory and output file path
     SUBJECT_DIR="$BASE_DIR/$subj"
-    OUTPUT_FILE="$SUBJECT_DIR/config_${subj}.csh"
+    OUTPUT_FILE="$SUBJECT_DIR/tracula_config_${subj}.csh"
 
     # Replace {subj} in the template content with the actual subject ID
     FILE_CONTENT=$(echo "$TEMPLATE_CONTENT" | sed "s/{subj}/$subj/g")
