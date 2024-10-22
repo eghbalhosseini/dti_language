@@ -10,6 +10,9 @@ module add openmind/fsl/5.0.6
 module add openmind/miniconda/3.18.3-python2
 
 cd ${HOMEDIR}/${SUBJ}/
+
+ ln -s /mindhive/evlab/Shared/diffusionzeynep/sub007/dti.bedpostX /mindhive/evlab/Shared/diffusionzeynep/sub007/trc/sub007/dmri.bedpostX/
+
 #trac-all -prep -c tracula_config_sub007.csh
 #trac-all -bedp -c tracula_config_sub007.csh
 trac-all -path -c tracula_config_sub007.csh
