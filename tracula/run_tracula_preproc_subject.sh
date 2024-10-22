@@ -1,6 +1,5 @@
 #!/bin/bash
-#!/bin/bash
-#SBATCH --exclude node[017-018,094]
+#SBATCH --exclude node[017-018]
 #SBATCH -t 8:00:00
 #SBATCH --mem=10G
 GRAND_FILE=$1
