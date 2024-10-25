@@ -42,6 +42,13 @@ cd ${HOMEDIR}/${SUBJ}/ || { echo "Error: Could not change to subject directory $
 CONFIG_FILE="tracula_config_${SUBJ}.csh"
 which python
 trac-all -prep -c ${CONFIG_FILE}
+# create an empty directory for linking the bedpostX directory @ /mindhive/evlab/Shared/diffusionzeynep/${SUBJ}/trc/${SUBJ}/dmri.bedpostX/ also create the parents
+# make sure the parents to /mindhive/evlab/Shared/diffusionzeynep/${SUBJ}/trc/${SUBJ}/dmri.bedpostX/ exist
+# Define the path
+path="/mindhive/evlab/Shared/diffusionzeynep/${SUBJ}/trc/${SUBJ}/dmri.bedpostX/"
+# Create parent directories if they don't exist
+mkdir -p "$(dirname "$path")"
+echo "Ensured parent directories exist for: $path"
 # Create symbolic link for bedpostX directory
 ln -sf /mindhive/evlab/Shared/diffusionzeynep/${SUBJ}/dti.bedpostX /mindhive/evlab/Shared/diffusionzeynep/${SUBJ}/trc/${SUBJ}/dmri.bedpostX/
 # Run trac-all commands with the subject-specific configuration file
