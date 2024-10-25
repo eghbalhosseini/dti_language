@@ -39,13 +39,10 @@ module add openmind/miniconda/3.18.3-python2
 
 # Change to the subject's directory
 cd ${HOMEDIR}/${SUBJ}/ || { echo "Error: Could not change to subject directory ${HOMEDIR}/${SUBJ}/"; exit 1; }
-
+CONFIG_FILE="tracula_config_${SUBJ}.csh"
+trac-all -prep -c ${CONFIG_FILE}
 # Create symbolic link for bedpostX directory
 ln -sf /mindhive/evlab/Shared/diffusionzeynep/${SUBJ}/dti.bedpostX /mindhive/evlab/Shared/diffusionzeynep/${SUBJ}/trc/${SUBJ}/dmri.bedpostX/
-
 # Run trac-all commands with the subject-specific configuration file
-CONFIG_FILE="tracula_config_${SUBJ}.csh"
-
 # Run trac-all pipeline
-trac-all -prep -c ${CONFIG_FILE}
 trac-all -path -c ${CONFIG_FILE}

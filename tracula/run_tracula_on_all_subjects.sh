@@ -16,8 +16,8 @@ printf "%s,%s\n" "row" "subject_name" >> $SUBJECT_TRX_FILE
 
 echo "looking at ${DTI_DIR} "
 SUBJ_LINE=0
-overwrite= false
-bad_sub=(sub072 sub106 sub124 sub126 sub135 sub136 sub138 sub148 sub159 sub163 sub171 sub172 sub190 sub195 sub199 sub202 sub210 sub234 sub254 sub311 sub540 sub541)
+overwrite= true
+bad_sub=(sub007 sub072 sub106 sub124 sub126 sub135 sub136 sub138 sub148 sub159 sub163 sub171 sub172 sub190 sub195 sub199 sub202 sub210 sub234 sub254 sub311 sub540 sub541)
 
 while read x; do
       # check if file already exist in labels dir
@@ -28,6 +28,13 @@ while read x; do
         echo "skipping ${subject_name}"
         continue
       else
+        # first remove this file if it exists
+        file_to_remove="/mindhive/evlab/Shared/diffusionzeynep/${subject_name}/trc/${subject_name}/scripts/IsRunning.trac"
+        if [ -f "$file_to_remove" ]; then
+          echo "removing ${file_to_remove}"
+          rm $file_to_remove
+        fi
+
         trc_folder="${DTI_DIR}/${subject_name}/trc/${subject_name}"
         #rm $lh_folder
         #rm $rh_folder
