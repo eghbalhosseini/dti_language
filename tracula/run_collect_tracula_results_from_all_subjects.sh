@@ -73,7 +73,7 @@ while read x; do
         # copy the dpath_folder onto subject dump directory
         # print what you are doing
         echo "copying path_files to ${DUMP_DF_DIR}/${subject_name}/"
-        cp -r $dpath_folder ${DUMP_DF_DIR}/${subject_name}/
+        cp -r $dtifit_FA_file ${DUMP_DF_DIR}/${subject_name}/
 
         #rm $lh_folder
         #rm $rh_folder
