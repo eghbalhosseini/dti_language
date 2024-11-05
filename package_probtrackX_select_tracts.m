@@ -4,18 +4,18 @@ close all
 probtrack_folder='/Users/eghbalhosseini/MyData/dti_language/';
 analysis_path='/Users/eghbalhosseini/MyData/dti_language/analysis';
 
-threshold=10;
+threshold=20;
 w_type='sum';
-folders={   %sprintf('probtrackX_results_IFG_top_%d-AngG_top_%d_TO_IFG_top_%d-AngG_top_%d_EX_IFGorb_top_%d-MFG_top_%d',threshold,threshold,threshold,threshold,threshold,threshold);
+folders={   sprintf('probtrackX_results_IFG_top_%d-AngG_top_%d_TO_IFG_top_%d-AngG_top_%d_EX_IFGorb_top_%d-MFG_top_%d',threshold,threshold,threshold,threshold,threshold,threshold);
             sprintf('probtrackX_results_IFG_top_%d-AntTemp_top_%d_TO_IFG_top_%d-AntTemp_top_%d_EX_IFGorb_top_%d-MFG_top_%d',threshold,threshold,threshold,threshold,threshold,threshold);
             sprintf('probtrackX_results_IFG_top_%d-PostTemp_top_%d_TO_IFG_top_%d-PostTemp_top_%d_EX_IFGorb_top_%d-MFG_top_%d',threshold,threshold,threshold,threshold,threshold,threshold);
             sprintf('probtrackX_results_IFGorb_top_%d-AntTemp_top_%d_TO_IFGorb_top_%d-AntTemp_top_%d_EX_IFG_top_%d-MFG_top_%d',threshold,threshold,threshold,threshold,threshold,threshold);
             % 
-            %sprintf('probtrackX_results_IFGorb_top_%d-AngG_top_%d_TO_IFGorb_top_%d-AngG_top_%d_EX_IFG_top_%d-MFG_top_%d',threshold,threshold,threshold,threshold,threshold,threshold);
+            sprintf('probtrackX_results_IFGorb_top_%d-AngG_top_%d_TO_IFGorb_top_%d-AngG_top_%d_EX_IFG_top_%d-MFG_top_%d',threshold,threshold,threshold,threshold,threshold,threshold);
             sprintf('probtrackX_results_IFGorb_top_%d-AntTemp_top_%d_TO_IFGorb_top_%d-AntTemp_top_%d_EX_IFG_top_%d-MFG_top_%d',threshold,threshold,threshold,threshold,threshold,threshold);
             sprintf('probtrackX_results_IFGorb_top_%d-PostTemp_top_%d_TO_IFGorb_top_%d-PostTemp_top_%d_EX_IFG_top_%d-MFG_top_%d',threshold,threshold,threshold,threshold,threshold,threshold);
             %
-            %sprintf('probtrackX_results_MFG_top_%d-AngG_top_%d_TO_MFG_top_%d-AngG_top_%d_EX_IFG_top_%d-IFGorb_top_%d',threshold,threshold,threshold,threshold,threshold,threshold);
+            sprintf('probtrackX_results_MFG_top_%d-AngG_top_%d_TO_MFG_top_%d-AngG_top_%d_EX_IFG_top_%d-IFGorb_top_%d',threshold,threshold,threshold,threshold,threshold,threshold);
             sprintf('probtrackX_results_MFG_top_%d-AntTemp_top_%d_TO_MFG_top_%d-AntTemp_top_%d_EX_IFG_top_%d-IFGorb_top_%d',threshold,threshold,threshold,threshold,threshold,threshold);
             sprintf('probtrackX_results_MFG_top_%d-PostTemp_top_%d_TO_MFG_top_%d-PostTemp_top_%d_EX_IFG_top_%d-IFGorb_top_%d',threshold,threshold,threshold,threshold,threshold,threshold);
     }
@@ -113,7 +113,46 @@ for kk=1:size(all_unique_subs,2)
 end 
 % get files both LH and RH 
 
+%% 
+%% load indvidual paths 
+all_unique_subs={};
+for folder = folders'
+    fdt_files=dir(fullfile(probtrack_folder,folder{1},'*fdt_paths.nii.gz'));
+    
+    sub_ids=regexp({fdt_files(:).name},'sub\d+','match');
+    sub_ids=cellfun(@(x) x(1) , sub_ids);
+    unique_subs=unique(sub_ids);
+    all_unique_subs=[all_unique_subs;unique_subs];
+    LH_path={};
+    RH_path={};
 
+    for id_sub=1:length(unique_subs)
+        sub=unique_subs{id_sub};
+        overlap=find(strcmp(sub_ids,sub));
+        assert(length(overlap)==2)
+        for file_id=overlap
+            file_dat=niftiread(fullfile(fdt_files(file_id).folder,fdt_files(file_id).name));
+            file_info=niftiinfo(fullfile(fdt_files(file_id).folder,fdt_files(file_id).name));
+            if contains(fdt_files(file_id).name,'LH')
+                LH_path{id_sub,1}=file_dat;
+                LH_path{id_sub,2}=file_info;
+                LH_path{id_sub,3}=sub;
+            elseif contains(fdt_files(file_id).name,'RH')
+                RH_path{id_sub,1}=file_dat;
+                RH_path{id_sub,2}=file_info;
+                RH_path{id_sub,3}=sub;
+            end
+        end
+    end
+    assert(all(cellfun(@(x,y) strcmp(x,y),LH_path(:,3),unique_subs')))
+    assert(all(cellfun(@(x,y) strcmp(x,y),RH_path(:,3),unique_subs')))
+    unique_paths=struct;
+    unique_paths.LH_path=LH_path;
+    unique_paths.RH_path=RH_path;
+    unique_paths.unique_subjects=unique_subs;
+    save(fullfile(probtrack_folder,folder{1},'unique_subjects_paths'),'unique_paths');
+    
+end
 
 %% hypothesis 1. 
 % Left hemisphere, post temp to IFG , vs AntTemp to IFGorb
