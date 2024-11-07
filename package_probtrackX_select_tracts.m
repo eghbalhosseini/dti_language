@@ -104,7 +104,7 @@ for folder =folders'
     unique_dti.unique_RH_fdt_sum=RH_fdt_sum;
 
 
-    save(fullfile(probtrack_folder,folder{1},'unique_subjects_pkg'),'unique_dti');
+    save(fullfile(probtrack_folder,folder{1},'unique_subjects_pkg_nov2024'),'unique_dti');
     
     
 end
@@ -150,7 +150,7 @@ for folder = folders'
     unique_paths.LH_path=LH_path;
     unique_paths.RH_path=RH_path;
     unique_paths.unique_subjects=unique_subs;
-    save(fullfile(probtrack_folder,folder{1},'unique_subjects_paths'),'unique_paths');
+    save(fullfile(probtrack_folder,folder{1},'unique_subjects_paths_nov2024'),'unique_paths');
     
 end
 
@@ -970,7 +970,6 @@ end
 %print(ff,'-fillpage','-dpdf','-painters', strcat(analysis_path,'/','LH_all_targeted_connectivity_subs_',num2str(num_subs),'_thr_',num2str(threshold),'.pdf'));
 %print(ff,'-painters','-dpng', strcat(analysis_path,'/','LH_all_targeted_connectivity_subs_',num2str(num_subs),'_thr_',num2str(threshold),'.png'));
 
-%% 
 
 %% Calculate temporal to frontal pairs 
 % RIght parcels 

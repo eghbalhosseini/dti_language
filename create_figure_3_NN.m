@@ -29,8 +29,10 @@ folders={
 results={};
 results_path={};
 for idx=1:size(folders,1)
-   results{idx}=load(fullfile(probtrack_folder,folders{idx},'unique_subjects_pkg'),'unique_dti').unique_dti;
-   results_path{idx}=load(fullfile(probtrack_folder,folders{idx},'unique_subjects_paths.mat')).unique_paths;
+    A= load(fullfile(probtrack_folder,folders{idx},'unique_subjects_pkg_nov2024'),'unique_dti');
+    B= load(fullfile(probtrack_folder,folders{idx},'unique_subjects_paths_nov2024.mat'));
+   results{idx}=A.unique_dti;
+   results_path{idx}=B.unique_paths;
 end 
 assert(all(cell2mat(cellfun(@(x,y) strcmp(x,y),results{1}.unique_subs,results{2}.unique_subs,'uni',false))))
 assert(all(cell2mat(cellfun(@(x,y) strcmp(x,y),results_path{1}.unique_subjects,results_path{2}.unique_subjects,'uni',false))))
@@ -75,8 +77,8 @@ train_dti.unique_subs=unique_dti.unique_subs(ids);
 train_dti.unique_LH_fdt_raw=unique_dti.unique_LH_fdt_raw(ids);
 train_dti.unique_LH_fdt_sum=unique_dti.unique_LH_fdt_sum(ids);
 
-train_dti.unique_RH_fdt_raw=unique_dti.unique_RH_fdt_raw(ids);
-train_dti.unique_RH_fdt_sum=unique_dti.unique_RH_fdt_sum(ids);
+%train_dti.unique_RH_fdt_raw=unique_dti.unique_RH_fdt_raw(ids); 
+%train_dti.unique_RH_fdt_sum=unique_dti.unique_RH_fdt_sum(ids);
 
 train_dti.unique_LH_targets=unique_dti.unique_LH_targets(:,ids);
 train_dti.unique_RH_targets=unique_dti.unique_RH_targets(:,ids);
