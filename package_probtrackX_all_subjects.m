@@ -4,7 +4,7 @@ close all
 probtrack_folder='/Users/eghbalhosseini/MyData/dti_language/';
 analysis_path='/Users/eghbalhosseini/MyData/dti_language/analysis';
 threshold=20;
-folders={['probtrackX_results_lang_glasser_thr_',num2str(threshold)]}
+folders={['probtrackX_results_lang_glasser_thr_',num2str(threshold)]};
 
 
 %% 
@@ -88,7 +88,6 @@ for folder =folders'
     unique_dti.unique_LH_fdt_sum=LH_fdt_sum;
     unique_dti.unique_RH_fdt_raw=RH_fdt_raw;
     unique_dti.unique_RH_fdt_sum=RH_fdt_sum;
-
 
     save(fullfile(probtrack_folder,folder{1},'unique_subjects_pkg'),'unique_dti');
     

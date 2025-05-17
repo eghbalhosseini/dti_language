@@ -1,25 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="ehoseini@evnode_X11:22 agent" remoteFilesAllowedToDisappearOnAutoupload="false">
+  <component name="PublishConfigData" autoUpload="Always" remoteFilesAllowedToDisappearOnAutoupload="false">
     <serverData>
       <paths name="ehoseini@evnode_X11:22 agent">
         <serverdata>
           <mappings>
             <mapping deploy="/om2/user/ehoseini/dti_language" local="$PROJECT_DIR$" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="ehoseini@evnode_X11:22 agent (1)">
-        <serverdata>
-          <mappings>
-            <mapping deploy="/om/user/ehoseini/dti_language" local="$PROJECT_DIR$" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="ehoseini@evnode_X11:22 agent (10)">
-        <serverdata>
-          <mappings>
-            <mapping deploy="/om/user/ehoseini/dti_language" local="$PROJECT_DIR$" />
           </mappings>
         </serverdata>
       </paths>
@@ -31,48 +17,6 @@
         </serverdata>
       </paths>
       <paths name="ehoseini@evnode_X11:22 agent (3)">
-        <serverdata>
-          <mappings>
-            <mapping deploy="/om/user/ehoseini/dti_language" local="$PROJECT_DIR$" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="ehoseini@evnode_X11:22 agent (4)">
-        <serverdata>
-          <mappings>
-            <mapping deploy="/om/user/ehoseini/dti_language" local="$PROJECT_DIR$" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="ehoseini@evnode_X11:22 agent (5)">
-        <serverdata>
-          <mappings>
-            <mapping deploy="/om/user/ehoseini/dti_language" local="$PROJECT_DIR$" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="ehoseini@evnode_X11:22 agent (6)">
-        <serverdata>
-          <mappings>
-            <mapping deploy="/om/user/ehoseini/dti_language" local="$PROJECT_DIR$" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="ehoseini@evnode_X11:22 agent (7)">
-        <serverdata>
-          <mappings>
-            <mapping deploy="/om/user/ehoseini/dti_language" local="$PROJECT_DIR$" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="ehoseini@evnode_X11:22 agent (8)">
-        <serverdata>
-          <mappings>
-            <mapping deploy="/om/user/ehoseini/dti_language" local="$PROJECT_DIR$" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="ehoseini@evnode_X11:22 agent (9)">
         <serverdata>
           <mappings>
             <mapping deploy="/om/user/ehoseini/dti_language" local="$PROJECT_DIR$" />

@@ -172,8 +172,7 @@ for k=1:length(seeds)
 end 
     
 
-%% 
-%% 
+
 %ff=figure();
 %ff.Units='Inches';
 %ff.Position=[55.5139 10.6250 8 11];
@@ -286,6 +285,7 @@ for k=1:length(seeds)
     X_non_zero=X_total(non_zero_idx);
     s_t_nonzero=s_t_weights(non_zero_idx,:);
     larger_idx=sum(s_t_nonzero>X_non_zero,2)>0;
+    %larger_idx=0*sum(s_t_nonzero>X_non_zero,2)>0;
     fprintf('dropping %d subject because the values is bigger than sum \n',sum(larger_idx));
     s_t_nonzero=s_t_nonzero(find(~larger_idx),:);
     X_non_zero=X_non_zero(find(~larger_idx),:);
@@ -359,6 +359,7 @@ for k=1:length(targets)
     X_non_zero=X_total(non_zero_idx);
     s_t_nonzero=s_t_weights(non_zero_idx,:);
     larger_idx=sum(s_t_nonzero>X_non_zero,2)>0;
+    %larger_idx=0*sum(s_t_nonzero>X_non_zero,2)>0;
     fprintf('dropping %d subject because the values is bigger than sum \n',sum(larger_idx));
     s_t_nonzero=s_t_nonzero(find(~larger_idx),:);
     X_non_zero=X_non_zero(find(~larger_idx),:);
@@ -489,8 +490,8 @@ cb.Ticks=[0,100];
 cb.Box='off';
      
     
-print(ff,'-dpdf','-bestfit','-painters', strcat(analysis_path,'/','figure_3_all_lang_con_ratio_thr_',num2str(threshold),'_',w_type,'_subs_',num2str(length(train_subs)),'.pdf'));
-print(ff,'-painters','-dpng', strcat(analysis_path,'/','figure_3_all_lang_connectivity_ratio_thr_','_',num2str(threshold),'_',w_type,'_subs_',num2str(length(train_subs)),'.png'));
+%print(ff,'-dpdf','-bestfit','-painters', strcat(analysis_path,'/','figure_3_all_lang_con_ratio_thr_',num2str(threshold),'_',w_type,'_subs_',num2str(length(train_subs)),'.pdf'));
+%print(ff,'-painters','-dpng', strcat(analysis_path,'/','figure_3_all_lang_connectivity_ratio_thr_','_',num2str(threshold),'_',w_type,'_subs_',num2str(length(train_subs)),'.png'));
  
 
 %% load connectivity between regions as a ratio for all brain 
@@ -573,7 +574,7 @@ cb.Ticks=ax.CLim;
 cb.Box='off';
      
     
-print(ff,'-dpdf','-bestfit','-painters', strcat(analysis_path,'/','figure_3_global_lang_con_ratio_thr_',num2str(threshold),'_',w_type,'_subs_',num2str(length(train_subs)),'.pdf'));
-print(ff,'-painters','-dpng', strcat(analysis_path,'/','figure_3_global_lang_connectivity_ratio_thr_','_',num2str(threshold),'_',w_type,'_subs_',num2str(length(train_subs)),'.png'));
+%print(ff,'-dpdf','-bestfit','-painters', strcat(analysis_path,'/','figure_3_global_lang_con_ratio_thr_',num2str(threshold),'_',w_type,'_subs_',num2str(length(train_subs)),'.pdf'));
+%print(ff,'-painters','-dpng', strcat(analysis_path,'/','figure_3_global_lang_connectivity_ratio_thr_','_',num2str(threshold),'_',w_type,'_subs_',num2str(length(train_subs)),'.png'));
  
 

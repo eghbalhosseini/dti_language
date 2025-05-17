@@ -1,8 +1,8 @@
 clear all;
 close all;
 threshold=20;
-num_subs=70;
-%num_subs=125;
+%num_subs=70;
+num_subs=125;
 left_out=false;
 w_type='sum';
 analysis_path='/Users/eghbalhosseini/MyData/dti_language/analysis';
@@ -367,8 +367,8 @@ ax=axes('position',[.2,.1,.15,.15*pa_ratio]);
 ylabels=["STSva";"STSda";"AntTemp"];
 locations=cellfun(@(x) find(contains(sorted_label,x)), flipud([LH_temporal_target(1);"LH_STSda_ROI";"LH_STSva_ROI"]));
 assert(max(locations)<=4);
-x_all=cat(3,xx_per_label{:});
-%x_all=cat(3,xx_per_label{1:7});
+%x_all=cat(3,xx_per_label{:});
+x_all=cat(3,xx_per_label{1:7});
 x_all_labels=cat(3,xx_per_label{locations});
 x_labels=sorted_label(locations);
 
@@ -421,7 +421,6 @@ ax=makeaxis_eh(ax);
 
 ax=axes('position',[.56,.1,.15,.15*pa_ratio]);
 x=squeeze(x_all_labels(:,3,:))';
-a=sum(x,1);
 x_all_1=squeeze(x_all(:,3,:))';
 a=nansum(x_all_1,1);
 
