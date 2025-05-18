@@ -108,13 +108,13 @@ if [ "$LINE_COUNT" -gt "$run_val" ]; then
      echo "Less than 200 jobs (${LINE_COUNT}). Submitting all jobs at once (up to max_running/max_queue limits)."
      # Assuming transformation script takes GRAND_FILE as $1
      # Pass the SUBJECT_TRX_FILE path as the argument to the transformation script.
-     nohup /cm/shared/admin/bin/submit-many-jobs "$LINE_COUNT" "$LINE_COUNT" "$LINE_COUNT" "$SUBJECT_TRX_FILE" "$TRANSFORMATION_SCRIPT" &
+     nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT "$LINE_COUNT" "$LINE_COUNT" 0 run_tracula_mni2diff_subject.sh $SUBJECT_TRX_FILE &
   else
       echo "200 or more jobs (${LINE_COUNT}). Submitting in batches."
       # Assuming transformation script takes GRAND_FILE as $1
       # submit-many-jobs num_jobs max_running max_queue first_arg second_arg ... script_name
       # Adjust batching numbers (175, 200, 25) as appropriate for your cluster
-      nohup /cm/shared/admin/bin/submit-many-jobs "$LINE_COUNT" 175 200 "$SUBJECT_TRX_FILE" "$TRANSFORMATION_SCRIPT" &
+      nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT 175 200 25 run_tracula_mni2diff_subject.sh $SUBJECT_TRX_FILE &
   fi
 else
   echo "No subjects require transformation ($LINE_COUNT). No jobs submitted."
