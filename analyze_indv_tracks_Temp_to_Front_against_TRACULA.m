@@ -25,7 +25,9 @@ trac_paths={'lh.unc_AS_avg33_mni_bbr','lh.slft_PP_avg33_mni_bbr','lh.slfp_PP_avg
 trac_names={'Uncinate fasciculus','Superior longitudinal fasciculus (temporal)','Superior longitudinal fasciculus (paretial)','Inferior longitudinal fasciculus','Cortico spinal','cingulate gyrus','Cingulum - angular bundle.'};
 %% 
 %
-index=1;
+index=4;
+all_subject=true ;
+
 probtrack_folder= probtrack_folers{index};
 fig_title=titles{index};
 
@@ -39,9 +41,13 @@ extractedPatterns = cellfun(@(filename) regexp(filename, pattern, 'match', 'once
 extractedPatterns = extractedPatterns(~cellfun('isempty', extractedPatterns));
 extractedPatterns=unique(extractedPatterns);
 
+if all_subject
+    subs=unique(extractedPatterns);
+end 
+
 subs=subs(cell2mat(cellfun(@(x) any(ismember(extractedPatterns,x)),subs,'UniformOutput',false)));
 
-bad_sub={'sub007';'sub072';'sub106';'sub124';'sub126';'sub135';'sub136';'sub138';'sub148';'sub159';'sub163';'sub171';'sub172';'sub190';'sub195';'sub199';'sub202';'sub206';'sub210';'sub234';'sub254';'sub298';'sub311';'sub540';'sub541'; 'sub721'};
+bad_sub={'sub007';'sub072';'sub106';'sub124';'sub126';'sub135';'sub136';'sub138';'sub148';'sub159';'sub163';'sub171';'sub245';'sub539';'sub172';'sub190';'sub195';'sub197';'sub199';'sub202';'sub206';'sub210';'sub234';'sub254';'sub279';'sub298';'sub301';'sub307';'sub311';'sub540';'sub541'; 'sub721'};
 subs=sort(subs(~cell2mat(cellfun(@(x) any(ismember(bad_sub,x)),subs,'UniformOutput',false)))');
 %
 threshold=0;
@@ -136,4 +142,4 @@ hold off;
 % Optional: Add a colorbar if colors represent specific information
 % colorbar;
 
-%export_fig(sprintf('/Users/eghbalhosseini/MyData/dti_language/tracula/probtrac_by_tracula_%s_nsub_%d.pdf',fig_title,sub_id), '-pdf', '-transparent');
+export_fig(sprintf('/Users/eghbalhosseini/MyData/dti_language/tracula/probtrac_by_tracula_%s_nsub_%d.pdf',fig_title,sub_id), '-pdf', '-transparent');
