@@ -51,6 +51,8 @@ MNI_TO_DIFF_MAT="${XFMS_DIR}/mni2diff.bbr.mat"
 # Define a reference image in the target (corrected diffusion) space
 # Using the diffusion brain mask as a reference is usually robust
 DIFF_REF_IMAGE="${SUBJECT_TRACULA_DIR}/dlabel/diff/aparc+aseg_mask.bbr.nii.gz"
+DIFF_REF_IMAGE="${SUBJECT_TRACULA_DIR}/dmri/dtifit_FA.nii.gz
+
 
 # --- Load necessary modules ---
 # Ensure these match your system's module names and paths
