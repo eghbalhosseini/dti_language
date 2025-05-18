@@ -155,7 +155,7 @@ for TRACT_BASE in "${TRACT_LIST[@]}"; do
                     --in="$INPUT_FILE" \
                     --out="$OUTPUT_FILE" \
                     --premat="$MNI_TO_DIFF_MAT" \
-                    --interp=linear # Or nearest neighbor depending on path.nii.gz content
+                    --interp=trilinear # Or nearest neighbor depending on path.nii.gz content
 
 
           if [ $? -eq 0 ]; then
