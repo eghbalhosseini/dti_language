@@ -113,14 +113,14 @@ for TRACT_BASE in "${TRACT_LIST[@]}"; do
   if [[ "$TRACT_BASE" == "fmajor_PP_avg33" || "$TRACT_BASE" == "fminor_PP_avg33" ]]; then
       HEMI_PREFIX=""
       INPUT_TRACT_DIR="${SUBJECT_TRACULA_DIR}/dpath/${TRACT_BASE}_mni_bbr"
-      INPUT_FILE="${INPUT_TRACT_DIR}/path.nii.gz" # Assuming this is the MNI volume
+      INPUT_FILE="${INPUT_TRACT_DIR}/path.pd.nii.gz" # Assuming this is the MNI volume
       OUTPUT_FILE="${SUBJECT_TRACULA_DIR}/dpath/${TRACT_BASE}_diff_bbr.nii.gz" # Output in diffusion space
   else
       # Handle hemispheric tracts
       for HEMI in "${HEMISPHERES[@]}"; do
           HEMI_PREFIX="${HEMI}."
           INPUT_TRACT_DIR="${SUBJECT_TRACULA_DIR}/dpath/${HEMI_PREFIX}${TRACT_BASE}_mni_bbr"
-          INPUT_FILE="${INPUT_TRACT_DIR}/path.nii.gz" # Assuming this is the MNI volume
+          INPUT_FILE="${INPUT_TRACT_DIR}/path.pd.nii.gz" # Assuming this is the MNI volume
           OUTPUT_FILE="${SUBJECT_TRACULA_DIR}/dpath/${HEMI_PREFIX}${TRACT_BASE}_diff_bbr.nii.gz" # Output in diffusion space
 
           # Check if input file exists for this hemisphere/tract
