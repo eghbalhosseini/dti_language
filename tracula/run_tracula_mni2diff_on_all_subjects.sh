@@ -36,7 +36,7 @@ CHECK_TRACT="lh.unc_AS_avg33" # Base name of one tract
 CHECK_SUFFIX="_diff_bbr.nii.gz" # Suffix indicating the target space and format
 
 # Set overwrite flag for THIS wrapper script (determines if the check is bypassed)
-overwrite="false" # Set to "true" to force adding all non-bad subjects to the list
+overwrite="true" # Set to "true" to force adding all non-bad subjects to the list
 
 echo "Checking for existing transformed files using: ${CHECK_TRACT}${CHECK_SUFFIX} as the indicator."
 
@@ -61,7 +61,7 @@ find "$DTI_DIR" -maxdepth 1 -type d -name "sub*" | while read -r subject_dir; do
     if [ "$overwrite" = true ]; then
         # If overwrite is true in the wrapper, add the subject regardless of existing output
         echo "Overwrite is true. Adding ${subject_name} to the list regardless of existing output."
-        LINE_COUNT=$(expr ${LINE_COUNT} + 1)
+        LINE_COUNT=$((LINE_COUNT + 1))
         printf "%d,%s\n" "$LINE_COUNT" "$subject_name" >> "$SUBJECT_TRX_FILE"
     else
         # If overwrite is false, check if the expected transformed file exists
@@ -69,7 +69,7 @@ find "$DTI_DIR" -maxdepth 1 -type d -name "sub*" | while read -r subject_dir; do
             # If the transformed file is NOT found, add the subject to the list
             echo "Transformed file not found for ${subject_name}: ${SUBJECT_TRANSFORMED_CHECK_FILE}"
             echo "Adding ${subject_name} to the list for transformation."
-            LINE_COUNT=$(expr ${LINE_COUNT} + 1)
+            LINE_COUNT=$((LINE_COUNT + 1))
             printf "%d,%s\n" "$LINE_COUNT" "$subject_name" >> "$SUBJECT_TRX_FILE"
         else
             # If the transformed file IS found, skip this subject
@@ -96,7 +96,7 @@ echo "Total subjects added to ${SUBJECT_TRX_FILE} for transformation: ${LINE_COU
 # Make sure you have saved that transformation script (e.g., as run_tracula_transform_subject.sh)
 # and update the variable below to match its actual name.
 TRANSFORMATION_SCRIPT="run_tracula_mni2diff_subject.sh" # <-- **Change this to the actual name of your transformation script file**
-
+echo $LINE_COUNT
 run_val=0 # Submit jobs if at least this many subjects need processing (set to 1 to require at least one)
 if [ "$LINE_COUNT" -gt "$run_val" ]; then
   echo "Submitting ${LINE_COUNT} transformation jobs using ${TRANSFORMATION_SCRIPT}..."
