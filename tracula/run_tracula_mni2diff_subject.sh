@@ -3,7 +3,7 @@
 #SBATCH -t 8:00:00
 #SBATCH --mem=10G
 GRAND_FILE=$1
-OVERWRITE='false' # or 'true'
+OVERWRITE='true' # or 'true'
 #
 # DTI_DIR variable is not strictly used in the core logic below,
 # but keep it if needed elsewhere in your script.
