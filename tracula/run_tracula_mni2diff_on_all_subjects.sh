@@ -43,7 +43,7 @@ echo "Checking for existing transformed files using: ${CHECK_TRACT}${CHECK_SUFFI
 
 # Find all subject directories
 # Using read -r to handle spaces safely, though sub* names usually don't have them
-find "$DTI_DIR" -maxdepth 1 -type d -name "sub*" | while read -r subject_dir; do
+while read -r subject_dir; do
     # Extract subject name from the full path
     # Removes the DTI_DIR prefix and any trailing slash
     subject_name=$(basename "$subject_dir")
@@ -85,7 +85,7 @@ find "$DTI_DIR" -maxdepth 1 -type d -name "sub*" | while read -r subject_dir; do
         rm "$file_to_remove"
     fi
 
-done # End while loop reading directories
+done < <(find "$DTI_DIR" -maxdepth 1 -type d -name "sub*")
 
 echo "Finished checking all subject directories."
 echo "Total subjects added to ${SUBJECT_TRX_FILE} for transformation: ${LINE_COUNT}"
