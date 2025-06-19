@@ -128,16 +128,19 @@ while read x; do
 done < <(find $DTI_DIR -maxdepth 1 -type d -name "sub*")
 echo $LINE_COUNT
 run_val=0
+
+TRANSFORMATION_SCRIPT="probtrackX_vol_2_vol_on_group_tracts.sh" # <-- **Change this to the actual name of your transformation script file**
+
 if [ "$LINE_COUNT" -gt "$run_val" ]; then
-  echo "running  ${LINE_COUNT} jobs"
-  if [ "$LINE_COUNT" -lt 300 ] ; then
-    echo "less than 300 jobs:  ${LINE_COUNT} jobs"
-      nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT "$LINE_COUNT" "$LINE_COUNT" 0 probtrackX_vol_2_vol_on_group_tracts.sh  $SUBJECT_PROBX_FILE
-  else
-    echo "more than 300 jobs:  ${LINE_COUNT} jobs"
-      #nohup /cm/shared/admin/bin/submit-many-jobs 3 2 3 1 probtrackX_on_select_tracts.sh  $SUBJECT_PROBX_FILE
-      nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT 275 300 25 probtrackX_vol_2_vol_on_group_tracts.sh  $SUBJECT_PROBX_FILE
-  fi
-  else
-    echo $LINE_COUNT
+echo "Submitting ${LINE_COUNT} transformation jobs using ${TRANSFORMATION_SCRIPT}..."
+# The transformation script expects the path to the subject list file ($SUBJECT_TRX_FILE) as its first argument.
+if [ "$LINE_COUNT" -lt 200 ]; then
+echo "Less than 200 jobs (${LINE_COUNT}). Submitting all jobs at once (up to max_running/max_queue limits)."
+nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT "$LINE_COUNT" "$LINE_COUNT" 0 probtrackX_vol_2_vol_on_group_tracts.sh $SUBJECT_PROBX_FILE &
+else
+echo "200 or more jobs (${LINE_COUNT}). Submitting in batches."
+nohup /cm/shared/admin/bin/submit-many-jobs $LINE_COUNT 175 200 25 probtrackX_vol_2_vol_on_group_tracts.sh $SUBJECT_PROBX_FILE &
+fi
+else
+echo "No subjects require transformation ($LINE_COUNT). No jobs submitted."
 fi
