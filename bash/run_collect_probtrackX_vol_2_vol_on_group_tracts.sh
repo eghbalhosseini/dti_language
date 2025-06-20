@@ -95,13 +95,13 @@ while read x; do
         lh_folder="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_LH_thr_${threshold}_${SOURCEJoin}_TO_${TARGETSJoin}_EX_${EXCLUDEJoin}/fdt_paths_in_orig.nii.gz"
         find "${DTI_DIR}/${subject_name}/dti.probtrackx/" -name "*90*"  -exec rm -rf {} +
         # copy the lh_folder to results_dir but add the subject_name to fdt_paths_in_orig.nii.gz
-        mv "${lh_folder}" "${results_dir}/${subject_name}_LH_fdt_paths_in_orig.nii.gz"
+        cp "${lh_folder}" "${results_dir}/${subject_name}_LH_fdt_paths_in_orig.nii.gz"
 
 
         #rm $lh_folder
         rh_folder="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_RH_thr_${threshold}_${SOURCEJoin}_TO_${TARGETSJoin}_EX_${EXCLUDEJoin}/fdt_paths_in_orig.nii.gz"
         #rm $rh_folder
-        mv "${lh_folder}" "${results_dir}/${subject_name}_RH_fdt_paths_in_orig.nii.gz"
+        cp "${lh_folder}" "${results_dir}/${subject_name}_RH_fdt_paths_in_orig.nii.gz"
 
       fi
 
