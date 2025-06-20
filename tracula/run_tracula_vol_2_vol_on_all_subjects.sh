@@ -20,7 +20,7 @@ LINE_COUNT=0 # Counter for subjects added to the list
 bad_sub=(sub007 sub072 sub106 sub124 sub126 sub135 sub136 sub138 sub148 sub159 sub163 sub171 sub172 sub190 sub195 sub199 sub202 sub210 sub234 sub254 sub311 sub540 sub541)
 CHECK_TRACT="lh.unc_AS_avg33_mni_bbr" # Base name of one tract
 CHECK_SUFFIX="path.pd.in_orig.nii.gz" # Suffix indicating the target space and format
-overwrite="true" # Set to "true" to force adding all non-bad subjects to the list
+overwrite="false" # Set to "true" to force adding all non-bad subjects to the list
 echo "Checking for existing transformed files using: ${CHECK_TRACT}${CHECK_SUFFIX} as the indicator."
 while read -r subject_dir; do
 subject_name=$(basename "$subject_dir")
