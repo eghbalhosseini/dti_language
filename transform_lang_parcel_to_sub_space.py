@@ -187,7 +187,7 @@ if __name__ == '__main__':
     output = subprocess.Popen(unix_pattern, env=my_env)
     output.communicate()
     # do some plotting here
-    plt.close('all')
+                                                                       lt.close('all')
     subj_vol_path = os.path.join(subj_FS_path, subj_id, 'mri', 'brain.mgz')
     # plot hemispheres
     test_img = load_img(f'{sub_parcel_dir}/x.fsnative.{network_id}_parcels.nii.gz')

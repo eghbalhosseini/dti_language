@@ -58,6 +58,7 @@ else
   exit 1
 fi
 
+# 22 subjects are considered bacd
 bad_sub=(sub072 sub106 sub124 sub126 sub135 sub136 sub138 sub148 sub159 sub163 sub171 sub172 sub190 sub195 sub199 sub202 sub210 sub234 sub254 sub311 sub540 sub541)
 
 SOURCEJoin=$(IFS=- ; echo "${SOURCES[*]}")
