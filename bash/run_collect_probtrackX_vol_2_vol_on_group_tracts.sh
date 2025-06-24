@@ -101,7 +101,7 @@ while read x; do
         #rm $lh_folder
         rh_folder="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_RH_thr_${threshold}_${SOURCEJoin}_TO_${TARGETSJoin}_EX_${EXCLUDEJoin}/fdt_paths_in_orig.nii.gz"
         #rm $rh_folder
-        cp "${lh_folder}" "${results_dir}/${subject_name}_RH_fdt_paths_in_orig.nii.gz"
+        cp "${rh_folder}" "${results_dir}/${subject_name}_RH_fdt_paths_in_orig.nii.gz"
 
       fi
 
