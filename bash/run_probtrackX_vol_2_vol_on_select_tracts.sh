@@ -66,7 +66,9 @@ else
   exit 1
 fi
 
-#bad_sub=(sub072 sub124 sub126 sub135 sub136 sub138 sub148 sub159 sub163 sub171 sub172 sub190 sub195 sub199 sub202 sub210 sub234 sub254 sub311 sub540 sub541)
+# 22 subjects are considered bacd
+bad_sub=(sub072 sub106 sub124 sub126 sub135 sub136 sub138 sub148 sub159 sub163 sub171 sub172 sub190 sub195 sub199 sub202 sub210 sub234 sub254 sub311 sub540 sub541)
+
 
 SOURCEJoin=$(IFS=- ; echo "${SOURCES[*]}")
 #echo $SOURCEJoin
@@ -90,6 +92,12 @@ while read x; do
       original=$DTI_DIR
       correction=''
       subject_name="${x/$original/$correction}"
+      # if subject_name is in bad_sub list, skip otherwise process subject
+      if [[ " ${bad_sub[@]} " =~ " ${subject_name} " ]]; then
+        echo "skipping ${subject_name}"
+        continue
+      else
+
       lh_folder="${DTI_DIR}/${subject_name}/dti.probtrackx/lang_glasser_LH_thr_${threshold}_${SOURCEJoin}_TO_${TARGETSJoin}_EX_${EXCLUDEJoin}/fdt_paths_in_orig.nii.gz"
       find "${DTI_DIR}/${subject_name}/dti.probtrackx/" -name "*90*"  -exec rm -rf {} +
       #rm $lh_folder
@@ -123,6 +131,7 @@ while read x; do
             LINE_COUNT=$(expr ${LINE_COUNT} + 1)
             printf "%d,%s,%s,%s,%s,%s,%s,%d\n" "$LINE_COUNT" "$subject_name" "lang_glasser_RH_thr_${threshold}" "$SOURCEJoin" "$TARGETSJoin" "$EXCLUDEJoin" "RH" "$threshold" >> $SUBJECT_PROBX_FILE
           fi
+      fi
       fi
 done < <(find $DTI_DIR -maxdepth 1 -type d -name "sub*")
 echo $LINE_COUNT
