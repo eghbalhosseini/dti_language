@@ -7,8 +7,6 @@ GRAND_FILE=$1
 OVERWRITE='false' # or 'true'
 #
 DTI_DIR=/mindhive/evlab/Shared/diffusionzeynep/
-SUBJECT_FS_DIR="${DTI_DIR}/${SUBJ}/fs/" # Base freesurfer dir
-SUBJECT_REG_DIR="${DTI_DIR}/${SUBJ}/lang_glasser/" # Base freesurfer dir
 if [ -n "$SLURM_ARRAY_TASK_ID" ]; then
   JID=$SLURM_ARRAY_TASK_ID    # Taking the task ID in a job array as an input parameter.
 else
@@ -44,6 +42,9 @@ echo "excludes : ${EXCLUDES}"
 echo "hemi :${HEMI}"
 
 # step 1 check if segment text files exist.
+SUBJECT_FS_DIR="${DTI_DIR}/${SUB}/fs/" # Base freesurfer dir
+SUBJECT_REG_DIR="${DTI_DIR}/${SUB}/lang_glasser/" # Base freesurfer dir
+
 mov_file="${DTI_DIR}/${SUB}/dti.probtrackx/${SEGNAME}_${SOURCES}_TO_${TARGETS}_EX_${EXCLUDES}/fdt_paths.nii.gz"
 output_file="${DTI_DIR}/${SUB}/dti.probtrackx/${SEGNAME}_${SOURCES}_TO_${TARGETS}_EX_${EXCLUDES}/fdt_paths_in_orig.nii.gz"
 reg_file="${SUBJECT_REG_DIR}/reg_FS2nodif.dat"
