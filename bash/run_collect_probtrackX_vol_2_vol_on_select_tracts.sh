@@ -86,7 +86,7 @@ printf "%s,%s,%s,%s,%s,%s,%s,%s\n" "row" "subject_name" "segment_name" "source_n
 
 echo "looking at ${DTI_DIR} "
 # create a folder named probtrackX_labels_ in DTI_DIR
-results_dir="${DTI_DIR}/probtrackX_results_group_in_orig_${SOURCEJoin}_TO_${TARGETSJoin}_EX_${EXCLUDEJoin}"
+results_dir="${DTI_DIR}/probtrackX_results_select_in_orig_${SOURCEJoin}_TO_${TARGETSJoin}_EX_${EXCLUDEJoin}"
 mkdir -p "${results_dir}"
 overwrite=false
 while read x; do
